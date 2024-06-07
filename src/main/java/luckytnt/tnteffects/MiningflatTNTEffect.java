@@ -6,13 +6,13 @@ import luckytntlib.util.explosions.ExplosionHelper;
 import luckytntlib.util.explosions.IForEachBlockExplosionEffect;
 import luckytntlib.util.explosions.ImprovedExplosion;
 import luckytntlib.util.tnteffects.PrimedTNTEffect;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.Tags;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 
 public class MiningflatTNTEffect extends PrimedTNTEffect{
 
@@ -29,16 +29,16 @@ public class MiningflatTNTEffect extends PrimedTNTEffect{
 		ExplosionHelper.doCylindricalExplosion(entity.getLevel(), entity.getPos(), radius, radiusY, new IForEachBlockExplosionEffect() {
 			
 			@Override
-			public void doBlockExplosion(Level level, BlockPos pos, BlockState state, double distance) {
+			public void doBlockExplosion(World level, BlockPos pos, BlockState state, double distance) {
 				if(pos.getY() >= entity.y() - 0.5f) {
-					if(state.getExplosionResistance(level, pos, ImprovedExplosion.dummyExplosion(entity.getLevel())) < 100) {
-						if(state.is(Tags.Blocks.ORES)) {
-							Block.dropResources(state, level, pos);
+					if(state.getBlock().getBlastResistance() < 100) {
+						if(state.isIn(ConventionalBlockTags.ORES)) {
+							Block.dropStacks(state, level, pos);
 						}
-						state.onBlockExploded(level, pos, ImprovedExplosion.dummyExplosion(entity.getLevel()));
+						state.getBlock().onDestroyedByExplosion(level, pos, ImprovedExplosion.dummyExplosion(entity.getLevel()));
 						if(pos.getY() - Math.round(entity.y()) == 0) {
-							if(Math.random() < 0.05f && Block.canSupportCenter(level, pos.below(), Direction.UP)) {
-								level.setBlockAndUpdate(pos, Blocks.TORCH.defaultBlockState());
+							if(Math.random() < 0.05f && Block.sideCoversSmallSquare(level, pos.down(), Direction.UP)) {
+								level.setBlockState(pos, Blocks.TORCH.getDefaultState());
 							}
 						}
 					}

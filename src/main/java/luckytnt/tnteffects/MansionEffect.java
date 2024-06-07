@@ -2,7 +2,7 @@ package luckytnt.tnteffects;
 
 import luckytnt.registry.BlockRegistry;
 import luckytntlib.util.IExplosiveEntity;
-import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.particle.ParticleTypes;
 
 public class MansionEffect extends HouseTNTEffect {
 

@@ -8,23 +8,22 @@ import luckytnt.registry.BlockRegistry;
 import luckytntlib.util.IExplosiveEntity;
 import luckytntlib.util.explosions.ExplosionHelper;
 import luckytntlib.util.explosions.IForEachBlockExplosionEffect;
-import luckytntlib.util.explosions.ImprovedExplosion;
 import luckytntlib.util.tnteffects.PrimedTNTEffect;
-import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.Tags;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class OreTNTEffect extends PrimedTNTEffect{
 
 	@SuppressWarnings("resource")
 	@Override
 	public void explosionTick(IExplosiveEntity entity) {
-		if(!entity.getLevel().isClientSide) {
+		if(!entity.getLevel().isClient) {
 			if(entity instanceof PrimedOreTNT tnt) {
 				if(tnt.availablePos.isEmpty()) {
 					fillAvailablePos(tnt);
@@ -61,8 +60,8 @@ public class OreTNTEffect extends PrimedTNTEffect{
 						if(tnt.availablePos.get(rand) != null) {
 							BlockPos pos = tnt.availablePos.get(rand);
 							tnt.availablePos.remove(rand);
-							entity.getLevel().setBlockAndUpdate(pos, block.defaultBlockState());
-							entity.getLevel().playSound(null, pos, SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1f, 1f);
+							entity.getLevel().setBlockState(pos, block.getDefaultState());
+							entity.getLevel().playSound(null, pos, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1f, 1f);
 						}
 					}
 				}
@@ -103,8 +102,8 @@ public class OreTNTEffect extends PrimedTNTEffect{
 						if(tnt.availablePos.get(rand) != null) {
 							BlockPos pos = tnt.availablePos.get(rand);
 							tnt.availablePos.remove(rand);
-							entity.getLevel().setBlockAndUpdate(pos, block.defaultBlockState());
-							entity.getLevel().playSound(null, pos, SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1f, 1f);
+							entity.getLevel().setBlockState(pos, block.getDefaultState());
+							entity.getLevel().playSound(null, pos, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1f, 1f);
 						}
 					}
 				}		
@@ -150,8 +149,8 @@ public class OreTNTEffect extends PrimedTNTEffect{
 					if(tnt.availablePos.get(rand) != null) {
 						BlockPos pos = tnt.availablePos.get(rand);
 						tnt.availablePos.remove(rand);
-						entity.getLevel().setBlockAndUpdate(pos, block.defaultBlockState());
-						entity.getLevel().playSound(null, pos, SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1f, 1f);
+						entity.getLevel().setBlockState(pos, block.getDefaultState());
+						entity.getLevel().playSound(null, pos, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1f, 1f);
 					}
 				}				
 			}
@@ -192,8 +191,8 @@ public class OreTNTEffect extends PrimedTNTEffect{
 					if(tnt.availablePos.get(rand) != null) {
 						BlockPos pos = tnt.availablePos.get(rand);
 						tnt.availablePos.remove(rand);
-						entity.getLevel().setBlockAndUpdate(pos, block.defaultBlockState());
-						entity.getLevel().playSound(null, pos, SoundEvents.STONE_PLACE, SoundSource.BLOCKS, 1f, 1f);
+						entity.getLevel().setBlockState(pos, block.getDefaultState());
+						entity.getLevel().playSound(null, pos, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1f, 1f);
 					}
 				}
 			}
@@ -201,10 +200,10 @@ public class OreTNTEffect extends PrimedTNTEffect{
 	}
 	
 	public void fillAvailablePos(PrimedOreTNT tnt) {
-		ExplosionHelper.doSphericalExplosion(tnt.level(), tnt.getPos(), 12, new IForEachBlockExplosionEffect() {
+		ExplosionHelper.doSphericalExplosion(tnt.getWorld(), tnt.getPos(), 12, new IForEachBlockExplosionEffect() {
 			@Override
-			public void doBlockExplosion(Level level, BlockPos pos, BlockState state, double distance) {
-				if (!state.isAir() && state.getExplosionResistance(level, pos, ImprovedExplosion.dummyExplosion(tnt.level())) < 100 && state.isCollisionShapeFullBlock(level, pos) && !state.is(Tags.Blocks.ORES)) {
+			public void doBlockExplosion(World level, BlockPos pos, BlockState state, double distance) {
+				if (!state.isAir() && state.getBlock().getBlastResistance() < 100 && state.isFullCube(level, pos) && !state.isIn(ConventionalBlockTags.ORES)) {
 					tnt.availablePos.add(pos);
 				}
 			}
@@ -212,10 +211,10 @@ public class OreTNTEffect extends PrimedTNTEffect{
 	}
 	
 	public void fillAvailablePos(OreTNTMinecart tnt) {
-		ExplosionHelper.doSphericalExplosion(tnt.level(), tnt.getPos(), 12, new IForEachBlockExplosionEffect() {
+		ExplosionHelper.doSphericalExplosion(tnt.getWorld(), tnt.getPos(), 12, new IForEachBlockExplosionEffect() {
 			@Override
-			public void doBlockExplosion(Level level, BlockPos pos, BlockState state, double distance) {
-				if (!state.isAir() && state.getExplosionResistance(level, pos, ImprovedExplosion.dummyExplosion(tnt.level())) < 100 && state.isCollisionShapeFullBlock(level, pos) && !state.is(Tags.Blocks.ORES)) {
+			public void doBlockExplosion(World level, BlockPos pos, BlockState state, double distance) {
+				if (!state.isAir() && state.getBlock().getBlastResistance() < 100 && state.isFullCube(level, pos) && !state.isIn(ConventionalBlockTags.ORES)) {
 					tnt.availablePos.add(pos);
 				}
 			}

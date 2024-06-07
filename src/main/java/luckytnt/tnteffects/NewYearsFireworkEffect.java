@@ -2,26 +2,27 @@ package luckytnt.tnteffects;
 
 import java.util.Random;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import luckytnt.registry.BlockRegistry;
 import luckytnt.registry.EntityRegistry;
 import luckytntlib.entity.PrimedLTNT;
 import luckytntlib.util.IExplosiveEntity;
 import luckytntlib.util.tnteffects.PrimedTNTEffect;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Mth;
-import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.item.FallingBlockEntity;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.FallingBlockEntity;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.StringIdentifiable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 public class NewYearsFireworkEffect extends PrimedTNTEffect {
 
@@ -29,14 +30,16 @@ public class NewYearsFireworkEffect extends PrimedTNTEffect {
 	public void serverExplosion(IExplosiveEntity ent) {
 		if(ent.getPersistentData().getInt("type") == 0) {
 			for(int count = 0; count < 10; count++) {
-				Vec3 vel = ((Entity)ent).getViewVector(1).normalize();
+				Vec3d vel = ((Entity)ent).getRotationVec(1).normalize();
 				PrimedLTNT firework = EntityRegistry.NEW_YEARS_FIREWORK.get().create(ent.getLevel());
 				firework.setTNTFuse(40);
-				firework.setPos(ent.getPos());
-				firework.setDeltaMovement(vel.scale(2));
-				firework.getPersistentData().putInt("type", 1);
-				ent.getLevel().addFreshEntity(firework);
-				((Entity)ent).setYRot(((Entity)ent).getYRot() + 36);
+				firework.setPosition(ent.getPos());
+				firework.setVelocity(vel.multiply(2));
+				NbtCompound tag = firework.getPersistentData();
+				tag.putInt("type", 1);
+				firework.setPersistentData(tag);
+				ent.getLevel().spawnEntity(firework);
+				((Entity)ent).setYaw(((Entity)ent).getYaw() + 36);
 			}
 		} else {
 			Block block = getRandomConcrete();
@@ -53,13 +56,13 @@ public class NewYearsFireworkEffect extends PrimedTNTEffect {
 										double x = Math.cos(theta) * radius;
 										double z = Math.sin(theta) * radius;
 									
-										Vec3 vec = new Vec3((ent.x() + (x * 20)) - ent.x(), (ent.y() + (y * 20)) - ent.y(), (ent.z() + (z * 20)) - ent.z()).normalize().scale(1D + Math.random() * 0.5D);
-										addFallingBlock(ent.x(), ent.y(), ent.z(), vec.x, vec.y, vec.z, block.defaultBlockState(), ent);
+										Vec3d vec = new Vec3d((ent.x() + (x * 20)) - ent.x(), (ent.y() + (y * 20)) - ent.y(), (ent.z() + (z * 20)) - ent.z()).normalize().multiply(1D + Math.random() * 0.5D);
+										addFallingBlock(ent.x(), ent.y(), ent.z(), vec.x, vec.y, vec.z, block.getDefaultState(), ent);
 									}
 								}
 								break;
-				case CREEPER:	createShape(1, new double[][]{{0.0D, 0.2D}, {0.2D, 0.2D}, {0.2D, 0.6D}, {0.6D, 0.6D}, {0.6D, 0.2D}, {0.2D, 0.2D}, {0.2D, 0.0D}, {0.4D, 0.0D}, {0.4D, -0.6D}, {0.2D, -0.6D}, {0.2D, -0.4D}, {0.0D, -0.4D}}, true, block.defaultBlockState(), ent); break;
-				case STAR:		createShape(1, new double[][]{{0.0D, 1.0D}, {0.3455D, 0.309D}, {0.9511D, 0.309D}, {0.3795918367346939D, -0.12653061224489795D}, {0.6122448979591837D, -0.8040816326530612D}, {0.0D, -0.35918367346938773D}}, false, block.defaultBlockState(), ent); break;
+				case CREEPER:	createShape(1, new double[][]{{0.0D, 0.2D}, {0.2D, 0.2D}, {0.2D, 0.6D}, {0.6D, 0.6D}, {0.6D, 0.2D}, {0.2D, 0.2D}, {0.2D, 0.0D}, {0.4D, 0.0D}, {0.4D, -0.6D}, {0.2D, -0.6D}, {0.2D, -0.4D}, {0.0D, -0.4D}}, true, block.getDefaultState(), ent); break;
+				case STAR:		createShape(1, new double[][]{{0.0D, 1.0D}, {0.3455D, 0.309D}, {0.9511D, 0.309D}, {0.3795918367346939D, -0.12653061224489795D}, {0.6122448979591837D, -0.8040816326530612D}, {0.0D, -0.35918367346938773D}}, false, block.getDefaultState(), ent); break;
 				default: break;
 			}
 		}
@@ -67,19 +70,21 @@ public class NewYearsFireworkEffect extends PrimedTNTEffect {
 	
 	@Override
 	public void explosionTick(IExplosiveEntity ent) {
-		((Entity)ent).setDeltaMovement(((Entity)ent).getDeltaMovement().x, 0.8f, ((Entity)ent).getDeltaMovement().z);
+		((Entity)ent).setVelocity(((Entity)ent).getVelocity().x, 0.8f, ((Entity)ent).getVelocity().z);
 		if(ent.getPersistentData().getString("shape").equals("")) {
 			String string = "";
 			int rand = new Random().nextInt(5);
 			switch(rand) {
-				case 0: string = Shape.SPHERE.getSerializedName(); break;
-				case 1: string = Shape.SPHERE.getSerializedName(); break;
-				case 2: string = Shape.STAR.getSerializedName(); break;
-				case 3: string = Shape.STAR.getSerializedName(); break;
-				case 4: string = Shape.CREEPER.getSerializedName(); break;
+				case 0: string = Shape.SPHERE.asString(); break;
+				case 1: string = Shape.SPHERE.asString(); break;
+				case 2: string = Shape.STAR.asString(); break;
+				case 3: string = Shape.STAR.asString(); break;
+				case 4: string = Shape.CREEPER.asString(); break;
 				default: break;
 			}
-			ent.getPersistentData().putString("shape", string);
+			NbtCompound tag = ent.getPersistentData();
+			tag.putString("shape", string);
+			ent.setPersistentData(tag);
 		}
 	}
 	
@@ -89,14 +94,14 @@ public class NewYearsFireworkEffect extends PrimedTNTEffect {
 	}
 	
 	public void addFallingBlock(double x, double y, double z, double mX, double mY, double mZ, BlockState state, IExplosiveEntity ent) {
-		FallingBlockEntity block = FallingBlockEntity.fall(ent.getLevel(), new BlockPos(Mth.floor(x), Mth.floor(y), Mth.floor(z)), state);
+		FallingBlockEntity block = FallingBlockEntity.spawnFromBlock(ent.getLevel(), new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z)), state);
 		block.dropItem = false;
-		block.setDeltaMovement(mX, mY, mZ);
-		ent.getLevel().addFreshEntity(block);
-		if(ent.getLevel() instanceof ServerLevel sl) {
-			for(ServerPlayer player : sl.players()) {
+		block.setVelocity(mX, mY, mZ);
+		ent.getLevel().spawnEntity(block);
+		if(ent.getLevel() instanceof ServerWorld sl) {
+			for(ServerPlayerEntity player : sl.getPlayers()) {
 				if(player.distanceTo((Entity)ent) <= 100f) {
-					player.connection.send(new ClientboundSetEntityMotionPacket(block));
+					player.networkHandler.sendPacket(new EntityVelocityUpdateS2CPacket(block));
 				}
 			}
 		}
@@ -120,8 +125,8 @@ public class NewYearsFireworkEffect extends PrimedTNTEffect {
            		double d7 = shape[j][1];
 
            		for(double d8 = 0.25D; d8 <= 1.0D; d8 += 0.25D) {
-              		double d9 = Mth.lerp(d8, d4, d6) * speed;
-              		double d10 = Mth.lerp(d8, d5, d7) * speed;
+              		double d9 = MathHelper.lerp(d8, d4, d6) * speed;
+              		double d10 = MathHelper.lerp(d8, d5, d7) * speed;
               		double d11 = d9 * Math.sin(d3);
               		d9 = d9 * Math.cos(d3);
 
@@ -166,13 +171,13 @@ public class NewYearsFireworkEffect extends PrimedTNTEffect {
 		return template;
 	}
 	
-	public static enum Shape implements StringRepresentable {
+	public static enum Shape implements StringIdentifiable {
 		SPHERE("sphere"),
 		STAR("star"),
 		CREEPER("creeper");
 		
 		@SuppressWarnings("deprecation")
-		private static final StringRepresentable.EnumCodec<Shape> CODEC = StringRepresentable.fromEnum(Shape::values);
+		private static final StringIdentifiable.EnumCodec<Shape> CODEC = StringIdentifiable.createCodec(Shape::values);
 		private final String name;
 		
 		private Shape(String name) {
@@ -180,14 +185,14 @@ public class NewYearsFireworkEffect extends PrimedTNTEffect {
 		}
 
 		@Override
-		public String getSerializedName() {
+		public String asString() {
 			return name;
 		}
 		
 		@SuppressWarnings("deprecation")
 		@Nullable
 		public static Shape byName(@Nullable String name) {
-			return CODEC.byName(name);
+			return CODEC.byId(name);
 		}
 		
 	}
