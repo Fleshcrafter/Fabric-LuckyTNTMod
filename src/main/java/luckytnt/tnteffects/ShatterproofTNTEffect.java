@@ -6,14 +6,13 @@ import luckytnt.registry.BlockRegistry;
 import luckytntlib.util.IExplosiveEntity;
 import luckytntlib.util.explosions.ExplosionHelper;
 import luckytntlib.util.explosions.IForEachBlockExplosionEffect;
-import luckytntlib.util.explosions.ImprovedExplosion;
 import luckytntlib.util.tnteffects.PrimedTNTEffect;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.particle.DustParticleEffect;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class ShatterproofTNTEffect extends PrimedTNTEffect{
 
@@ -22,9 +21,9 @@ public class ShatterproofTNTEffect extends PrimedTNTEffect{
 		ExplosionHelper.doSphericalExplosion(entity.getLevel(), entity.getPos(), 10, new IForEachBlockExplosionEffect() {
 			
 			@Override
-			public void doBlockExplosion(Level level, BlockPos pos, BlockState state, double distance) {
-				if(!state.getCollisionShape(level, pos).isEmpty() && state.getExplosionResistance(level, pos, ImprovedExplosion.dummyExplosion(entity.getLevel())) < 1200) {
-					level.setBlockAndUpdate(pos, Blocks.OBSIDIAN.defaultBlockState());
+			public void doBlockExplosion(World level, BlockPos pos, BlockState state, double distance) {
+				if(!state.getCollisionShape(level, pos).isEmpty() && state.getBlock().getBlastResistance() < 1200) {
+					level.setBlockState(pos, Blocks.OBSIDIAN.getDefaultState());
 				}
 			}
 		});
@@ -32,8 +31,8 @@ public class ShatterproofTNTEffect extends PrimedTNTEffect{
 	
 	@Override
 	public void spawnParticles(IExplosiveEntity entity) {
-		entity.getLevel().addParticle(new DustParticleOptions(new Vector3f(0.1f, 0.1f, 0.1f), 1), entity.x(), entity.y() + 1f, entity.z(), 0, 0, 0);
-		entity.getLevel().addParticle(new DustParticleOptions(new Vector3f(0.5f, 0.3f, 0.8f), 1), entity.x(), entity.y() + 1f, entity.z(), 0, 0, 0);
+		entity.getLevel().addParticle(new DustParticleEffect(new Vector3f(0.1f, 0.1f, 0.1f), 1), entity.x(), entity.y() + 1f, entity.z(), 0, 0, 0);
+		entity.getLevel().addParticle(new DustParticleEffect(new Vector3f(0.5f, 0.3f, 0.8f), 1), entity.x(), entity.y() + 1f, entity.z(), 0, 0, 0);
 	}
 	
 	@Override

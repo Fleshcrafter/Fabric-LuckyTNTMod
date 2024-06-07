@@ -3,149 +3,147 @@ package luckytnt.tnteffects;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-
-import com.google.common.base.Predicate;
+import java.util.function.Predicate;
 
 import luckytnt.block.StructureTNTBlock;
 import luckytnt.registry.BlockRegistry;
 import luckytnt.util.StructureStates;
 import luckytntlib.util.IExplosiveEntity;
 import luckytntlib.util.tnteffects.PrimedTNTEffect;
-import net.minecraft.core.Direction;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.data.worldgen.BastionPieces;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.StructureManager;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.biome.BiomeSource;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraft.world.level.levelgen.RandomState;
-import net.minecraft.world.level.levelgen.VerticalAnchor;
-import net.minecraft.world.level.levelgen.WorldgenRandom;
-import net.minecraft.world.level.levelgen.heightproviders.ConstantHeight;
-import net.minecraft.world.level.levelgen.structure.BoundingBox;
-import net.minecraft.world.level.levelgen.structure.BuiltinStructures;
-import net.minecraft.world.level.levelgen.structure.SinglePieceStructure;
-import net.minecraft.world.level.levelgen.structure.Structure;
-import net.minecraft.world.level.levelgen.structure.StructurePiece;
-import net.minecraft.world.level.levelgen.structure.StructureStart;
-import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
-import net.minecraft.world.level.levelgen.structure.pools.StructureTemplatePool;
-import net.minecraft.world.level.levelgen.structure.structures.DesertPyramidPiece;
-import net.minecraft.world.level.levelgen.structure.structures.DesertPyramidStructure;
-import net.minecraft.world.level.levelgen.structure.structures.JigsawStructure;
-import net.minecraft.world.level.levelgen.structure.structures.OceanMonumentPieces;
-import net.minecraft.world.level.levelgen.structure.structures.OceanMonumentStructure;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.structure.BastionRemnantGenerator;
+import net.minecraft.structure.DesertTempleGenerator;
+import net.minecraft.structure.OceanMonumentGenerator;
+import net.minecraft.structure.StructurePiece;
+import net.minecraft.structure.StructurePiecesCollector;
+import net.minecraft.structure.StructureStart;
+import net.minecraft.structure.StructureTemplateManager;
+import net.minecraft.structure.pool.StructurePool;
+import net.minecraft.util.math.BlockBox;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.ChunkRandom;
+import net.minecraft.util.math.random.Random;
+import net.minecraft.world.Heightmap;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.source.BiomeSource;
+import net.minecraft.world.gen.StructureAccessor;
+import net.minecraft.world.gen.YOffset;
+import net.minecraft.world.gen.chunk.ChunkGenerator;
+import net.minecraft.world.gen.heightprovider.ConstantHeightProvider;
+import net.minecraft.world.gen.noise.NoiseConfig;
+import net.minecraft.world.gen.structure.DesertPyramidStructure;
+import net.minecraft.world.gen.structure.JigsawStructure;
+import net.minecraft.world.gen.structure.OceanMonumentStructure;
+import net.minecraft.world.gen.structure.Structure;
+import net.minecraft.world.gen.structure.StructureKeys;
 
 public class StructureTNTEffect extends PrimedTNTEffect {
 	
-	public Predicate<Holder<Biome>> PREDICATE = (holder) -> {
+	public Predicate<RegistryEntry<Biome>> PREDICATE = (holder) -> {
 		return true;
 	};
 
 	@Override
 	public void serverExplosion(IExplosiveEntity ent) {
 		String value = ent.getPersistentData().getString("structure");
-		if(ent.getLevel() instanceof ServerLevel sLevel) {
-			RegistryAccess rAccess = sLevel.registryAccess();
-			ChunkGenerator chunkGenerator = sLevel.getChunkSource().getGenerator();
-			BiomeSource biomeSource = sLevel.getChunkSource().getGenerator().getBiomeSource();
-			StructureTemplateManager sManager = sLevel.getStructureManager();
-			StructureManager sFManager = sLevel.structureManager();
-			BoundingBox bb = new BoundingBox((int)ent.x() - 150, (int)ent.y() - 150, (int)ent.z() - 150, (int)ent.x() + 150, (int)ent.y() + 150, (int)ent.z() + 150);
-			ChunkPos chunkPosition = ((Entity)ent).chunkPosition();
-			RandomSource random = RandomSource.create();
-			RandomState randomState = sLevel.getChunkSource().randomState();
+		if(ent.getLevel() instanceof ServerWorld sLevel) {
+			DynamicRegistryManager rAccess = sLevel.getRegistryManager();
+			ChunkGenerator chunkGenerator = sLevel.getChunkManager().getChunkGenerator();
+			BiomeSource biomeSource = sLevel.getChunkManager().getChunkGenerator().getBiomeSource();
+			StructureTemplateManager sManager = sLevel.getStructureTemplateManager();
+			StructureAccessor sFManager = sLevel.getStructureAccessor();
+			BlockBox bb = new BlockBox((int)ent.x() - 150, (int)ent.y() - 150, (int)ent.z() - 150, (int)ent.x() + 150, (int)ent.y() + 150, (int)ent.z() + 150);
+			ChunkPos chunkPosition = ((Entity)ent).getChunkPos();
+			Random random = sLevel.getRandom();
+			NoiseConfig randomState = sLevel.getChunkManager().getNoiseConfig();
 			
-			Registry<Structure> registry = sLevel.registryAccess().registryOrThrow(Registries.STRUCTURE);
-			Registry<StructureTemplatePool> pools = sLevel.registryAccess().registryOrThrow(Registries.TEMPLATE_POOL);
+			Registry<Structure> registry = rAccess.get(RegistryKeys.STRUCTURE);
+			Registry<StructurePool> pools = rAccess.get(RegistryKeys.TEMPLATE_POOL);
 
-			Holder<StructureTemplatePool> pool = pools.wrapAsHolder(pools.get(BastionPieces.START));
+			RegistryEntry<StructurePool> pool = pools.entryOf(BastionRemnantGenerator.STRUCTURE_POOLS);
 			
-			Structure pillager_outpost = registry.get(BuiltinStructures.PILLAGER_OUTPOST);
-			Structure mansion = registry.get(BuiltinStructures.WOODLAND_MANSION);
-			Structure jungle_pyramid = registry.get(BuiltinStructures.JUNGLE_TEMPLE);
+			Structure pillager_outpost = registry.get(StructureKeys.PILLAGER_OUTPOST);
+			Structure mansion = registry.get(StructureKeys.MANSION);
+			Structure jungle_pyramid = registry.get(StructureKeys.JUNGLE_PYRAMID);
 			Structure desert_pyramid = new DesertPyramid(null);
-			Structure stronghold = registry.get(BuiltinStructures.STRONGHOLD);
+			Structure stronghold = registry.get(StructureKeys.STRONGHOLD);
 			Structure monument = new Monument(null);
-			Structure fortress = registry.get(BuiltinStructures.FORTRESS);
-			Structure end_city = registry.get(BuiltinStructures.END_CITY);
-			Structure bastion = new JigsawStructure(null, pool, 6, ConstantHeight.of(VerticalAnchor.absolute((int)ent.y())), false);
-			Structure village_plains = registry.get(BuiltinStructures.VILLAGE_PLAINS);
-			Structure village_desert = registry.get(BuiltinStructures.VILLAGE_DESERT);
-			Structure village_savanna = registry.get(BuiltinStructures.VILLAGE_SAVANNA);
-			Structure village_snowy = registry.get(BuiltinStructures.VILLAGE_SNOWY);
-			Structure village_taiga = registry.get(BuiltinStructures.VILLAGE_TAIGA);
+			Structure fortress = registry.get(StructureKeys.FORTRESS);
+			Structure end_city = registry.get(StructureKeys.END_CITY);
+			Structure bastion = new JigsawStructure(null, pool, 6, ConstantHeightProvider.create(YOffset.fixed((int)ent.y())), false);
+			Structure village_plains = registry.get(StructureKeys.VILLAGE_PLAINS);
+			Structure village_desert = registry.get(StructureKeys.VILLAGE_DESERT);
+			Structure village_savanna = registry.get(StructureKeys.VILLAGE_SAVANNA);
+			Structure village_snowy = registry.get(StructureKeys.VILLAGE_SNOWY);
+			Structure village_taiga = registry.get(StructureKeys.VILLAGE_TAIGA);
 			
 			if(value.equals("pillager_outpost")) {
-				StructureStart start = pillager_outpost.generate(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
-				start.placeInChunk(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
+				StructureStart start = pillager_outpost.createStructureStart(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
+				start.place(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
 			}
 			else if(value.equals("mansion")) {
-				StructureStart start = mansion.generate(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
-				start.placeInChunk(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
+				StructureStart start = mansion.createStructureStart(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
+				start.place(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
 			}
 			else if(value.equals("jungle_pyramid")) {
-				StructureStart start = jungle_pyramid.generate(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
-				start.placeInChunk(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
+				StructureStart start = jungle_pyramid.createStructureStart(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
+				start.place(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
 			}
 			else if(value.equals("desert_pyramid")) {
-				StructureStart start = desert_pyramid.generate(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
-				start.placeInChunk(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
+				StructureStart start = desert_pyramid.createStructureStart(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
+				start.place(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
 			}
 			else if(value.equals("stronghold")) {
-				StructureStart start = stronghold.generate(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
-				start.placeInChunk(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
+				StructureStart start = stronghold.createStructureStart(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
+				start.place(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
 			}
 			else if(value.equals("monument")) {
-				StructureStart start = monument.generate(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
-				start.placeInChunk(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
+				StructureStart start = monument.createStructureStart(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
+				start.place(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
 			}
 			else if(value.equals("fortress")) {
-				StructureStart start = fortress.generate(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
-				start.placeInChunk(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
+				StructureStart start = fortress.createStructureStart(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
+				start.place(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
 			}
 			else if(value.equals("end_city")) {
-				StructureStart start = end_city.generate(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
-				start.placeInChunk(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
+				StructureStart start = end_city.createStructureStart(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
+				start.place(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
 			}
 			else if(value.equals("bastion")) {
-				StructureStart start = bastion.generate(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
-				start.placeInChunk(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
+				StructureStart start = bastion.createStructureStart(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
+				start.place(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
 			}
 			else if(value.equals("village_plains")) {
 				JungleTNTEffect.replaceNonSolidBlockOrVegetationWithAir(ent, 100, 10, true);
-				StructureStart start = village_plains.generate(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
-				start.placeInChunk(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
+				StructureStart start = village_plains.createStructureStart(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
+				start.place(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
 			}
 			else if(value.equals("village_desert")) {
 				JungleTNTEffect.replaceNonSolidBlockOrVegetationWithAir(ent, 100, 10, true);
-				StructureStart start = village_desert.generate(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
-				start.placeInChunk(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
+				StructureStart start = village_desert.createStructureStart(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
+				start.place(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
 			}
 			else if(value.equals("village_savanna")) {
 				JungleTNTEffect.replaceNonSolidBlockOrVegetationWithAir(ent, 100, 10, true);
-				StructureStart start = village_savanna.generate(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
-				start.placeInChunk(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
+				StructureStart start = village_savanna.createStructureStart(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
+				start.place(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
 			}
 			else if(value.equals("village_snowy")) {
 				JungleTNTEffect.replaceNonSolidBlockOrVegetationWithAir(ent, 100, 10, true);
-				StructureStart start = village_snowy.generate(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
-				start.placeInChunk(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
+				StructureStart start = village_snowy.createStructureStart(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
+				start.place(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
 			}
 			else if(value.equals("village_taiga")) {
 				JungleTNTEffect.replaceNonSolidBlockOrVegetationWithAir(ent, 100, 10, true);
-				StructureStart start = village_taiga.generate(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
-				start.placeInChunk(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
+				StructureStart start = village_taiga.createStructureStart(rAccess, chunkGenerator, biomeSource, randomState, sManager, sLevel.getSeed(), chunkPosition, 20, sLevel, PREDICATE);
+				start.place(sLevel, sFManager, chunkGenerator, random, bb, chunkPosition);
 			}
 		}
 	}
@@ -155,14 +153,14 @@ public class StructureTNTEffect extends PrimedTNTEffect {
 		boolean bool = false;
 		List<StructureStates> list = Arrays.asList(StructureStates.values());
 		for(StructureStates state : list) {
-			if(ent.getPersistentData().getString("structure").equals(state.getSerializedName())) {
+			if(ent.getPersistentData().getString("structure").equals(state.asString())) {
 				bool = true;
 			}
 		}
 		if(bool) {
-			return BlockRegistry.STRUCTURE_TNT.get().defaultBlockState().setValue(StructureTNTBlock.STRUCTURE, StructureTNTBlock.STRUCTURE.getValue(ent.getPersistentData().getString("structure")).get());
+			return BlockRegistry.STRUCTURE_TNT.get().getDefaultState().with(StructureTNTBlock.STRUCTURE, StructureTNTBlock.STRUCTURE.parse(ent.getPersistentData().getString("structure")).get());
 		}
-		return BlockRegistry.STRUCTURE_TNT.get().defaultBlockState();
+		return BlockRegistry.STRUCTURE_TNT.get().getDefaultState();
 	}
 	
 	@Override
@@ -172,45 +170,45 @@ public class StructureTNTEffect extends PrimedTNTEffect {
 	
 	public static class DesertPyramid extends DesertPyramidStructure {
 
-		public DesertPyramid(Structure.StructureSettings settings) {
+		public DesertPyramid(Structure.Config settings) {
 			super(settings);
 		}
 		
 		@Override
-		public Optional<Structure.GenerationStub> findGenerationPoint(Structure.GenerationContext ctx) {
-			return onTopOfChunkCenter(ctx, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (p) -> {
+		public Optional<Structure.StructurePosition> getStructurePosition(Structure.Context ctx) {
+			return getStructurePosition(ctx, Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, (p) -> {
 				generatePieces(p, ctx);
 			});
 		}
 		
-		private void generatePieces(StructurePiecesBuilder builder, Structure.GenerationContext ctx) {
+		private void generatePieces(StructurePiecesCollector builder, Structure.Context ctx) {
 			ChunkPos chunkpos = ctx.chunkPos();
-			SinglePieceStructure.PieceConstructor constructor = DesertPyramidPiece::new;
-			builder.addPiece(constructor.construct(ctx.random(), chunkpos.getMinBlockX(), chunkpos.getMinBlockZ()));
+			Constructor constructor = DesertTempleGenerator::new;
+			builder.addPiece(constructor.construct(ctx.random(), chunkpos.getStartX(), chunkpos.getStartZ()));
 		}
 	}
 	
 	public static class Monument extends OceanMonumentStructure {
 
-		public Monument(StructureSettings settings) {
+		public Monument(Structure.Config settings) {
 			super(settings);
 		}
 		
 		@Override
-		public Optional<Structure.GenerationStub> findGenerationPoint(Structure.GenerationContext ctx) {
-			return onTopOfChunkCenter(ctx, Heightmap.Types.OCEAN_FLOOR_WG, (p) -> {
+		public Optional<Structure.StructurePosition> getStructurePosition(Structure.Context ctx) {
+			return getStructurePosition(ctx, Heightmap.Type.OCEAN_FLOOR_WG, (p) -> {
 				generatePieces(p, ctx);
 			});
 		}
 
-		private static StructurePiece createTopPiece(ChunkPos pos, WorldgenRandom rand) {
-			int i = pos.getMinBlockX() - 29;
-			int j = pos.getMinBlockZ() - 29;
-			Direction direction = Direction.Plane.HORIZONTAL.getRandomDirection(rand);
-			return new OceanMonumentPieces.MonumentBuilding(rand, i, j, direction);
+		private static StructurePiece createTopPiece(ChunkPos pos, ChunkRandom rand) {
+			int i = pos.getStartX() - 29;
+			int j = pos.getStartZ() - 29;
+			Direction direction = Direction.Type.HORIZONTAL.random(rand);
+			return new OceanMonumentGenerator.Base(rand, i, j, direction);
 		}
 
-		private static void generatePieces(StructurePiecesBuilder builder, Structure.GenerationContext ctx) {
+		private static void generatePieces(StructurePiecesCollector builder, Structure.Context ctx) {
 			builder.addPiece(createTopPiece(ctx.chunkPos(), ctx.random()));
 		}
 	}
