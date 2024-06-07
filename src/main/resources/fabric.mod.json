@@ -1,0 +1,32 @@
+{
+	"schemaVersion": 1,
+	"id": "luckytntmod",
+	"version": "0.97.1.0",
+	"name": "Lucky TNT Mod",
+	"description": "Lucky TNT adds tons of new TNT to destroy your world with!",
+	"authors": [
+		"Fleshcrafter",
+		"SlimingHD"
+	],
+	"contact": {
+		"homepage": "https://www.curseforge.com/minecraft/mc-mods/luckytnt",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "All Rights Reserved",
+	"icon": "assets/luckytntmod/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"luckytnt.LuckyTNTMod"
+		]
+	},
+	"mixins": [
+		"luckytntmod.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": ">=1.20.3",
+		"java": ">=17",
+		"fabric-api": "*"
+	}
+}
