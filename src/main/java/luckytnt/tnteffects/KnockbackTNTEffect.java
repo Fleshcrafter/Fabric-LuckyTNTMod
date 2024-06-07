@@ -11,7 +11,6 @@ import luckytntlib.util.LuckyTNTEntityExtension;
 import luckytntlib.util.explosions.ImprovedExplosion;
 import luckytntlib.util.tnteffects.PrimedTNTEffect;
 import net.minecraft.block.Block;
-import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -68,10 +67,10 @@ public class KnockbackTNTEffect extends PrimedTNTEffect {
 	
 	@Override
 	public void serverExplosion(IExplosiveEntity ent) {
-		List<Entity> entities = ent.getLevel().getEntities((Entity)ent, new AABB(ent.x() - 75, ent.y() - 75, ent.z() - 75, ent.x() + 75, ent.y() + 75, ent.z() + 75));
+		List<Entity> entities = ent.getLevel().getOtherEntities((Entity)ent, new Box(ent.x() - 75, ent.y() - 75, ent.z() - 75, ent.x() + 75, ent.y() + 75, ent.z() + 75));
 		for(Entity entity : entities) {
-			if(!entity.ignoreExplosion(ImprovedExplosion.dummyExplosion(ent.getLevel()))) {
-				double distance = Math.sqrt(entity.distanceToSqr(ent.getPos())) / (75 * 2);
+			if(!entity.isImmuneToExplosion(ImprovedExplosion.dummyExplosion(ent.getLevel()))) {
+				double distance = Math.sqrt(entity.squaredDistanceTo(ent.getPos())) / (75 * 2);
 				if(distance <= 1f) {
 					double offX = (entity.getX() - ent.x());
 					double offY = (entity.getEyeY() - ent.y());
@@ -81,9 +80,9 @@ public class KnockbackTNTEffect extends PrimedTNTEffect {
 					offY /= distance2;
 					offZ /= distance2;
 					float damage = (1f - (float)distance);
-					entity.setVelocity(entity.getDeltaMovement().add(offX * damage * 15, offY * damage * 15, offZ * damage * 15));
+					entity.setVelocity(entity.getVelocity().add(offX * damage * 15, offY * damage * 15, offZ * damage * 15));
 					if(entity instanceof PlayerEntity player) {
-						player.hurtMarked = true;
+						player.velocityModified = true;
 					}
 				}
 			}
