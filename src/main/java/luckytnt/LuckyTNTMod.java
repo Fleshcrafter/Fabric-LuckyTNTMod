@@ -53,22 +53,5 @@ public class LuckyTNTMod implements ModInitializer {
 		}
 		
 		LuckyTNTConfigValues.registerConfig();
-		/**FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-    		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        	SoundRegistry.SOUNDS.register(bus);
-    		entityRegistry.register(bus);
-    		blockEntityRegistry.register(bus);
-    		blockRegistry.register(bus);
-    		itemRegistry.register(bus);
-    		effectRegistry.register(bus);
-    		featureRegistry.register(bus);
-        	MinecraftForge.EVENT_BUS.register(this);
-        	LuckyTNTConfigs.register();
-        	ModLoadingContext.get().registerExtensionPoint(ConfigScreenHandler.ConfigScreenFactory.class, () -> new ConfigScreenHandler.ConfigScreenFactory(new BiFunction<Minecraft, Screen, Screen>() {		
-			@Override
-			public Screen apply(Minecraft mc, Screen screen) {
-				return new ConfigScreen();
-			}
-		}));*/
 	}
 }

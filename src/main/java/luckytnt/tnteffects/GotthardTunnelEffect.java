@@ -20,7 +20,7 @@ public class GotthardTunnelEffect extends PrimedTNTEffect {
 
 	@Override
 	public void explosionTick(IExplosiveEntity ent) {
-		if(!ent.getLevel().isClientSide()) {
+		if(!ent.getLevel().isClient()) {
       		PacketHandler.CHANNEL.send(new ClientboundStringNBTPacket("direction", ent.getPersistentData().getString("direction"), ((Entity)ent).getId()), PacketDistributor.TRACKING_ENTITY.with((Entity)ent));
       		PacketHandler.CHANNEL.send(new ClientboundBooleanNBTPacket("streets", ent.getPersistentData().getBoolean("streets"), ((Entity)ent).getId()), PacketDistributor.TRACKING_ENTITY.with((Entity)ent));
       	}

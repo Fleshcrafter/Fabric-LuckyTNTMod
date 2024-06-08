@@ -1,28 +1,8 @@
 package luckytnt.client.overlay;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-
-import luckytnt.config.LuckyTNTConfigValues;
-import luckytnt.registry.EffectRegistry;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.RenderGuiEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-
 public class OverlayTick {
 	
-	private static float contaminatedAmount = 0;
+	/*private static float contaminatedAmount = 0;
 	
 	public static void onOverlayRender(DrawContext event) {
 		PlayerEntity player = MinecraftClient.getInstance().player;
@@ -52,5 +32,5 @@ public class OverlayTick {
 		RenderSystem.disableBlend();
 		RenderSystem.enableDepthTest();
 		RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
-	}
+	}*/
 }
