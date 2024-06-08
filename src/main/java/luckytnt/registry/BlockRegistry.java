@@ -265,4 +265,6 @@ public class BlockRegistry {
 	public static final Supplier<Block> OBSIDIAN_DETECTOR_RAIL = LuckyTNTMod.MODID.register("obsidian_detector_rail", () -> new DetectorRailBlock(AbstractBlock.Settings.create().mapColor(MapColor.NONE).sound(SoundType.METAL).requiresCorrectToolForDrops().strength(0.7f, 1200f).noCollission()));
 	public static final Supplier<Block> TOXIC_STONE = LuckyTNTMod.MODID.register("toxic_stone", () -> new ToxicStoneBlock(BlockBehaviour.Properties.ofFullCopy(Blocks.STONE).mapColor(MapColor.COLOR_GREEN).lootFrom(() -> Blocks.STONE)));
 	public static final Supplier<Block> PRESENT = LuckyTNTMod.MODID.register("present", () -> new PresentBlock(AbstractBlock.Settings.create().mapColor(MapColor.COLOR_RED).sound(SoundType.WOOL).strength(0.3f, 0f)));
+	
+	public static void init() {}
 }
