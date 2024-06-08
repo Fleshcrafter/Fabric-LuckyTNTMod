@@ -6,18 +6,19 @@ import luckytntlib.util.explosions.ExplosionHelper;
 import luckytntlib.util.explosions.IForEachBlockExplosionEffect;
 import luckytntlib.util.explosions.ImprovedExplosion;
 import luckytntlib.util.tnteffects.PrimedTNTEffect;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.CoralFanBlock;
-import net.minecraft.world.level.block.KelpPlantBlock;
-import net.minecraft.world.level.block.LiquidBlock;
-import net.minecraft.world.level.block.SeagrassBlock;
-import net.minecraft.world.level.block.TallSeagrassBlock;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.CoralFanBlock;
+import net.minecraft.block.FluidBlock;
+import net.minecraft.block.KelpPlantBlock;
+import net.minecraft.block.SeagrassBlock;
+import net.minecraft.block.TallSeagrassBlock;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
-public class VaporizeTNTEffect extends PrimedTNTEffect{
+public class VaporizeTNTEffect extends PrimedTNTEffect {
 
 	private final int strength;
 	
@@ -30,9 +31,10 @@ public class VaporizeTNTEffect extends PrimedTNTEffect{
 		ExplosionHelper.doSphericalExplosion(entity.getLevel(), entity.getPos(), strength, new IForEachBlockExplosionEffect() {
 			
 			@Override
-			public void doBlockExplosion(Level level, BlockPos pos, BlockState state, double distance) {
-				if(state.getBlock() instanceof LiquidBlock  || state.getBlock() instanceof KelpPlantBlock || state.getBlock() instanceof SeagrassBlock || state.getBlock() instanceof TallSeagrassBlock || state.getBlock() instanceof CoralFanBlock) {
-					state.onBlockExploded(level, pos, ImprovedExplosion.dummyExplosion(entity.getLevel()));
+			public void doBlockExplosion(World level, BlockPos pos, BlockState state, double distance) {
+				if(state.getBlock() instanceof FluidBlock  || state.getBlock() instanceof KelpPlantBlock || state.getBlock() instanceof SeagrassBlock || state.getBlock() instanceof TallSeagrassBlock || state.getBlock() instanceof CoralFanBlock) {
+					state.getBlock().onDestroyedByExplosion(level, pos, ImprovedExplosion.dummyExplosion(entity.getLevel()));
+					level.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 				}
 			}
 		});

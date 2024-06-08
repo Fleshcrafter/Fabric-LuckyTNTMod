@@ -4,56 +4,47 @@ import java.util.List;
 import java.util.Random;
 
 import luckytnt.LevelVariables;
-import luckytnt.LuckyTNTMod;
 import luckytnt.config.LuckyTNTConfigValues;
 import luckytnt.registry.EntityRegistry;
 import luckytnt.util.Materials;
 import luckytntlib.entity.LExplosiveProjectile;
 import luckytntlib.entity.LivingPrimedLTNT;
 import luckytntlib.entity.PrimedLTNT;
-import luckytntlib.util.explosions.ImprovedExplosion;
-import net.fabricmc.loader.impl.discovery.DomainObject.Mod;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.network.protocol.game.ClientboundLevelChunkWithLightPacket;
-import net.minecraft.registry.Registries;
+import net.minecraft.entity.LightningEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.network.packet.s2c.play.ChunkDataS2CPacket;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.Mth;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.InteractionHand;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeKeys;
+import net.minecraft.world.chunk.ChunkSection;
 import net.minecraft.world.chunk.PalettedContainer;
-import net.minecraft.world.entity.LightningBolt;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.event.listener.GameEventListener.Holder;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.biome.Biomes;
-import net.minecraft.world.level.chunk.LevelChunkSection;
-import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-@Mod.EventBusSubscriber(modid = LuckyTNTMod.MODID)
 public class LevelEvents {
 
-	@SubscribeEvent
-	public static void onLevelUpdate(TickEvent.LevelTickEvent event) {
-		Level level = event.level;
+	public static void onLevelUpdate(ServerWorld event) {
+		World level = event;
 		
-		List<? extends Player> players = level.players();
+		List<? extends PlayerEntity> players = level.getPlayers();
 		LevelVariables variables = LevelVariables.get(level);
-		if(event.phase == TickEvent.Phase.END && level.dimension() == Level.OVERWORLD) {
-			if(level instanceof ServerLevel sLevel) {
+		if(level.getRegistryKey() == World.OVERWORLD) {
+			if(level instanceof ServerWorld sLevel) {
 				if(variables.doomsdayTime > 0)
 					variables.doomsdayTime--;
 				if(variables.toxicCloudsTime > 0)
@@ -66,7 +57,7 @@ public class LevelEvents {
 					variables.tntRainTime--;
 				variables.sync(sLevel);
 			}
-			for(Player player : players) {
+			for(PlayerEntity player : players) {
 				if(variables != null) {
 					double x = player.getX();
 					double y = player.getY();
@@ -75,27 +66,27 @@ public class LevelEvents {
 						for(int count = 0; count < 6; count++) {
 							Entity ent = EntityRegistry.HAILSTONE.get().create(level);
 							ent.setPos(x + Math.random() * 100 - Math.random() * 100, y + LuckyTNTConfigValues.DROP_HEIGHT.get() / 4 + Math.random() * LuckyTNTConfigValues.DROP_HEIGHT.get() / 4, z + Math.random() * 100 - Math.random() * 100);
-							level.addFreshEntity(ent);
+							level.spawnEntity(ent);
 						}
 						if(Math.random() < 0.00675f * LuckyTNTConfigValues.AVERAGE_DIASTER_INTENSITY.get()) {
 							LExplosiveProjectile ent = EntityRegistry.LITTLE_METEOR.get().create(level);
 							ent.setPos(x + Math.random() * 200 - Math.random() * 200, y + LuckyTNTConfigValues.DROP_HEIGHT.get(), z + Math.random() * 200 - Math.random() * 200);
-							level.addFreshEntity(ent);
+							level.spawnEntity(ent);
 						}
 						if(Math.random() < 0.025f * LuckyTNTConfigValues.AVERAGE_DIASTER_INTENSITY.get()) {
 							Entity ent = EntityRegistry.MINI_METEOR.get().create(level);
 							ent.setPos(x + Math.random() * 200 - Math.random() * 200, y + LuckyTNTConfigValues.DROP_HEIGHT.get(), z + Math.random() * 200 - Math.random() * 200);
-							level.addFreshEntity(ent);
+							level.spawnEntity(ent);
 						}
 						if(Math.random() < 0.1f * LuckyTNTConfigValues.AVERAGE_DIASTER_INTENSITY.get()) {
-							if(level instanceof ServerLevel) {
+							if(level instanceof ServerWorld) {
 								double offX = Math.random() * 200 - Math.random() * 200;
 								double offZ = Math.random() * 200 - Math.random() * 200;
 								for(double offY = 320; offY > -64; offY--) {
-									if(!level.getBlockState(new BlockPos(Mth.floor(x + offX), Mth.floor(offY), Mth.floor(z + offZ))).isAir()) {
-										Entity lighting = new LightningBolt(EntityType.LIGHTNING_BOLT,  level);
+									if(!level.getBlockState(new BlockPos(MathHelper.floor(x + offX), MathHelper.floor(offY), MathHelper.floor(z + offZ))).isAir()) {
+										Entity lighting = new LightningEntity(EntityType.LIGHTNING_BOLT,  level);
 										lighting.setPos(x + offX, offY, z + offZ);
-										level.addFreshEntity(lighting);
+										level.spawnEntity(lighting);
 										break;
 									}
 								}
@@ -104,27 +95,27 @@ public class LevelEvents {
 					}
 					if(variables.toxicCloudsTime > 0) {
 						if(Math.random() < 0.005f * LuckyTNTConfigValues.AVERAGE_DIASTER_INTENSITY.get()) {
-							BlockPos pos = new BlockPos(Mth.floor(x + Math.random() * 100 - Math.random() * 100), Mth.floor(y + Math.random() * 50 - Math.random() * 50), Mth.floor(z + Math.random() * 100 - Math.random() * 100));
-							if(!level.getBlockState(pos).isCollisionShapeFullBlock(level, pos) || level.getBlockState(pos).isAir()) {
+							BlockPos pos = new BlockPos(MathHelper.floor(x + Math.random() * 100 - Math.random() * 100), MathHelper.floor(y + Math.random() * 50 - Math.random() * 50), MathHelper.floor(z + Math.random() * 100 - Math.random() * 100));
+							if(!level.getBlockState(pos).isFullCube(level, pos) || level.getBlockState(pos).isAir()) {
 								PrimedLTNT cloud = EntityRegistry.TOXIC_CLOUD.get().create(level);
 								cloud.setPos(pos.getX(), pos.getY(), pos.getZ());
-								level.addFreshEntity(cloud);
+								level.spawnEntity(cloud);
 							}						
 						}
 					}
 					if(variables.iceAgeTime > 0) {
-						Registry<Biome> registry = level.registryAccess().registryOrThrow(Registries.BIOME);
-						Holder<Biome> biome = registry.wrapAsHolder(registry.getOrThrow(Biomes.SNOWY_TAIGA));
-						if(player instanceof ServerPlayer sPlayer) {	
+						Registry<Biome> registry = level.getRegistryManager().get(RegistryKeys.BIOME);
+						RegistryEntry<Biome> biome = registry.entryOf(BiomeKeys.SNOWY_TAIGA);
+						if(player instanceof ServerPlayerEntity sPlayer) {	
 							for(double offX = -32; offX <= 32; offX += 16) {
 								for(double offZ = -32; offZ <= 32; offZ += 16) {
 									boolean needsUpdate = false;
-									for(LevelChunkSection section : level.getChunk(new BlockPos(Mth.floor(x + offX), 0, Mth.floor(z + offZ))).getSections()) {
+									for(ChunkSection section : level.getChunk(new BlockPos(MathHelper.floor(x + offX), 0, MathHelper.floor(z + offZ))).getSectionArray()) {
 										for(int i = 0; i < 4; ++i) {
 											for(int j = 0; j < 4; ++j) {
 												for(int k = 0; k < 4; ++k) {
-													if(section.getBiomes() instanceof PalettedContainer<Holder<Biome>> container && section.getBiomes().get(i, j, k).get() != level.registryAccess().registryOrThrow(Registries.BIOME).getOrThrow(Biomes.SNOWY_TAIGA)) {
-														container.getAndSetUnchecked(i, j, k, biome);
+													if(section.getBiomeContainer() instanceof PalettedContainer<RegistryEntry<Biome>> container && section.getBiomeContainer().get(i, j, k).value() != biome.value()) {
+														container.swapUnsafe(i, j, k, biome);
 														needsUpdate = true;
 													}
 												}
@@ -132,25 +123,25 @@ public class LevelEvents {
 										}
 									}
 									if(needsUpdate) {
-										sPlayer.connection.send(new ClientboundLevelChunkWithLightPacket(level.getChunkAt(new BlockPos(Mth.floor(x + offX), 0, Mth.floor(z + offZ))), level.getLightEngine(), null, null));
+										sPlayer.networkHandler.sendPacket(new ChunkDataS2CPacket(level.getWorldChunk(new BlockPos(MathHelper.floor(x + offX), 0, MathHelper.floor(z + offZ))), level.getLightingProvider(), null, null));
 									}
 								}
 							}
 						}
 					}
 					if(variables.heatDeathTime > 0) {
-						Registry<Biome> registry = level.registryAccess().registryOrThrow(Registries.BIOME);
-						Holder<Biome> biome = registry.wrapAsHolder(registry.getOrThrow(Biomes.DESERT));
-						if(player instanceof ServerPlayer sPlayer) {	
+						Registry<Biome> registry = level.getRegistryManager().get(RegistryKeys.BIOME);
+						RegistryEntry<Biome> biome = registry.entryOf(BiomeKeys.DESERT);
+						if(player instanceof ServerPlayerEntity sPlayer) {	
 							for(double offX = -32; offX <= 32; offX += 16) {
 								for(double offZ = -32; offZ <= 32; offZ += 16) {
 									boolean needsUpdate = false;
-									for(LevelChunkSection section : level.getChunk(new BlockPos(Mth.floor(x + offX), 0, Mth.floor(z + offZ))).getSections()) {
+									for(ChunkSection section : level.getChunk(new BlockPos(MathHelper.floor(x + offX), 0, MathHelper.floor(z + offZ))).getSectionArray()) {
 										for(int i = 0; i < 4; ++i) {
 											for(int j = 0; j < 4; ++j) {
 												for(int k = 0; k < 4; ++k) {
-													if(section.getBiomes() instanceof PalettedContainer<Holder<Biome>> container && section.getBiomes().get(i, j, k).get() != level.registryAccess().registryOrThrow(Registries.BIOME).getOrThrow(Biomes.DESERT)) {
-														container.getAndSetUnchecked(i, j, k, biome);
+													if(section.getBiomeContainer() instanceof PalettedContainer<RegistryEntry<Biome>> container && section.getBiomeContainer().get(i, j, k).value() != biome.value()) {
+														container.swapUnsafe(i, j, k, biome);
 														needsUpdate = true;
 													}
 												}
@@ -158,45 +149,45 @@ public class LevelEvents {
 										}
 									}
 									if(needsUpdate) {
-										sPlayer.connection.send(new ClientboundLevelChunkWithLightPacket(level.getChunkAt(new BlockPos(Mth.floor(x + offX), 0, Mth.floor(z + offZ))), level.getLightEngine(), null, null));
+										sPlayer.networkHandler.sendPacket(new ChunkDataS2CPacket(level.getWorldChunk(new BlockPos(MathHelper.floor(x + offX), 0, MathHelper.floor(z + offZ))), level.getLightingProvider(), null, null));
 									}
 								}
 							}
 							for(int i = 0; i < 1 + (int)(0.5D * LuckyTNTConfigValues.AVERAGE_DIASTER_INTENSITY.get()); i++) {
 								int offX = new Random().nextInt(60) - 30;
 								int offZ = new Random().nextInt(60) - 30;
-								int posY = getTopBlock(sPlayer.level(), sPlayer.getX() + offX, sPlayer.getZ() + offZ, false);
-								BlockPos pos = new BlockPos(Mth.floor(sPlayer.getX() + offX), Mth.floor(posY + 1), Mth.floor(sPlayer.getZ() + offZ));
-								BlockState state = sPlayer.level().getBlockState(pos);
-								if((Materials.isPlant(state) || state.isAir()) && state.getExplosionResistance(level, pos, ImprovedExplosion.dummyExplosion(level)) <= 100) {
+								int posY = getTopBlock(sPlayer.getWorld(), sPlayer.getX() + offX, sPlayer.getZ() + offZ, false);
+								BlockPos pos = new BlockPos(MathHelper.floor(sPlayer.getX() + offX), MathHelper.floor(posY + 1), MathHelper.floor(sPlayer.getZ() + offZ));
+								BlockState state = sPlayer.getWorld().getBlockState(pos);
+								if((Materials.isPlant(state) || state.isAir()) && state.getBlock().getBlastResistance() <= 100) {
 									if(Math.random() > 0.1D) {
-										BlockHitResult result = new BlockHitResult(new Vec3(sPlayer.getX(), sPlayer.getY(), sPlayer.getZ()), Direction.UP, pos, false);
-										BlockPlaceContext ctx = new BlockPlaceContext(sPlayer, InteractionHand.MAIN_HAND, sPlayer.getItemInHand(InteractionHand.MAIN_HAND), result);
-										level.setBlock(pos, Blocks.FIRE.getStateForPlacement(ctx), 3);
+										BlockHitResult result = new BlockHitResult(new Vec3d(sPlayer.getX(), sPlayer.getY(), sPlayer.getZ()), Direction.UP, pos, false);
+										ItemPlacementContext ctx = new ItemPlacementContext(sPlayer, Hand.MAIN_HAND, sPlayer.getStackInHand(Hand.MAIN_HAND), result);
+										level.setBlockState(pos, Blocks.FIRE.getPlacementState(ctx), 3);
 									} else {
-										level.setBlock(pos, Blocks.LAVA.defaultBlockState(), 3);
+										level.setBlockState(pos, Blocks.LAVA.getDefaultState(), 3);
 									}
 								}
 							}
 							for(int i = 0; i < 1 + (int)(0.5D * LuckyTNTConfigValues.AVERAGE_DIASTER_INTENSITY.get()); i++) {
 								int offX = new Random().nextInt(60) - 30;
 								int offZ = new Random().nextInt(60) - 30;
-								int posY = getTopBlock(sPlayer.level(), sPlayer.getX() + offX, sPlayer.getZ() + offZ, true);
-								BlockPos pos = new BlockPos(Mth.floor(sPlayer.getX() + offX), posY, Mth.floor(sPlayer.getZ() + offZ));
-								BlockState state = sPlayer.level().getBlockState(pos);
-								if(state.is(Blocks.GRASS_BLOCK)) {
-									level.setBlock(pos, Math.random() > 0.5D ? Blocks.COARSE_DIRT.defaultBlockState() : Blocks.DIRT.defaultBlockState(), 3);
-								} else if(sPlayer.level().getBlockState(pos.above()).is(Blocks.WATER) && Math.random() > 0.6D) {
-									level.setBlock(pos, Blocks.MAGMA_BLOCK.defaultBlockState(), 3);
+								int posY = getTopBlock(sPlayer.getWorld(), sPlayer.getX() + offX, sPlayer.getZ() + offZ, true);
+								BlockPos pos = new BlockPos(MathHelper.floor(sPlayer.getX() + offX), posY, MathHelper.floor(sPlayer.getZ() + offZ));
+								BlockState state = sPlayer.getWorld().getBlockState(pos);
+								if(state.isOf(Blocks.GRASS_BLOCK)) {
+									level.setBlockState(pos, Math.random() > 0.5D ? Blocks.COARSE_DIRT.getDefaultState() : Blocks.DIRT.getDefaultState(), 3);
+								} else if(sPlayer.getWorld().getBlockState(pos.up()).isOf(Blocks.WATER) && Math.random() > 0.6D) {
+									level.setBlockState(pos, Blocks.MAGMA_BLOCK.getDefaultState(), 3);
 								}
 							}
 							for(int offX = -30; offX < 30; offX += 2) {
 								for(int offZ = -30; offZ < 30; offZ += 2) {
-									int posY = getTopBlock(sPlayer.level(), sPlayer.getX() + offX, sPlayer.getZ() + offZ, true);
-									BlockPos pos = new BlockPos(Mth.floor(sPlayer.getX() + offX), posY + 1, Mth.floor(sPlayer.getZ() + offZ));
-									BlockState state = sPlayer.level().getBlockState(pos);
-									if((Materials.isPlant(state) || state.isAir()) && sPlayer.level().getBlockState(pos.below()).canSustainPlant(level, pos.below(), Direction.UP, (IPlantable)Blocks.DEAD_BUSH) && state.getExplosionResistance(level, pos, ImprovedExplosion.dummyExplosion(level)) <= 100 && state.getBlock() != Blocks.DEAD_BUSH) {
-										level.setBlock(pos, Blocks.DEAD_BUSH.defaultBlockState(), 3);
+									int posY = getTopBlock(sPlayer.getWorld(), sPlayer.getX() + offX, sPlayer.getZ() + offZ, true);
+									BlockPos pos = new BlockPos(MathHelper.floor(sPlayer.getX() + offX), posY + 1, MathHelper.floor(sPlayer.getZ() + offZ));
+									BlockState state = sPlayer.getWorld().getBlockState(pos);
+									if((Materials.isPlant(state) || state.isAir()) && sPlayer.getWorld().getBlockState(pos.down()).canPlaceAt(level, pos) && state.getBlock().getBlastResistance() <= 100 && state.getBlock() != Blocks.DEAD_BUSH) {
+										level.setBlockState(pos, Blocks.DEAD_BUSH.getDefaultState(), 3);
 									}
 								}
 							}
@@ -211,7 +202,7 @@ public class LevelEvents {
 						} else if(LuckyTNTConfigValues.AVERAGE_DIASTER_INTENSITY.get().intValue() > 15) {
 							i = 1;
 						}
-						if (!level.isClientSide() && variables.tntRainTime % i == 0) {
+						if (!level.isClient() && variables.tntRainTime % i == 0) {
 							Entity ent;
 							int rand = new Random().nextInt(100);
 							if (rand == 0) {
@@ -258,7 +249,7 @@ public class LevelEvents {
 							if(ent instanceof LivingPrimedLTNT tnt) {
 								tnt.setTNTFuse(120);
 							}
-							level.addFreshEntity(ent);
+							level.spawnEntity(ent);
 						}
 					}
 				}
@@ -266,7 +257,6 @@ public class LevelEvents {
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static int getTopBlock(World level, double x, double z, boolean ignoreLeaves) {
 		if(!level.isClient) {
 			boolean blockFound = false;

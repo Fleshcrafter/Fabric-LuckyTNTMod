@@ -1,16 +1,19 @@
 package luckytnt.registry;
 
 import luckytnt.client.model.BombModel;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry.TexturedModelDataProvider;
+import net.minecraft.client.model.TexturedModelData;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = {Dist.CLIENT})
 public class ModelRegistry {
 
-	@SubscribeEvent
-	public static void registerModels(EntityRenderersEvent.RegisterLayerDefinitions event) {
-		event.registerLayerDefinition(BombModel.LAYER_LOCATION, BombModel::createBodyLayer);
+	public static void init() {
+		EntityModelLayerRegistry.registerModelLayer(BombModel.LAYER_LOCATION, new TexturedModelDataProvider() {
+			
+			@Override
+			public TexturedModelData createModelData() {
+				return BombModel.getTexturedModelData();
+			}
+		});
 	}
 }

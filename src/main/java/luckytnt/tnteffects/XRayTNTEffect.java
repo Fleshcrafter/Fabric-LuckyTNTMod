@@ -6,14 +6,14 @@ import luckytntlib.util.explosions.ExplosionHelper;
 import luckytntlib.util.explosions.IForEachBlockExplosionEffect;
 import luckytntlib.util.explosions.ImprovedExplosion;
 import luckytntlib.util.tnteffects.PrimedTNTEffect;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.Tags;
+import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
-public class XRayTNTEffect extends PrimedTNTEffect{
+public class XRayTNTEffect extends PrimedTNTEffect {
 
 	private final int radius;
 	
@@ -26,10 +26,10 @@ public class XRayTNTEffect extends PrimedTNTEffect{
 		ExplosionHelper.doSphericalExplosion(entity.getLevel(), entity.getPos(), radius, new IForEachBlockExplosionEffect() {
 			
 			@Override
-			public void doBlockExplosion(Level level, BlockPos pos, BlockState state, double distance) {
-				if(!state.is(Tags.Blocks.ORES) && !state.isAir() && state.getExplosionResistance(level, pos, ImprovedExplosion.dummyExplosion(entity.getLevel())) <= 100) {
-					state.onBlockExploded(level, pos, ImprovedExplosion.dummyExplosion(entity.getLevel()));
-					level.setBlockAndUpdate(pos, Blocks.GLASS.defaultBlockState());
+			public void doBlockExplosion(World level, BlockPos pos, BlockState state, double distance) {
+				if(!state.isIn(ConventionalBlockTags.ORES) && !state.isAir() && state.getBlock().getBlastResistance() <= 100) {
+					state.getBlock().onDestroyedByExplosion(level, pos, ImprovedExplosion.dummyExplosion(entity.getLevel()));
+					level.setBlockState(pos, Blocks.GLASS.getDefaultState());
 				}
 			}
 		});

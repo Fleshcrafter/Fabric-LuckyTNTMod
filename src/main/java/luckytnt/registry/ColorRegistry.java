@@ -1,30 +1,34 @@
 package luckytnt.registry;
 
-import net.minecraft.client.renderer.BiomeColors;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.GrassColor;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.fabricmc.fabric.impl.client.rendering.ColorProviderRegistryImpl;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.color.block.BlockColorProvider;
+import net.minecraft.client.color.item.ItemColorProvider;
+import net.minecraft.client.color.world.BiomeColors;
+import net.minecraft.client.color.world.GrassColors;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.BlockRenderView;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ColorRegistry {
 	
-	@SubscribeEvent
-	public static void registerBlockColors(RegisterColorHandlersEvent.Block event) {
-		event.register((BlockState state, BlockAndTintGetter tint, BlockPos pos, int color) -> {
-			return tint != null && pos != null ? BiomeColors.getAverageGrassColor(tint, pos) : GrassColor.get(0.5D, 1D);
-		}, BlockRegistry.CUSTOM_FIREWORK.get());
-	}
+	private static final BlockColorProvider BLOCK_PROVIDER = new BlockColorProvider() {
+		
+		@Override
+		public int getColor(BlockState state, BlockRenderView tint, BlockPos pos, int color) {
+			return tint != null && pos != null ? BiomeColors.getGrassColor(tint, pos) : GrassColors.getColor(0.5D, 1D);
+		}
+	};
+	private static final ItemColorProvider ITEM_PROVIDER = new ItemColorProvider() {
+		
+		@Override
+		public int getColor(ItemStack stack, int color) {
+			return GrassColors.getColor(0.5D, 1D);
+		}
+	};
 	
-	@SubscribeEvent
-	public static void registerItemColors(RegisterColorHandlersEvent.Item event) {
-		event.register((ItemStack stack, int color) -> {
-			return GrassColor.get(0.5D, 1D);
-		}, BlockRegistry.CUSTOM_FIREWORK.get());
+	public static void init() {
+		ColorProviderRegistryImpl.BLOCK.register(BLOCK_PROVIDER, BlockRegistry.CUSTOM_FIREWORK.get());
+		ColorProviderRegistryImpl.ITEM.register(ITEM_PROVIDER, BlockRegistry.CUSTOM_FIREWORK.get());
 	}
 }
