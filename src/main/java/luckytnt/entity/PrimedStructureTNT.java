@@ -17,6 +17,7 @@ public class PrimedStructureTNT extends PrimedLTNT {
 	
 	@Override
 	public void setChangeListener(EntityChangeListener listener) {
+		super.setChangeListener(listener);
 		if(!getWorld().isClient() && listener != EntityChangeListener.NONE) {
       		PacketHandler.CHANNEL.send(new ClientboundStringNBTPacket("structure", getPersistentData().getString("structure"), getId()), PacketDistributor.TRACKING_ENTITY.with(this));
       	}
