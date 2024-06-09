@@ -25,7 +25,7 @@ public abstract class InGameHudMixin {
 	protected abstract void renderOverlay(DrawContext context, Identifier texture, float opacity);
 	
 	@SuppressWarnings("resource")
-	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet.minecraft.client.MinecraftClient;getLastFrameDuration:F"), cancellable = true)
+	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getLastFrameDuration()F"), cancellable = true)
 	private void render(DrawContext context, float tickDelta, CallbackInfo info) {
 		PlayerEntity player = MinecraftClient.getInstance().player;
 		if(player instanceof LuckyTNTEntityExtension lplayer) {

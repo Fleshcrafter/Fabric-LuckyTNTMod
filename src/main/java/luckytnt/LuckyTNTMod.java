@@ -1,10 +1,5 @@
 package luckytnt;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.ModInitializer;
-import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.text.Text;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +19,10 @@ import luckytnt.registry.ModelRegistry;
 import luckytnt.registry.RendererRegistry;
 import luckytnt.registry.SoundRegistry;
 import luckytntlib.registry.RegistryHelper;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.ModInitializer;
+import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.text.Text;
 
 public class LuckyTNTMod implements ModInitializer {
 

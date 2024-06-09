@@ -24,7 +24,7 @@ public class GameRendererMixin {
 	@Final
 	private Camera camera;
 
-	@Inject(method = "renderWorld", at = @At(value = "INVOKE", target = "Lnet.minecraft.client.render.GameRenderer;loadProjectionMatrix:V", shift = At.Shift.AFTER), cancellable = true)
+	@Inject(method = "renderWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/GameRenderer;loadProjectionMatrix(Lorg/joml/Matrix4f;)V", shift = At.Shift.AFTER), cancellable = true)
 	private void renderWorldInject(float tickDelta, long limitTime, MatrixStack matrices, CallbackInfo info) {
 		MinecraftClient minecraft = MinecraftClient.getInstance();
 		ClientPlayerEntity player = minecraft.player;

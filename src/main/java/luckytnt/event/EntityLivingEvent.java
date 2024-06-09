@@ -39,30 +39,34 @@ public class EntityLivingEvent {
 							NbtCompound tag = lentity.getAdditionalPersistentData();
 							tag.putInt("freezeTime", lentity.getAdditionalPersistentData().getInt("freezeTime") + LuckyTNTConfigValues.AVERAGE_DIASTER_INTENSITY.get().intValue());
 							lentity.setAdditionalPersistentData(tag);
-							if(ent instanceof ServerPlayerEntity player)
+							if(ent instanceof ServerPlayerEntity player) {
 								PacketHandler.CHANNEL.send(new ClientboundFreezeNBTPacket("freezeTime", lentity.getAdditionalPersistentData().getInt("freezeTime")), PacketDistributor.PLAYER.with(player));
+							}
 						}
 						else if(lentity.getAdditionalPersistentData().getInt("freezeTime") > 0){
 							NbtCompound tag = lentity.getAdditionalPersistentData();
 							tag.putInt("freezeTime", (int)MathHelper.clamp(lentity.getAdditionalPersistentData().getInt("freezeTime") - 0.5f * sLevel.getLightLevel(LightType.BLOCK, new BlockPos(MathHelper.floor(ent.getX()), MathHelper.floor(ent.getY()), MathHelper.floor(ent.getZ()))), 0, Double.POSITIVE_INFINITY));
 							lentity.setAdditionalPersistentData(tag);
-							if(ent instanceof ServerPlayerEntity player)
+							if(ent instanceof ServerPlayerEntity player) {
 								PacketHandler.CHANNEL.send(new ClientboundFreezeNBTPacket("freezeTime", lentity.getAdditionalPersistentData().getInt("freezeTime")), PacketDistributor.PLAYER.with(player));
+							}
 						}
 					}
 					else {
 						NbtCompound tag = lentity.getAdditionalPersistentData();
 						tag.putInt("freezeTime", 0);
 						lentity.setAdditionalPersistentData(tag);
-						if(ent instanceof ServerPlayerEntity player)
+						if(ent instanceof ServerPlayerEntity player) {
 							PacketHandler.CHANNEL.send(new ClientboundFreezeNBTPacket("freezeTime", lentity.getAdditionalPersistentData().getInt("freezeTime")), PacketDistributor.PLAYER.with(player));
+						}
 					}
 				} else if(lentity.getAdditionalPersistentData().getInt("freezeTime") > 0) {
 					NbtCompound tag = lentity.getAdditionalPersistentData();
 					tag.putInt("freezeTime", (int)MathHelper.clamp(lentity.getAdditionalPersistentData().getInt("freezeTime") - 10, 0, Double.POSITIVE_INFINITY));
 					lentity.setAdditionalPersistentData(tag);
-					if(ent instanceof ServerPlayerEntity player)
+					if(ent instanceof ServerPlayerEntity player) {
 						PacketHandler.CHANNEL.send(new ClientboundFreezeNBTPacket("freezeTime", lentity.getAdditionalPersistentData().getInt("freezeTime")), PacketDistributor.PLAYER.with(player));
+					}
 				}
 				if(lentity.getAdditionalPersistentData().getInt("freezeTime") >= 600) {
 					ent.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, lentity.getAdditionalPersistentData().getInt("freezeTime") / 600));
@@ -80,30 +84,34 @@ public class EntityLivingEvent {
 							NbtCompound tag = lentity.getAdditionalPersistentData();
 							tag.putInt("heatTime", lentity.getAdditionalPersistentData().getInt("heatTime") + LuckyTNTConfigValues.AVERAGE_DIASTER_INTENSITY.get().intValue());
 							lentity.setAdditionalPersistentData(tag);
-							if(ent instanceof ServerPlayerEntity player)
+							if(ent instanceof ServerPlayerEntity player) {
 								PacketHandler.CHANNEL.send(new ClientboundFreezeNBTPacket("heatTime", lentity.getAdditionalPersistentData().getInt("heatTime")), PacketDistributor.PLAYER.with(player));
+							}
 						}
 						else if(lentity.getAdditionalPersistentData().getInt("heatTime") > 0){
 							NbtCompound tag = lentity.getAdditionalPersistentData();
 							tag.putInt("heatTime", (int)MathHelper.clamp(lentity.getAdditionalPersistentData().getInt("heatTime") - 20, 0, Double.POSITIVE_INFINITY));
 							lentity.setAdditionalPersistentData(tag);
-							if(ent instanceof ServerPlayerEntity player)
+							if(ent instanceof ServerPlayerEntity player) {
 								PacketHandler.CHANNEL.send(new ClientboundFreezeNBTPacket("heatTime", lentity.getAdditionalPersistentData().getInt("heatTime")), PacketDistributor.PLAYER.with(player));
+							}
 						}
 					}
 					else {
 						NbtCompound tag = lentity.getAdditionalPersistentData();
 						tag.putInt("heatTime", 0);
 						lentity.setAdditionalPersistentData(tag);
-						if(ent instanceof ServerPlayerEntity player)
+						if(ent instanceof ServerPlayerEntity player) {
 							PacketHandler.CHANNEL.send(new ClientboundFreezeNBTPacket("heatTime", lentity.getAdditionalPersistentData().getInt("heatTime")), PacketDistributor.PLAYER.with(player));
+						}
 					}
 				} else if(lentity.getAdditionalPersistentData().getInt("heatTime") > 0) {
 					NbtCompound tag = lentity.getAdditionalPersistentData();
 					tag.putInt("heatTime", (int)MathHelper.clamp(lentity.getAdditionalPersistentData().getInt("heatTime") - 20, 0, Double.POSITIVE_INFINITY));
 					lentity.setAdditionalPersistentData(tag);
-					if(ent instanceof ServerPlayerEntity player)
+					if(ent instanceof ServerPlayerEntity player) {
 						PacketHandler.CHANNEL.send(new ClientboundFreezeNBTPacket("heatTime", lentity.getAdditionalPersistentData().getInt("heatTime")), PacketDistributor.PLAYER.with(player));
+					}
 				}
 				if(lentity.getAdditionalPersistentData().getInt("heatTime") >= 600) {
 					ent.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 100, 0));
