@@ -16,6 +16,7 @@ import luckytnt.registry.FeatureRegistry;
 import luckytnt.registry.ItemRegistry;
 import luckytnt.registry.LuckyTNTTabs;
 import luckytnt.registry.ModelRegistry;
+import luckytnt.registry.NetworkRegistry;
 import luckytnt.registry.RendererRegistry;
 import luckytnt.registry.SoundRegistry;
 import luckytntlib.registry.RegistryHelper;
@@ -41,6 +42,7 @@ public class LuckyTNTMod implements ModInitializer {
 		EffectRegistry.init();
 		FeatureRegistry.init();
 		CommandRegistry.init();
+		NetworkRegistry.init();
 		EventRegistry.init();
 		
 		if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {

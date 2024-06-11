@@ -88,9 +88,6 @@ public class TunnelingTNTBlock extends LTNTBlock{
 			tag.putString("direction", level.getBlockState(new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z))).getBlock() instanceof TunnelingTNTBlock ? level.getBlockState(new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z))).get(FACING).getName() : "east");
 			tnt.setPersistentData(tag);
 			level.spawnEntity(tnt);
-			if(!level.isClient) {
-				PacketHandler.CHANNEL.send(new ClientboundStringNBTPacket("direction", tnt.getPersistentData().getString("direction"), tnt.getId()), PacketDistributor.TRACKING_ENTITY.with(tnt));
-			}
 			level.playSound(null, new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z)), SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.MASTER, 1, 1);
 			if(level.getBlockState(new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z))).getBlock() == this) {
 				level.setBlockState(new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z)), Blocks.AIR.getDefaultState(), 3);

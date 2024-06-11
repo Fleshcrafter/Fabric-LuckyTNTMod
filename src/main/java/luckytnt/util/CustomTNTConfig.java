@@ -14,9 +14,11 @@ public enum CustomTNTConfig implements StringRepresentable {
 	FIREWORK(Text.translatable("luckytntmod.config.firework_tnt"), "firework");
 	
 	private final MutableText text;
+	private final String name;
 	
 	private CustomTNTConfig(MutableText text, String name) {
 		this.text = text;
+		this.name = name;
 	}
 	
 	public MutableText getComponent() {
@@ -25,6 +27,6 @@ public enum CustomTNTConfig implements StringRepresentable {
 
 	@Override
 	public String getString() {
-		return text.getString();
+		return name;
 	}
 }

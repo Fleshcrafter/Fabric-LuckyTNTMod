@@ -2,8 +2,6 @@ package luckytnt.tnteffects;
 
 import java.util.List;
 
-import luckytnt.network.ClientboundIntNBTPacket;
-import luckytnt.network.PacketHandler;
 import luckytnt.registry.BlockRegistry;
 import luckytntlib.util.IExplosiveEntity;
 import luckytntlib.util.explosions.ImprovedExplosion;
@@ -12,7 +10,6 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 
@@ -35,9 +32,6 @@ public class EatingTNTEffect extends PrimedTNTEffect{
 					NbtCompound tag = entity.getPersistentData();
 					tag.putInt("eatLevel", MathHelper.clamp(entity.getPersistentData().getInt("eatLevel") + item.getStack().getCount(), 0, 300));
 					entity.setPersistentData(tag);
-					if(entity.getLevel() instanceof ServerWorld) {
-						PacketHandler.CHANNEL.send(new ClientboundIntNBTPacket("eatLevel", entity.getPersistentData().getInt("eatLevel"), ((Entity)entity).getId()), PacketDistributor.TRACKING_ENTITY.with((Entity)entity));
-					}
 					item.discard();
 				}
 			}

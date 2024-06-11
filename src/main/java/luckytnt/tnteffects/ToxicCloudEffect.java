@@ -5,8 +5,6 @@ import java.util.List;
 import org.joml.Math;
 import org.joml.Vector3f;
 
-import luckytnt.network.ClientboundToxicCloudPacket;
-import luckytnt.network.PacketHandler;
 import luckytntlib.util.IExplosiveEntity;
 import luckytntlib.util.explosions.ImprovedExplosion;
 import luckytntlib.util.tnteffects.PrimedTNTEffect;
@@ -27,7 +25,6 @@ public class ToxicCloudEffect extends PrimedTNTEffect {
 			NbtCompound tag = ent.getPersistentData();
 			tag.putDouble("size", 1D + Math.random() * 3D);
 			ent.setPersistentData(tag);
-			PacketHandler.CHANNEL.send(new ClientboundToxicCloudPacket(ent.getPersistentData().getDouble("size"), ((Entity)ent).getId()), PacketDistributor.TRACKING_ENTITY.with((Entity)ent));
 		}
 		((Entity)ent).setVelocity(0, 0, 0);
 		((Entity)ent).setPos(((Entity)ent).prevX, ((Entity)ent).prevY, ((Entity)ent).prevZ);

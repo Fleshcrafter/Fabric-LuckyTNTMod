@@ -2,11 +2,17 @@ package luckytnt.client.gui;
 
 import static luckytnt.client.gui.ConfigScreen.deactivatedButtonAction;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import luckytnt.LuckyTNTMod;
 import luckytnt.config.LuckyTNTConfigValues;
+import luckytnt.network.LuckyTNTUpdateConfigValuesPacket;
 import luckytnt.util.CustomTNTConfig;
 import luckytntlib.client.gui.widget.AdvancedSlider;
 import luckytntlib.client.gui.widget.CenteredStringWidget;
 import luckytntlib.config.common.Config;
+import luckytntlib.config.common.Config.ConfigValue;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -20,6 +26,13 @@ import net.minecraft.screen.ScreenTexts;
 import net.minecraft.text.Text;
 
 public class ConfigScreen2 extends Screen {
+	
+	CustomTNTConfig custom_tnt_first_explosion_initial_value = CustomTNTConfig.NO_EXPLOSION;
+	int custom_tnt_first_explosion_intensity_initial_value = 0;
+	CustomTNTConfig custom_tnt_second_explosion_initial_value = CustomTNTConfig.NO_EXPLOSION;
+	int custom_tnt_second_explosion_intensity_initial_value = 0;
+	CustomTNTConfig custom_tnt_third_explosion_initial_value = CustomTNTConfig.NO_EXPLOSION;
+	int custom_tnt_third_explosion_intensity_initial_value = 0;
 	
 	ButtonWidget custom_tnt_first_explosion = null;
 	AdvancedSlider custom_tnt_first_explosion_intensity = null;
@@ -61,10 +74,12 @@ public class ConfigScreen2 extends Screen {
 		rows.add(custom_tnt_first_explosion = new ButtonWidget.Builder(LuckyTNTConfigValues.CUSTOM_TNT_FIRST_EXPLOSION.get().getComponent(), button -> nextExplosionValue(LuckyTNTConfigValues.CUSTOM_TNT_FIRST_EXPLOSION, custom_tnt_first_explosion)).width(100).build());
 		rows.add(new CenteredStringWidget(Text.translatable("luckytntmod.config.first_type"), textRenderer));
 		rows.add(new ButtonWidget.Builder(Text.translatable("luckytntmod.config.reset"), button -> resetExplosion(LuckyTNTConfigValues.CUSTOM_TNT_FIRST_EXPLOSION, custom_tnt_first_explosion)).width(100).build());
+		custom_tnt_first_explosion_initial_value = LuckyTNTConfigValues.CUSTOM_TNT_FIRST_EXPLOSION.get();
 		
 		rows.add(custom_tnt_first_explosion_intensity = new AdvancedSlider(0, 0, 100, 20, Text.empty(), Text.empty(), 1, 20, LuckyTNTConfigValues.CUSTOM_TNT_FIRST_EXPLOSION_INTENSITY.get().intValue(), true));
 		rows.add(new CenteredStringWidget(Text.translatable("luckytntmod.config.first_intensity"), textRenderer));
 		rows.add(new ButtonWidget.Builder(Text.translatable("luckytntmod.config.reset"), button -> resetIntValue(LuckyTNTConfigValues.CUSTOM_TNT_FIRST_EXPLOSION_INTENSITY, 1, custom_tnt_first_explosion_intensity)).width(100).build());
+		custom_tnt_first_explosion_intensity_initial_value = LuckyTNTConfigValues.CUSTOM_TNT_FIRST_EXPLOSION_INTENSITY.get().intValue();
 		
 		rows.add(new CenteredStringWidget(Text.translatable("luckytntmod.config.second_tnt"), textRenderer));
 		rows.add(empty);
@@ -73,10 +88,12 @@ public class ConfigScreen2 extends Screen {
 		rows.add(custom_tnt_second_explosion = new ButtonWidget.Builder(LuckyTNTConfigValues.CUSTOM_TNT_SECOND_EXPLOSION.get().getComponent(), button -> nextExplosionValue(LuckyTNTConfigValues.CUSTOM_TNT_SECOND_EXPLOSION, custom_tnt_second_explosion)).width(100).build());
 		rows.add(new CenteredStringWidget(Text.translatable("luckytntmod.config.second_type"), textRenderer));
 		rows.add(new ButtonWidget.Builder(Text.translatable("luckytntmod.config.reset"), button -> resetExplosion(LuckyTNTConfigValues.CUSTOM_TNT_SECOND_EXPLOSION, custom_tnt_second_explosion)).width(100).build());
+		custom_tnt_second_explosion_initial_value = LuckyTNTConfigValues.CUSTOM_TNT_SECOND_EXPLOSION.get();
 		
 		rows.add(custom_tnt_second_explosion_intensity = new AdvancedSlider(0, 0, 100, 20, Text.empty(), Text.empty(), 1, 20, LuckyTNTConfigValues.CUSTOM_TNT_SECOND_EXPLOSION_INTENSITY.get().intValue(), true));
 		rows.add(new CenteredStringWidget(Text.translatable("luckytntmod.config.second_intensity"), textRenderer));
 		rows.add(new ButtonWidget.Builder(Text.translatable("luckytntmod.config.reset"), button -> resetIntValue(LuckyTNTConfigValues.CUSTOM_TNT_SECOND_EXPLOSION_INTENSITY, 1, custom_tnt_second_explosion_intensity)).width(100).build());
+		custom_tnt_second_explosion_intensity_initial_value = LuckyTNTConfigValues.CUSTOM_TNT_SECOND_EXPLOSION_INTENSITY.get().intValue();
 		
 		rows.add(new CenteredStringWidget(Text.translatable("luckytntmod.config.third_tnt"), textRenderer));
 		rows.add(empty);
@@ -85,10 +102,12 @@ public class ConfigScreen2 extends Screen {
 		rows.add(custom_tnt_third_explosion = new ButtonWidget.Builder(LuckyTNTConfigValues.CUSTOM_TNT_THIRD_EXPLOSION.get().getComponent(), button -> nextExplosionValue(LuckyTNTConfigValues.CUSTOM_TNT_THIRD_EXPLOSION, custom_tnt_third_explosion)).width(100).build());
 		rows.add(new CenteredStringWidget(Text.translatable("luckytntmod.config.third_type"), textRenderer));
 		rows.add(new ButtonWidget.Builder(Text.translatable("luckytntmod.config.reset"), button -> resetExplosion(LuckyTNTConfigValues.CUSTOM_TNT_THIRD_EXPLOSION, custom_tnt_third_explosion)).width(100).build());
+		custom_tnt_third_explosion_initial_value = LuckyTNTConfigValues.CUSTOM_TNT_THIRD_EXPLOSION.get();
 		
 		rows.add(custom_tnt_third_explosion_intensity = new AdvancedSlider(0, 0, 100, 20, Text.empty(), Text.empty(), 1, 20, LuckyTNTConfigValues.CUSTOM_TNT_THIRD_EXPLOSION_INTENSITY.get().intValue(), true));
 		rows.add(new CenteredStringWidget(Text.translatable("luckytntmod.config.third_intensity"), textRenderer));
 		rows.add(new ButtonWidget.Builder(Text.translatable("luckytntmod.config.reset"), button -> resetIntValue(LuckyTNTConfigValues.CUSTOM_TNT_THIRD_EXPLOSION_INTENSITY, 1, custom_tnt_third_explosion_intensity)).width(100).build());
+		custom_tnt_third_explosion_intensity_initial_value = LuckyTNTConfigValues.CUSTOM_TNT_THIRD_EXPLOSION_INTENSITY.get().intValue();
 		
 		ButtonWidget back = new ButtonWidget.Builder(Text.translatable("luckytntmod.config.back"), button -> lastPage()).width(100).build();
 		ButtonWidget done = new ButtonWidget.Builder(ScreenTexts.DONE, button -> close()).width(100).build();
@@ -127,6 +146,30 @@ public class ConfigScreen2 extends Screen {
 		if(custom_tnt_third_explosion_intensity != null) {
 			LuckyTNTConfigValues.CUSTOM_TNT_THIRD_EXPLOSION_INTENSITY.set(custom_tnt_third_explosion_intensity.getValueInt());
 		}
+		
+		List<ConfigValue<?>> values = new ArrayList<>();
+		if(LuckyTNTConfigValues.CUSTOM_TNT_FIRST_EXPLOSION.get() != custom_tnt_first_explosion_initial_value) {
+			values.add(LuckyTNTConfigValues.CUSTOM_TNT_FIRST_EXPLOSION);
+		}
+		if(LuckyTNTConfigValues.CUSTOM_TNT_SECOND_EXPLOSION.get() != custom_tnt_second_explosion_initial_value) {
+			values.add(LuckyTNTConfigValues.CUSTOM_TNT_SECOND_EXPLOSION);
+		}
+		if(LuckyTNTConfigValues.CUSTOM_TNT_THIRD_EXPLOSION.get() != custom_tnt_third_explosion_initial_value) {
+			values.add(LuckyTNTConfigValues.CUSTOM_TNT_THIRD_EXPLOSION);
+		}
+		if(LuckyTNTConfigValues.CUSTOM_TNT_FIRST_EXPLOSION_INTENSITY.get().intValue() != custom_tnt_first_explosion_intensity_initial_value) {
+			values.add(LuckyTNTConfigValues.CUSTOM_TNT_FIRST_EXPLOSION_INTENSITY);
+		}
+		if(LuckyTNTConfigValues.CUSTOM_TNT_SECOND_EXPLOSION_INTENSITY.get().intValue() != custom_tnt_second_explosion_intensity_initial_value) {
+			values.add(LuckyTNTConfigValues.CUSTOM_TNT_SECOND_EXPLOSION_INTENSITY);
+		}
+		if(LuckyTNTConfigValues.CUSTOM_TNT_THIRD_EXPLOSION_INTENSITY.get().intValue() != custom_tnt_third_explosion_intensity_initial_value) {
+			values.add(LuckyTNTConfigValues.CUSTOM_TNT_THIRD_EXPLOSION_INTENSITY);
+		}
+		if(!values.isEmpty()) {
+			LuckyTNTMod.RH.sendC2SPacket(new LuckyTNTUpdateConfigValuesPacket(values));
+		}
+		
 		super.close();
 	}
 	
@@ -137,7 +180,7 @@ public class ConfigScreen2 extends Screen {
 	
 	public void resetIntValue(Config.IntValue config, int newValue, AdvancedSlider slider) {
 		config.set(newValue);
-		slider.setValue(newValue);
+		slider.setSliderValue(newValue);
 	}
 	
 	public void nextExplosionValue(Config.EnumValue<CustomTNTConfig> config, ButtonWidget button) {

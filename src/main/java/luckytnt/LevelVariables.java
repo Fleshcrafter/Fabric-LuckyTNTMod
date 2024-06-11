@@ -1,9 +1,9 @@
 package luckytnt;
 
-import luckytnt.network.ClientboundLevelVariablesPacket;
-import luckytnt.network.PacketHandler;
+import luckytnt.network.LevelVariablesS2CPacket;
 import net.minecraft.datafixer.DataFixTypes;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.PersistentState;
 import net.minecraft.world.ServerWorldAccess;
@@ -19,6 +19,7 @@ public class LevelVariables extends PersistentState {
 	
 	public static LevelVariables clientSide = new LevelVariables();
 	
+	@Override
 	public NbtCompound writeNbt(NbtCompound tag) {
 		tag.putInt("doomsdayTime", doomsdayTime);
 		tag.putInt("toxicCloudsTime", toxicCloudsTime);
@@ -51,6 +52,10 @@ public class LevelVariables extends PersistentState {
 	
 	public void sync(ServerWorld level) {
 		markDirty();
-		PacketHandler.CHANNEL.send(new ClientboundLevelVariablesPacket(this), PacketDistributor.DIMENSION.with(level.dimension()));
+		for(ServerWorld world : level.getServer().getWorlds()) {
+			for(ServerPlayerEntity player : world.getPlayers()) {
+				LuckyTNTMod.RH.sendS2CPacket(player, new LevelVariablesS2CPacket(this));
+			}
+		}
 	}
 }

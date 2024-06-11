@@ -1,12 +1,21 @@
 package luckytnt.config;
 
+import java.util.List;
+
 import luckytnt.LuckyTNTMod;
+import luckytnt.network.LuckyTNTUpdateConfigValuesPacket;
 import luckytnt.util.CustomTNTConfig;
+import luckytntlib.config.common.ClientConfig;
 import luckytntlib.config.common.Config;
+import luckytntlib.config.common.Config.ConfigValue;
+import luckytntlib.config.common.Config.UpdatePacketCreator;
+import luckytntlib.network.LuckyTNTPacket;
+import luckytntlib.config.common.ServerConfig;
 
 public class LuckyTNTConfigValues {
 	
-	public static Config CONFIG;
+	public static ServerConfig CONFIG;
+	public static ClientConfig CLIENT_CONFIG;
 	
 	public static Config.IntValue ISLAND_HEIGHT = new Config.IntValue(50, 20, 160, "islandHeight");
 	public static Config.IntValue DROP_HEIGHT = new Config.IntValue(200, 60, 400, "dropHeight");
@@ -28,6 +37,14 @@ public class LuckyTNTConfigValues {
 	
 	public static Config.BooleanValue PRESENT_DROP_DESTROY_BLOCKS = new Config.BooleanValue(true, "presentDropDestroy");
 	
+	private static UpdatePacketCreator CREATOR = new UpdatePacketCreator() {
+		
+		@Override
+		public LuckyTNTPacket getPacket(List<ConfigValue<?>> configValues) {
+			return new LuckyTNTUpdateConfigValuesPacket(configValues);
+		}
+	};
+	
 	public static void registerConfig() {
 		CONFIG = Config.Builder.of(LuckyTNTMod.MODID)
 				.addConfigValue(ISLAND_HEIGHT)
@@ -41,10 +58,13 @@ public class LuckyTNTConfigValues {
 				.addConfigValue(CUSTOM_TNT_THIRD_EXPLOSION)
 				.addConfigValue(CUSTOM_TNT_THIRD_EXPLOSION_INTENSITY)
 				.addConfigValue(SEASON_EVENTS_ALWAYS_ACTIVE)
-				.addConfigValue(RENDER_CONTAMINATED_OVERLAY)
 				.addConfigValue(PRESENT_DROP_DESTROY_BLOCKS)
-				.build();
+				.setPacketCreator(CREATOR)
+				.buildServer();
 		
 		CONFIG.init();
+		
+		CLIENT_CONFIG = Config.Builder.of(LuckyTNTMod.MODID).addConfigValue(RENDER_CONTAMINATED_OVERLAY).buildClient();
+		CLIENT_CONFIG.init();
 	}
 }

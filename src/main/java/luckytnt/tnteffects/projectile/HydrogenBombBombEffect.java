@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.joml.Vector3f;
 
-import luckytnt.network.ClientboundHydrogenBombPacket;
-import luckytnt.network.PacketHandler;
+import luckytnt.LuckyTNTMod;
+import luckytnt.network.HydrogenBombS2CPacket;
 import luckytnt.registry.BlockRegistry;
 import luckytnt.registry.EffectRegistry;
 import luckytnt.util.NuclearBombLike;
@@ -21,6 +21,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -32,8 +33,14 @@ public class HydrogenBombBombEffect extends PrimedTNTEffect implements NuclearBo
 
 	@Override
 	public void serverExplosion(IExplosiveEntity ent) {
-		if(ent.getLevel() instanceof ServerWorld) {
-			PacketHandler.CHANNEL.send(new ClientboundHydrogenBombPacket(((Entity)ent).getId()), PacketDistributor.TRACKING_ENTITY.with((Entity)ent));
+		if(ent.getLevel() instanceof ServerWorld sworld) {
+			for(ServerWorld sw : sworld.getServer().getWorlds()) {
+				for(ServerPlayerEntity player : sw.getPlayers()) {
+					if(player.getWorld().getDimension() == sworld.getDimension() && player.distanceTo((Entity)ent) <= 150) {
+						LuckyTNTMod.RH.sendS2CPacket(player, new HydrogenBombS2CPacket(((Entity)ent).getId()));
+					}
+				}
+			}
 		}
 		
 		ImprovedExplosion explosion = new ImprovedExplosion(ent.getLevel(), (Entity)ent, ent.getPos(), 230);

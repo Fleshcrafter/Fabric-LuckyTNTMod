@@ -19,7 +19,6 @@ import luckytnt.entity.PrimedItemFirework;
 import luckytnt.entity.PrimedOreTNT;
 import luckytnt.entity.PrimedReplayTNT;
 import luckytnt.entity.PrimedResetTNT;
-import luckytnt.entity.PrimedStructureTNT;
 import luckytnt.tnteffects.*;
 import luckytnt.tnteffects.projectile.AcceleratingDynamiteEffect;
 import luckytnt.tnteffects.projectile.AnimalDynamiteEffect;
@@ -81,6 +80,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.entity.ai.goal.ActiveTargetGoal;
+import net.minecraft.entity.ai.goal.LongDoorInteractGoal;
+import net.minecraft.entity.ai.goal.LookAroundGoal;
+import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.WanderAroundGoal;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -88,12 +93,6 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
-import net.minecraft.entity.ai.goal.ActiveTargetGoal;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.ai.goal.LongDoorInteractGoal;
-import net.minecraft.entity.ai.goal.WanderAroundGoal;
-import net.minecraft.entity.ai.goal.LookAroundGoal;
-import net.minecraft.entity.ai.goal.SwimGoal;
 
 public class EntityRegistry {
 
@@ -325,7 +324,7 @@ public class EntityRegistry {
 	public static final Supplier<EntityType<PrimedLTNT>> SOLAR_ERUPTION = LuckyTNTMod.RH.registerTNTEntity("solar_eruption", new SolarEruptionEffect());
 	public static final Supplier<EntityType<PrimedLTNT>> VREDEFORT = LuckyTNTMod.RH.registerTNTEntity("vredefort", new DropProjectileTNTEffect(() -> EntityRegistry.VREDEFORT_PROJECTILE));
 	public static final Supplier<EntityType<PrimedLTNT>> COLOSSAL_TNT = LuckyTNTMod.RH.registerTNTEntity("colossal_tnt", new ColossalTNTEffect());
-	public static final Supplier<EntityType<PrimedLTNT>> STRUCTURE_TNT = LuckyTNTMod.RH.registerTNTEntity(LuckyTNTMod.MODID, "structure_tnt", () -> EntityType.Builder.<PrimedLTNT>create(PrimedStructureTNT::new, SpawnGroup.MISC).maxTrackingRange(64).makeFireImmune().setDimensions(1f, 1f).build("structure_tnt"));
+	public static final Supplier<EntityType<PrimedLTNT>> STRUCTURE_TNT = LuckyTNTMod.RH.registerTNTEntity("structure_tnt", new StructureTNTEffect());
 	public static final Supplier<EntityType<PrimedLTNT>> GRANDE_FINALE = LuckyTNTMod.RH.registerTNTEntity("grande_finale", new GrandeFinaleEffect());
 	public static final Supplier<EntityType<PrimedLTNT>> FLAT_EARTH = LuckyTNTMod.RH.registerTNTEntity("flat_earth", new FlatTNTEffect(() -> BlockRegistry.FLAT_EARTH, 200, 50, 200));
 	public static final Supplier<EntityType<LivingPrimedLTNT>> EVIL_TNT = LuckyTNTMod.RH.registerLivingTNTEntity("evil_tnt", () -> EntityType.Builder.<LivingPrimedLTNT>create((EntityType<LivingPrimedLTNT> type, World level) -> new LivingPrimedLTNT(type, level, TNT_X20_EFFECT.fuse(400).buildTNT(() -> BlockRegistry.EVIL_TNT)) {		
