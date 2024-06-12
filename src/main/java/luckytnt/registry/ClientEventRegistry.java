@@ -15,7 +15,6 @@ public class ClientEventRegistry {
 		@Override
 		public void onPlayReady(ClientPlayNetworkHandler handler, PacketSender sender, MinecraftClient client) {
 			LuckyTNTMod.RH.sendC2SPacket(new LuckyTNTClientReadyC2SPacket());
-			System.out.println("packet sent to server");
 		}
 	};
 	

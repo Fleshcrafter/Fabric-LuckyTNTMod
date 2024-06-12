@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import luckytnt.client.ClientAccess;
 import luckytnt.config.LuckyTNTConfigValues;
 import luckytnt.registry.AttributeRegistry;
+import luckytnt.registry.BiomeModificationRegistry;
 import luckytnt.registry.BlockRegistry;
 import luckytnt.registry.ColorRegistry;
 import luckytnt.registry.CommandRegistry;
@@ -45,6 +46,7 @@ public class LuckyTNTMod implements ModInitializer {
 		CommandRegistry.init();
 		NetworkRegistry.init();
 		EventRegistry.init();
+		BiomeModificationRegistry.init();
 		
 		if(FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) {
 			ColorRegistry.init();
