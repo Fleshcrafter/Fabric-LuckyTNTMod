@@ -5,7 +5,6 @@ import java.util.function.Supplier;
 import luckytnt.LuckyTNTMod;
 import luckytnt.block.ChristmasTNTBlock;
 import luckytnt.block.GotthardTunnelBlock;
-import luckytnt.block.GunpowderOreBlock;
 import luckytnt.block.ItemFireworkBlock;
 import luckytnt.block.NuclearWasteBlock;
 import luckytnt.block.PresentBlock;
@@ -26,6 +25,7 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.DetectorRailBlock;
+import net.minecraft.block.ExperienceDroppingBlock;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.PoweredRailBlock;
 import net.minecraft.block.RailBlock;
@@ -34,6 +34,7 @@ import net.minecraft.registry.Registry;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.intprovider.UniformIntProvider;
 
 public class BlockRegistry {
 
@@ -108,7 +109,7 @@ public class BlockRegistry {
 	public static final Supplier<LTNTBlock> ROULETTE_TNT = LuckyTNTMod.RH.registerTNTBlock("roulette_tnt", EntityRegistry.ROULETTE_TNT, "n");
 	public static final Supplier<LTNTBlock> SENSOR_TNT = LuckyTNTMod.RH.registerTNTBlock("sensor_tnt", EntityRegistry.SENSOR_TNT, "n", MapColor.BLUE, false);
 	public static final Supplier<LTNTBlock> RAINBOW_FIREWORK = LuckyTNTMod.RH.registerTNTBlock("rainbow_firework", EntityRegistry.RAINBOW_FIREWORK, "n", MapColor.WHITE_GRAY, false);
-	public static final Supplier<LTNTBlock> XRAY_TNT = LuckyTNTMod.RH.registerTNTBlock(LuckyTNTMod.MODID, LuckyTNTMod.MODID, () -> new XRayTNTBlock(AbstractBlock.Settings.create().mapColor(MapColor.RED).nonOpaque().sounds(BlockSoundGroup.GRASS)), new TNTBlockRegistryData.Builder("xray_tnt").tab("n").build());
+	public static final Supplier<LTNTBlock> XRAY_TNT = LuckyTNTMod.RH.registerTNTBlock(LuckyTNTMod.MODID, LuckyTNTMod.MODID, () -> new XRayTNTBlock(AbstractBlock.Settings.create().mapColor(MapColor.RED).nonOpaque().sounds(BlockSoundGroup.GLASS)), new TNTBlockRegistryData.Builder("xray_tnt").tab("n").build());
 	public static final Supplier<LTNTBlock> FARMING_TNT = LuckyTNTMod.RH.registerTNTBlock("farming_tnt", EntityRegistry.FARMING_TNT, "n", MapColor.BROWN, true);
 	public static final Supplier<LTNTBlock> PHANTOM_TNT = LuckyTNTMod.RH.registerTNTBlock("phantom_tnt", EntityRegistry.PHANTOM_TNT, "n", MapColor.PURPLE, true);
 	public static final Supplier<LTNTBlock> SWAP_TNT = LuckyTNTMod.RH.registerTNTBlock("swap_tnt", EntityRegistry.SWAP_TNT, "n", false);
@@ -253,9 +254,9 @@ public class BlockRegistry {
 	public static final Supplier<LTNTBlock> LUCKY_DOOMSDAY = LuckyTNTMod.RH.registerTNTBlock(LuckyTNTMod.MODID, LuckyTNTMod.MODID, () -> new LuckyTNTBlock(AbstractBlock.Settings.create().mapColor(MapColor.RED).sounds(BlockSoundGroup.GRASS), LuckyTNTMod.RH.TNTLists.get("d")), new TNTBlockRegistryData.Builder("lucky_doomsday").tab("d").build());
 	
 	//Other
-	public static final Supplier<Block> NUCLEAR_WASTE = registerBlock("nuclear_waste", () -> new NuclearWasteBlock(AbstractBlock.Settings.create().luminance(state -> {return 8;}).mapColor(MapColor.GREEN).sounds(BlockSoundGroup.SLIME).breakInstantly().noCollision().dropsNothing().ticksRandomly().luminance(s -> 8)));
-	public static final Supplier<Block> GUNPOWDER_ORE = registerBlock("gunpowder_ore", () -> new GunpowderOreBlock(AbstractBlock.Settings.create().mapColor(MapColor.LIGHT_GRAY).sounds(BlockSoundGroup.STONE).requiresTool().strength(3f, 3f)));
-	public static final Supplier<Block> DEEPSLATE_GUNPOWDER_ORE = registerBlock("deepslate_gunpowder_ore", () -> new GunpowderOreBlock(AbstractBlock.Settings.create().mapColor(MapColor.LIGHT_GRAY).sounds(BlockSoundGroup.DEEPSLATE).requiresTool().strength(4.5f, 3f)));
+	public static final Supplier<Block> NUCLEAR_WASTE = registerBlock("nuclear_waste", () -> new NuclearWasteBlock(AbstractBlock.Settings.create().mapColor(MapColor.GREEN).sounds(BlockSoundGroup.SLIME).breakInstantly().noCollision().dropsNothing().ticksRandomly().luminance(s -> 8)));
+	public static final Supplier<Block> GUNPOWDER_ORE = registerBlock("gunpowder_ore", () -> new ExperienceDroppingBlock(UniformIntProvider.create(2, 5), AbstractBlock.Settings.create().mapColor(MapColor.LIGHT_GRAY).sounds(BlockSoundGroup.STONE).requiresTool().strength(3f, 3f)));
+	public static final Supplier<Block> DEEPSLATE_GUNPOWDER_ORE = registerBlock("deepslate_gunpowder_ore", () -> new ExperienceDroppingBlock(UniformIntProvider.create(2, 5), AbstractBlock.Settings.create().mapColor(MapColor.LIGHT_GRAY).sounds(BlockSoundGroup.DEEPSLATE).requiresTool().strength(4.5f, 3f)));
 	public static final Supplier<Block> URANIUM_ORE = registerBlock("uranium_ore", () -> new UraniumOreBlock(AbstractBlock.Settings.create().mapColor(MapColor.LIME).sounds(BlockSoundGroup.STONE).requiresTool().strength(3f, 3f)));
 	public static final Supplier<Block> DEEPSLATE_URANIUM_ORE = registerBlock("deepslate_uranium_ore", () -> new UraniumOreBlock(AbstractBlock.Settings.create().mapColor(MapColor.LIME).sounds(BlockSoundGroup.DEEPSLATE).requiresTool().strength(4.5f, 3f)));
 	public static final Supplier<Block> OBSIDIAN_RAIL = registerBlock("obsidian_rail", () -> new RailBlock(AbstractBlock.Settings.create().mapColor(MapColor.CLEAR).sounds(BlockSoundGroup.METAL).requiresTool().strength(0.7f, 1200f).noCollision()));

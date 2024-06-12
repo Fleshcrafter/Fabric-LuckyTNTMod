@@ -58,7 +58,7 @@ public class GotthardTunnelBlock extends LTNTBlock {
 			BlockState state = level.getBlockState(new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z)));
 			PrimedLTNT tnt = EntityRegistry.GOTTHARD_TUNNEL.get().create(level);
 			tnt.setFuse(40);
-			tnt.setPos(x + 0.5f, y, z + 0.5f);
+			tnt.setPosition(x + 0.5f, y, z + 0.5f);
 			tnt.setOwner(igniter);
 			tnt.setTNTFuse(200);
 			NbtCompound tag = tnt.getPersistentData();

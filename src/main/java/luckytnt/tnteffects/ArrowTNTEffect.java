@@ -21,7 +21,7 @@ public class ArrowTNTEffect extends PrimedTNTEffect{
 	public void serverExplosion(IExplosiveEntity entity) {
 		for(int count = 0; count < arrowCount; count++) {
 			ArrowEntity arrow = new ArrowEntity(EntityType.ARROW, entity.getLevel());
-			arrow.setPos(entity.x(), entity.y() + (entity instanceof PrimedLTNT ? 0.5f : 0f), entity.z());
+			arrow.setPosition(entity.x(), entity.y() + (entity instanceof PrimedLTNT ? 0.5f : 0f), entity.z());
 			arrow.setVelocity(Math.random() * 3 - Math.random() * 3, Math.random() * 2 - Math.random(), Math.random() * 3 - Math.random() * 3);
 			arrow.setOwner(entity.owner());
 			arrow.setDamage(10);

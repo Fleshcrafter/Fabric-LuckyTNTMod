@@ -29,7 +29,7 @@ public class LightningStormEffect extends PrimedTNTEffect {
 					for(int offY = ent.getLevel().getTopY(); offY > ent.getLevel().getBottomY(); offY--) {
 						if(!ent.getLevel().getBlockState(new BlockPos(MathHelper.floor(ent.x() + offX), offY, MathHelper.floor(ent.z() + offZ))).isAir()) {
 							Entity lighting = new LightningEntity(EntityType.LIGHTNING_BOLT, ent.getLevel());
-							lighting.setPos(ent.x() + offX, offY, ent.z() + offZ);
+							lighting.setPosition(ent.x() + offX, offY, ent.z() + offZ);
 							ent.getLevel().spawnEntity(lighting);
 							break;
 						}
@@ -46,7 +46,7 @@ public class LightningStormEffect extends PrimedTNTEffect {
 			for(int offY = ent.getLevel().getTopY(); offY > ent.getLevel().getBottomY(); offY--) {
 				if(!ent.getLevel().getBlockState(new BlockPos(MathHelper.floor(lent.getX()), offY, MathHelper.floor(lent.getZ()))).isAir()) {
 					Entity lighting = new LightningEntity(EntityType.LIGHTNING_BOLT,  ent.getLevel());
-					lighting.setPos(lent.getX(), offY, lent.getZ());
+					lighting.setPosition(lent.getX(), offY, lent.getZ());
 					ent.getLevel().spawnEntity(lighting);
 					
 					ImprovedExplosion explosion = new ImprovedExplosion(ent.getLevel(), new Vec3d(lent.getX(), offY, lent.getZ()), 3);

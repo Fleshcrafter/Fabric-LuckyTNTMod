@@ -40,7 +40,7 @@ public class ItemFireworkBlock extends LTNTBlock implements BlockEntityProvider 
 			BlockEntity blockEntity = level.getBlockEntity(new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z)));
 			PrimedItemFirework tnt = new PrimedItemFirework(EntityRegistry.ITEM_FIREWORK.get(), level);
 			tnt.setFuse(40);
-			tnt.setPos(x + 0.5f, y, z + 0.5f);
+			tnt.setPosition(x + 0.5f, y, z + 0.5f);
 			tnt.setOwner(igniter);
 			if(blockEntity != null && blockEntity instanceof ItemFireworkBlockEntity block) {
 				tnt.item = block.item;

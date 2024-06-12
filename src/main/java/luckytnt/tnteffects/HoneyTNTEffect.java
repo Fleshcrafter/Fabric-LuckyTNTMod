@@ -45,7 +45,7 @@ public class HoneyTNTEffect extends PrimedTNTEffect{
 						}
 						if(Math.random() < 0.025f) {
 							BeeEntity bee = new BeeEntity(EntityType.BEE, level);
-							bee.setPos(pos.getX(), pos.getY(), pos.getZ());
+							bee.setPosition(pos.getX(), pos.getY(), pos.getZ());
 							level.spawnEntity(bee);
 						}				
 					}

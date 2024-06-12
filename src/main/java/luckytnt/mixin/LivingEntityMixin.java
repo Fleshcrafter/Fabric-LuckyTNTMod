@@ -9,7 +9,7 @@ import luckytnt.registry.EventRegistry;
 import net.minecraft.entity.LivingEntity;
 
 @Mixin(LivingEntity.class)
-public class LivingEntityMixin {
+public abstract class LivingEntityMixin {
 
 	@Inject(method = "tick", at = @At("HEAD"), cancellable = true)
 	private void tickInject(CallbackInfo info) {

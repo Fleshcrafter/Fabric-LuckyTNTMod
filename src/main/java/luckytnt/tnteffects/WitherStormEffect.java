@@ -64,7 +64,7 @@ public class WitherStormEffect extends PrimedTNTEffect {
 				BlockPos pos = new BlockPos(MathHelper.floor(ent.x() + offX), y, MathHelper.floor(ent.z() + offZ));
 				BlockState state = ent.getLevel().getBlockState(pos);
 				if(!Block.isFaceFullSquare(state.getCollisionShape(ent.getLevel(), pos), Direction.UP) && Block.isFaceFullSquare(ent.getLevel().getBlockState(pos.down()).getCollisionShape(ent.getLevel(), pos.down()), Direction.UP)) {
-					skeleton.setPos(pos.getX() + 0.5D, y, pos.getZ() + 0.5D);
+					skeleton.setPosition(pos.getX() + 0.5D, y, pos.getZ() + 0.5D);
 					break;
 				}
 			}

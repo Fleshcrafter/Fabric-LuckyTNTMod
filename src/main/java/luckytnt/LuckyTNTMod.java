@@ -17,6 +17,7 @@ import luckytnt.registry.ItemRegistry;
 import luckytnt.registry.LuckyTNTTabs;
 import luckytnt.registry.ModelRegistry;
 import luckytnt.registry.NetworkRegistry;
+import luckytnt.registry.RenderLayerRegistry;
 import luckytnt.registry.RendererRegistry;
 import luckytnt.registry.SoundRegistry;
 import luckytntlib.registry.RegistryHelper;
@@ -49,6 +50,7 @@ public class LuckyTNTMod implements ModInitializer {
 			ColorRegistry.init();
 			ModelRegistry.init();
 			RendererRegistry.init();
+			RenderLayerRegistry.init();
 			
 			RH.registerConfigScreenFactory(Text.literal("Lucky TNT Mod"), ClientAccess.getFactory());
 		}

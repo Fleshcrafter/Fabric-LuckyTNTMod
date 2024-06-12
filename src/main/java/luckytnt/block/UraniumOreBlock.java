@@ -12,26 +12,13 @@ import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.explosion.Explosion;
-import net.minecraft.world.item.TieredItem;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.phys.Vec3;
 
 public class UraniumOreBlock extends Block {
 	
 	public UraniumOreBlock(AbstractBlock.Settings properties) {
 		super(properties);
 	}
-	
-	@SuppressWarnings("deprecation")
-	@Override
-    public boolean canHarvestBlock(BlockState state, BlockGetter world, BlockPos pos, Player player) {
-        if (player.getInventory().getSelected().getItem() instanceof TieredItem tieredItem)
-            return tieredItem.getTier().getLevel() >= 2;
-        return false;
-    }
 	
 	@Override
 	public List<ItemStack> getDroppedStacks(BlockState state, LootContextParameterSet.Builder builder) {

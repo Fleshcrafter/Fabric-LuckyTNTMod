@@ -32,7 +32,7 @@ public class PulsarTNTEffect extends PrimedTNTEffect {
 				ent.setPersistentData(tag);
 			}
 			((Entity)ent).setVelocity(0, 0, 0);
-			((Entity)ent).setPos(((Entity)ent).prevX, ((Entity)ent).prevY, ((Entity)ent).prevZ);
+			((Entity)ent).setPosition(((Entity)ent).prevX, ((Entity)ent).prevY, ((Entity)ent).prevZ);
 		}
 	}
 	

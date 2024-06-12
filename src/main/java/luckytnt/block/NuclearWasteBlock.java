@@ -45,7 +45,7 @@ public class NuclearWasteBlock extends FallingBlock {
 	
 	@Override
 	public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-		return VoxelShapes.cuboid(0, 0, 0, 16, 2, 16);
+		return VoxelShapes.cuboid(0, 0, 0, 1, 2d / 16d, 1);
 	}
 
 	@Override
@@ -58,8 +58,8 @@ public class NuclearWasteBlock extends FallingBlock {
 	}
 	
 	@Override
-	public void scheduledTick(BlockState state, ServerWorld level, BlockPos pos, Random random) {
-		super.scheduledTick(state, level, pos, random);
+	public void randomTick(BlockState state, ServerWorld level, BlockPos pos, Random random) {
+		super.randomTick(state, level, pos, random);
 		if(Math.random() < 0.2f) {
 			if(level.getBlockState(new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())).getBlock().getBlastResistance() < 100) {
 				level.setBlockState(new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ()), Blocks.AIR.getDefaultState(), 3);

@@ -3,7 +3,8 @@
 	"package": "luckytnt.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"LivingEntityMixin"
+		"LivingEntityMixin",
+		"AbstractMinecartEntityMixin"
 	],
 	"client": [
 		"InGameHudMixin",

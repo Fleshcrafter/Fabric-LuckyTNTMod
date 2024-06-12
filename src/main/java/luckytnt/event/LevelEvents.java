@@ -65,17 +65,17 @@ public class LevelEvents {
 					if(variables.doomsdayTime > 0) {
 						for(int count = 0; count < 6; count++) {
 							Entity ent = EntityRegistry.HAILSTONE.get().create(level);
-							ent.setPos(x + Math.random() * 100 - Math.random() * 100, y + LuckyTNTConfigValues.DROP_HEIGHT.get() / 4 + Math.random() * LuckyTNTConfigValues.DROP_HEIGHT.get() / 4, z + Math.random() * 100 - Math.random() * 100);
+							ent.setPosition(x + Math.random() * 100 - Math.random() * 100, y + LuckyTNTConfigValues.DROP_HEIGHT.get() / 4 + Math.random() * LuckyTNTConfigValues.DROP_HEIGHT.get() / 4, z + Math.random() * 100 - Math.random() * 100);
 							level.spawnEntity(ent);
 						}
 						if(Math.random() < 0.00675f * LuckyTNTConfigValues.AVERAGE_DIASTER_INTENSITY.get()) {
 							LExplosiveProjectile ent = EntityRegistry.LITTLE_METEOR.get().create(level);
-							ent.setPos(x + Math.random() * 200 - Math.random() * 200, y + LuckyTNTConfigValues.DROP_HEIGHT.get(), z + Math.random() * 200 - Math.random() * 200);
+							ent.setPosition(x + Math.random() * 200 - Math.random() * 200, y + LuckyTNTConfigValues.DROP_HEIGHT.get(), z + Math.random() * 200 - Math.random() * 200);
 							level.spawnEntity(ent);
 						}
 						if(Math.random() < 0.025f * LuckyTNTConfigValues.AVERAGE_DIASTER_INTENSITY.get()) {
 							Entity ent = EntityRegistry.MINI_METEOR.get().create(level);
-							ent.setPos(x + Math.random() * 200 - Math.random() * 200, y + LuckyTNTConfigValues.DROP_HEIGHT.get(), z + Math.random() * 200 - Math.random() * 200);
+							ent.setPosition(x + Math.random() * 200 - Math.random() * 200, y + LuckyTNTConfigValues.DROP_HEIGHT.get(), z + Math.random() * 200 - Math.random() * 200);
 							level.spawnEntity(ent);
 						}
 						if(Math.random() < 0.1f * LuckyTNTConfigValues.AVERAGE_DIASTER_INTENSITY.get()) {
@@ -85,7 +85,7 @@ public class LevelEvents {
 								for(double offY = 320; offY > -64; offY--) {
 									if(!level.getBlockState(new BlockPos(MathHelper.floor(x + offX), MathHelper.floor(offY), MathHelper.floor(z + offZ))).isAir()) {
 										Entity lighting = new LightningEntity(EntityType.LIGHTNING_BOLT,  level);
-										lighting.setPos(x + offX, offY, z + offZ);
+										lighting.setPosition(x + offX, offY, z + offZ);
 										level.spawnEntity(lighting);
 										break;
 									}
@@ -98,7 +98,7 @@ public class LevelEvents {
 							BlockPos pos = new BlockPos(MathHelper.floor(x + Math.random() * 100 - Math.random() * 100), MathHelper.floor(y + Math.random() * 50 - Math.random() * 50), MathHelper.floor(z + Math.random() * 100 - Math.random() * 100));
 							if(!level.getBlockState(pos).isFullCube(level, pos) || level.getBlockState(pos).isAir()) {
 								PrimedLTNT cloud = EntityRegistry.TOXIC_CLOUD.get().create(level);
-								cloud.setPos(pos.getX(), pos.getY(), pos.getZ());
+								cloud.setPosition(pos.getX(), pos.getY(), pos.getZ());
 								level.spawnEntity(cloud);
 							}						
 						}
@@ -242,7 +242,7 @@ public class LevelEvents {
 							} else {
 								ent = EntityRegistry.TNT.get().create(level);
 							}
-							ent.setPos(player.getX() + (Math.random() * 80D - 40D), player.getY() + 20D + Math.random() * 10D, player.getZ() + (Math.random() * 80D - 40D));
+							ent.setPosition(player.getX() + (Math.random() * 80D - 40D), player.getY() + 20D + Math.random() * 10D, player.getZ() + (Math.random() * 80D - 40D));
 							if(ent instanceof PrimedLTNT tnt) {
 								tnt.setFuse(120);
 							}

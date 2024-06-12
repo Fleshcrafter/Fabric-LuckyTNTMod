@@ -131,7 +131,7 @@ public class AtlantisEffect extends PrimedTNTEffect {
 		
 		for(int count = 0; count < 40; count++) {
 			Entity squid = new SquidEntity(EntityType.SQUID, ent.getLevel());
-			squid.setPos(ent.x() + 50 * Math.random() - 50 * Math.random(), ent.y() + 8, ent.z() + 50 * Math.random() - 50 * Math.random());
+			squid.setPosition(ent.x() + 50 * Math.random() - 50 * Math.random(), ent.y() + 8, ent.z() + 50 * Math.random() - 50 * Math.random());
 			ent.getLevel().spawnEntity(squid);
 		}
 	}

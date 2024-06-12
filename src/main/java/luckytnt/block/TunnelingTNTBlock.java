@@ -82,7 +82,7 @@ public class TunnelingTNTBlock extends LTNTBlock{
 		if(TNT != null) {
 			PrimedLTNT tnt = TNT.get().create(level);
 			tnt.setFuse(exploded && randomizedFuseUponExploded() ? tnt.getEffect().getDefaultFuse(tnt) / 8 + random.nextInt(MathHelper.clamp(tnt.getEffect().getDefaultFuse(tnt) / 4, 1, Integer.MAX_VALUE)) : tnt.getEffect().getDefaultFuse(tnt));
-			tnt.setPos(x + 0.5f, y, z + 0.5f);
+			tnt.setPosition(x + 0.5f, y, z + 0.5f);
 			tnt.setOwner(igniter);
 			NbtCompound tag = tnt.getPersistentData();
 			tag.putString("direction", level.getBlockState(new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z))).getBlock() instanceof TunnelingTNTBlock ? level.getBlockState(new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z))).get(FACING).getName() : "east");

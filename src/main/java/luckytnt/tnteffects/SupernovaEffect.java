@@ -17,7 +17,7 @@ public class SupernovaEffect extends SphereTNTEffect {
 	public void explosionTick(IExplosiveEntity ent) {
 		if(ent.getTNTFuse() == 300) {
 			Entity lighting = new LightningEntity(EntityType.LIGHTNING_BOLT, ent.getLevel());
-			lighting.setPos(ent.x(), ent.y(), ent.z());
+			lighting.setPosition(ent.x(), ent.y(), ent.z());
 			ent.getLevel().spawnEntity(lighting);
 		}
 	}

@@ -27,7 +27,7 @@ public class ToxicCloudEffect extends PrimedTNTEffect {
 			ent.setPersistentData(tag);
 		}
 		((Entity)ent).setVelocity(0, 0, 0);
-		((Entity)ent).setPos(((Entity)ent).prevX, ((Entity)ent).prevY, ((Entity)ent).prevZ);
+		((Entity)ent).setPosition(((Entity)ent).prevX, ((Entity)ent).prevY, ((Entity)ent).prevZ);
 		List<LivingEntity> list = ent.getLevel().getNonSpectatingEntities(LivingEntity.class, ((Entity)ent).getBoundingBox());
 		for(LivingEntity lent : list) {
 			lent.addStatusEffect(new StatusEffectInstance(StatusEffects.POISON, 80, 4));

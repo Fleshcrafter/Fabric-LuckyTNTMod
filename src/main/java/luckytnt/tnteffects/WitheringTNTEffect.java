@@ -52,7 +52,7 @@ public class WitheringTNTEffect extends PrimedTNTEffect {
 				BlockPos pos = new BlockPos(MathHelper.floor(entity.x() + offX), y, MathHelper.floor(entity.z() + offZ));
 				BlockState state = entity.getLevel().getBlockState(pos);
 				if(!Block.isFaceFullSquare(state.getCollisionShape(entity.getLevel(), pos), Direction.UP) && Block.isFaceFullSquare(entity.getLevel().getBlockState(pos.down()).getCollisionShape(entity.getLevel(), pos.down()), Direction.UP)) {
-					skeleton.setPos(pos.getX() + 0.5f, y, pos.getZ() + 0.5f);
+					skeleton.setPosition(pos.getX() + 0.5f, y, pos.getZ() + 0.5f);
 					break;
 				}
 			}

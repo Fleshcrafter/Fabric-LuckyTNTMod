@@ -33,7 +33,7 @@ public class DeathRayEffect extends PrimedTNTEffect {
 		
 		if(ent.getTNTFuse() < 80) {
 			((Entity)ent).setVelocity(0, 0, 0);
-			((Entity)ent).setPos(((Entity)ent).prevX, ((Entity)ent).prevY, ((Entity)ent).prevZ);
+			((Entity)ent).setPosition(((Entity)ent).prevX, ((Entity)ent).prevY, ((Entity)ent).prevZ);
 			
 			ExplosionHelper.doSphericalExplosion(ent.getLevel(), ent.getPos(), ent.getPersistentData().getInt("explosionSize"), new IForEachBlockExplosionEffect() {
 				

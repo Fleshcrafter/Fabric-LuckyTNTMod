@@ -42,7 +42,7 @@ public class ChristmasTNTEffect extends PrimedTNTEffect{
 				tag.putDouble("flyingZ", flying.z);
 				entity.setPersistentData(tag);
 				Vec3d flyingPos = new Vec3d(entity.x() + flying.negate().normalize().multiply(20).x, entity.y() + 30, entity.z() + flying.negate().normalize().multiply(20).z);
-				((Entity)entity).setPos(flyingPos.x, flyingPos.y, flyingPos.z);
+				((Entity)entity).setPosition(flyingPos.x, flyingPos.y, flyingPos.z);
 			}
 			if(entity.getTNTFuse() <= 220) {
 				((Entity)entity).setVelocity(new Vec3d(entity.getPersistentData().getDouble("flyingX"), entity.getPersistentData().getDouble("flyingY"), entity.getPersistentData().getDouble("flyingZ")).normalize().multiply(40D / 220D));

@@ -87,7 +87,7 @@ public class ItemFireworkEffect extends PrimedTNTEffect {
 						double z = Math.sin(theta) * radius;
 						
 						FireballEntity fireball = new FireballEntity(EntityType.FIREBALL, ent.getLevel());
-						fireball.setPos(ent.x() + x * 15, ent.y() + y * 15, ent.z() + z * 15);
+						fireball.setPosition(ent.x() + x * 15, ent.y() + y * 15, ent.z() + z * 15);
 						Vec3d vec = new Vec3d(fireball.getX() - ent.x(), fireball.getY() - ent.y(), fireball.getZ() - ent.z()).normalize().multiply(0.5D);
 						fireball.powerX = vec.x;
 						fireball.powerY = vec.y;
