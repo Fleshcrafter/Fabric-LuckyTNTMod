@@ -6,13 +6,12 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSources;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 
 public class ContaminatedEffect extends StatusEffect {
-
-	private int duration;
 	
 	public ContaminatedEffect(StatusEffectCategory category, int id) {
 		super(category, id);
@@ -25,12 +24,13 @@ public class ContaminatedEffect extends StatusEffect {
 	
 	@Override
 	public boolean canApplyUpdateEffect(int duration, int amplifier) {
-		this.duration = duration;
 		return true;
 	}
 
 	@Override
-	public void onApplied(LivingEntity entity, int amplifier) {
+	public void applyUpdateEffect(LivingEntity entity, int amplifier) {
+		StatusEffectInstance instance = entity.getActiveStatusEffects().get(this);
+		int duration = instance == null ? 0 : instance.getDuration();
 		DamageSources sources = entity.getWorld().getDamageSources();
 		
 		if(entity instanceof PlayerEntity player) {
