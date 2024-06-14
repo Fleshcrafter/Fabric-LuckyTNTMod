@@ -57,7 +57,7 @@ public class ItemFireworkEffect extends PrimedTNTEffect {
 					boolean hasChest = false;
 					BoatEntity.Type type = BoatEntity.Type.OAK;
 					try {
-						Field chest = BoatItem.class.getDeclaredField("hasChest");
+						Field chest = BoatItem.class.getDeclaredField("chest");
 						Field boattype = BoatItem.class.getDeclaredField("type");
 						chest.setAccessible(true);
 						boattype.setAccessible(true);

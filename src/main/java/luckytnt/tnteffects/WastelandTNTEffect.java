@@ -62,7 +62,7 @@ public class WastelandTNTEffect extends PrimedTNTEffect {
 							}
 							if(dryArea) {
 								if(Materials.isPlant(state)) {
-									if(state.canPlaceAt(ent.getLevel(), pos)) {
+									if(Blocks.DEAD_BUSH.getDefaultState().canPlaceAt(ent.getLevel(), pos)) {
 										ent.getLevel().setBlockState(pos, Blocks.DEAD_BUSH.getDefaultState(), 3);
 									}
 								}

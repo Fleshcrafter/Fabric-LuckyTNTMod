@@ -7,6 +7,7 @@ import luckytntlib.util.explosions.ImprovedExplosion;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.util.math.BlockPos;
@@ -27,6 +28,7 @@ public class UraniumOreBlock extends Block {
 	
     @Override
     public void onDestroyedByExplosion(World level, BlockPos pos, Explosion explosion) {
+    	level.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
     	ImprovedExplosion explo = new ImprovedExplosion(level, new Vec3d(pos.getX() + 0.5f, pos.getY(), pos.getZ() + 0.5f), 10);
     	explo.doEntityExplosion(1.5f, true);
     	explo.doBlockExplosion();

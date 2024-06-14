@@ -36,6 +36,7 @@ public class MiningflatTNTEffect extends PrimedTNTEffect{
 							Block.dropStacks(state, level, pos);
 						}
 						state.getBlock().onDestroyedByExplosion(level, pos, ImprovedExplosion.dummyExplosion(entity.getLevel()));
+						level.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 						if(pos.getY() - Math.round(entity.y()) == 0) {
 							if(Math.random() < 0.05f && Block.sideCoversSmallSquare(level, pos.down(), Direction.UP)) {
 								level.setBlockState(pos, Blocks.TORCH.getDefaultState());

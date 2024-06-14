@@ -186,7 +186,7 @@ public class LevelEvents {
 									int posY = getTopBlock(sPlayer.getWorld(), sPlayer.getX() + offX, sPlayer.getZ() + offZ, true);
 									BlockPos pos = new BlockPos(MathHelper.floor(sPlayer.getX() + offX), posY + 1, MathHelper.floor(sPlayer.getZ() + offZ));
 									BlockState state = sPlayer.getWorld().getBlockState(pos);
-									if((Materials.isPlant(state) || state.isAir()) && sPlayer.getWorld().getBlockState(pos.down()).canPlaceAt(level, pos) && state.getBlock().getBlastResistance() <= 100 && state.getBlock() != Blocks.DEAD_BUSH) {
+									if((Materials.isPlant(state) || state.isAir()) && Blocks.DEAD_BUSH.getDefaultState().canPlaceAt(level, pos) && state.getBlock().getBlastResistance() <= 100 && state.getBlock() != Blocks.DEAD_BUSH) {
 										level.setBlockState(pos, Blocks.DEAD_BUSH.getDefaultState(), 3);
 									}
 								}

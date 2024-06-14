@@ -7,6 +7,7 @@ import luckytntlib.util.IExplosiveEntity;
 import luckytntlib.util.explosions.ImprovedExplosion;
 import luckytntlib.util.tnteffects.PrimedTNTEffect;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -46,6 +47,7 @@ public class TetrahedronTNTEffect extends PrimedTNTEffect {
 
 						if (ent.getLevel().getBlockState(pos5).getBlock().getBlastResistance() <= 200) {
 							ent.getLevel().getBlockState(pos5).getBlock().onDestroyedByExplosion(ent.getLevel(), pos5, ImprovedExplosion.dummyExplosion(ent.getLevel()));
+							ent.getLevel().setBlockState(pos5, Blocks.AIR.getDefaultState(), 3);
 						}
 					}
 				}

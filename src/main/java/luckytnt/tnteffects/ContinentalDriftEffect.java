@@ -47,7 +47,7 @@ public class ContinentalDriftEffect extends PrimedTNTEffect {
 	      		if(player instanceof LuckyTNTEntityExtension eplayer) {
 	      			NbtCompound etag = eplayer.getAdditionalPersistentData();
 		      		etag.putInt("shakeTime", 400);
-		      		eplayer.setAdditionalPersistentData(tag);
+		      		eplayer.setAdditionalPersistentData(etag);
 	      		}
 	      	}
 		}

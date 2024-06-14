@@ -40,6 +40,7 @@ public class HoneyTNTEffect extends PrimedTNTEffect{
 					distance += Math.random();
 					if(distance <= radius - 2) {
 						state.getBlock().onDestroyedByExplosion(level, pos, ImprovedExplosion.dummyExplosion(entity.getLevel()));
+						level.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 						if(distance >= radius - 3 && Math.random() < 0.05f) {
 							level.setBlockState(pos, Blocks.BEE_NEST.getDefaultState().with(BeehiveBlock.FACING, getRandomDirectionHorizontal()).with(BeehiveBlock.HONEY_LEVEL, new Random().nextInt(6)));
 						}
@@ -54,6 +55,7 @@ public class HoneyTNTEffect extends PrimedTNTEffect{
 						int offY = Math.round(pos.getY() - (float)entity.y());
 						int offZ = Math.round(pos.getZ() - (float)entity.z());
 						state.getBlock().onDestroyedByExplosion(level, pos, ImprovedExplosion.dummyExplosion(entity.getLevel()));
+						level.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 						if(noise.getValue(MathHelper.clamp(offX + radius, 0, radius * 4), MathHelper.clamp((int)(offY + radius * 1.5f), 0, radius * 4), MathHelper.clamp(offZ + radius, 0, radius * 4)) > 0.7f) {
 							level.setBlockState(pos, Blocks.HONEY_BLOCK.getDefaultState());
 						}

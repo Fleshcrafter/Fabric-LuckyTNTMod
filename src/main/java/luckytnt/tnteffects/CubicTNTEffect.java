@@ -9,6 +9,7 @@ import luckytntlib.util.explosions.ImprovedExplosion;
 import luckytntlib.util.tnteffects.PrimedTNTEffect;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -27,6 +28,7 @@ public class CubicTNTEffect extends PrimedTNTEffect{
 			public void doBlockExplosion(World level, BlockPos pos, BlockState state, double distance) {
 				if(state.getBlock().getBlastResistance() <= 100) {
 					state.getBlock().onDestroyedByExplosion(level, pos, ImprovedExplosion.dummyExplosion(entity.getLevel()));
+					level.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 				}
 			}
 		});
