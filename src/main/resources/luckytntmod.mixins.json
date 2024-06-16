@@ -4,11 +4,13 @@
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
 		"LivingEntityMixin",
-		"AbstractMinecartEntityMixin"
+		"AbstractMinecartEntityMixin",
+		"HungerManagerMixin"
 	],
 	"client": [
 		"InGameHudMixin",
-		"GameRendererMixin"
+		"GameRendererMixin",
+		"CameraMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

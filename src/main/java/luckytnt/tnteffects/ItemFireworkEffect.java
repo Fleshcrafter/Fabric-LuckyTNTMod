@@ -57,13 +57,15 @@ public class ItemFireworkEffect extends PrimedTNTEffect {
 					boolean hasChest = false;
 					BoatEntity.Type type = BoatEntity.Type.OAK;
 					try {
-						Field chest = BoatItem.class.getDeclaredField("chest");
-						Field boattype = BoatItem.class.getDeclaredField("type");
-						chest.setAccessible(true);
-						boattype.setAccessible(true);
-						hasChest = chest.getBoolean(boatitem);
-						type = (BoatEntity.Type)boattype.get(boatitem);
-					} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+						for(Field field : BoatItem.class.getDeclaredFields()) {
+							field.setAccessible(true);
+							if(field.get(boatitem) instanceof BoatEntity.Type t) {
+								type = t;
+							} else if(field.get(boatitem) instanceof Boolean b) {
+								hasChest = b;
+							}
+						}
+					} catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
 						e.printStackTrace();
 					}
 					for(int i = 0; i < 300; i++) {

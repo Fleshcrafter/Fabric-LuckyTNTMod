@@ -1,13 +1,11 @@
 package luckytnt.effects;
 
-import java.lang.reflect.Field;
-
+import luckytnt.util.mixin.HungerManagerExtension;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSources;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.player.HungerManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 
@@ -33,15 +31,10 @@ public class ContaminatedEffect extends StatusEffect {
 		int duration = instance == null ? 0 : instance.getDuration();
 		DamageSources sources = entity.getWorld().getDamageSources();
 		
-		if(entity instanceof PlayerEntity player) {
-			try {
-                Field field = HungerManager.class.getDeclaredField("foodTickTimer");
-                field.setAccessible(true);
-                field.setInt(player.getHungerManager(), 0);
-            } catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
+		if(entity instanceof PlayerEntity player && player.getHungerManager() instanceof HungerManagerExtension hunger) {
+			hunger.setFoodTickTimerRaw(0);
 		}
+		
 		int i = 40 >> duration;
 		if (i > 0) {
 			if(amplifier % i == 0) {
