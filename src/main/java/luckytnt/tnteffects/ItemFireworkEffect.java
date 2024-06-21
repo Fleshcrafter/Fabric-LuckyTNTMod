@@ -57,13 +57,15 @@ public class ItemFireworkEffect extends PrimedTNTEffect {
 					boolean hasChest = false;
 					BoatEntity.Type type = BoatEntity.Type.OAK;
 					try {
-						Field chest = BoatItem.class.getDeclaredField("hasChest");
-						Field boattype = BoatItem.class.getDeclaredField("type");
-						chest.setAccessible(true);
-						boattype.setAccessible(true);
-						hasChest = chest.getBoolean(boatitem);
-						type = (BoatEntity.Type)boattype.get(boatitem);
-					} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+						for(Field field : BoatItem.class.getDeclaredFields()) {
+							field.setAccessible(true);
+							if(field.get(boatitem) instanceof BoatEntity.Type t) {
+								type = t;
+							} else if(field.get(boatitem) instanceof Boolean b) {
+								hasChest = b;
+							}
+						}
+					} catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
 						e.printStackTrace();
 					}
 					for(int i = 0; i < 300; i++) {
@@ -87,7 +89,7 @@ public class ItemFireworkEffect extends PrimedTNTEffect {
 						double z = Math.sin(theta) * radius;
 						
 						FireballEntity fireball = new FireballEntity(EntityType.FIREBALL, ent.getLevel());
-						fireball.setPos(ent.x() + x * 15, ent.y() + y * 15, ent.z() + z * 15);
+						fireball.setPosition(ent.x() + x * 15, ent.y() + y * 15, ent.z() + z * 15);
 						Vec3d vec = new Vec3d(fireball.getX() - ent.x(), fireball.getY() - ent.y(), fireball.getZ() - ent.z()).normalize().multiply(0.5D);
 						fireball.powerX = vec.x;
 						fireball.powerY = vec.y;

@@ -82,15 +82,12 @@ public class TunnelingTNTBlock extends LTNTBlock{
 		if(TNT != null) {
 			PrimedLTNT tnt = TNT.get().create(level);
 			tnt.setFuse(exploded && randomizedFuseUponExploded() ? tnt.getEffect().getDefaultFuse(tnt) / 8 + random.nextInt(MathHelper.clamp(tnt.getEffect().getDefaultFuse(tnt) / 4, 1, Integer.MAX_VALUE)) : tnt.getEffect().getDefaultFuse(tnt));
-			tnt.setPos(x + 0.5f, y, z + 0.5f);
+			tnt.setPosition(x + 0.5f, y, z + 0.5f);
 			tnt.setOwner(igniter);
 			NbtCompound tag = tnt.getPersistentData();
 			tag.putString("direction", level.getBlockState(new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z))).getBlock() instanceof TunnelingTNTBlock ? level.getBlockState(new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z))).get(FACING).getName() : "east");
 			tnt.setPersistentData(tag);
 			level.spawnEntity(tnt);
-			if(!level.isClient) {
-				PacketHandler.CHANNEL.send(new ClientboundStringNBTPacket("direction", tnt.getPersistentData().getString("direction"), tnt.getId()), PacketDistributor.TRACKING_ENTITY.with(tnt));
-			}
 			level.playSound(null, new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z)), SoundEvents.ENTITY_TNT_PRIMED, SoundCategory.MASTER, 1, 1);
 			if(level.getBlockState(new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z))).getBlock() == this) {
 				level.setBlockState(new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z)), Blocks.AIR.getDefaultState(), 3);

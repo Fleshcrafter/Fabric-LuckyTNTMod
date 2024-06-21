@@ -21,7 +21,7 @@ public class EyeOfTheSaharaEffect extends PrimedTNTEffect {
 			double x = ent.x() + 80 * Math.cos(angle * Math.PI / 180);
 			double z = ent.z() + 80 * Math.sin(angle * Math.PI / 180);
 			double y = RingTNTEffect.getFirstMotionBlockingBlock(ent.getLevel(), x, z);
-			tnt.setPos(x, y + 1D, z);
+			tnt.setPosition(x, y + 1D, z);
 			ent.getLevel().spawnEntity(tnt);
 		}
 	}

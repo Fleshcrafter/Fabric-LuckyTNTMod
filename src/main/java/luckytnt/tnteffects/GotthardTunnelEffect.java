@@ -17,14 +17,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.LightType;
 
 public class GotthardTunnelEffect extends PrimedTNTEffect {
-
-	@Override
-	public void explosionTick(IExplosiveEntity ent) {
-		if(!ent.getLevel().isClientSide()) {
-      		PacketHandler.CHANNEL.send(new ClientboundStringNBTPacket("direction", ent.getPersistentData().getString("direction"), ((Entity)ent).getId()), PacketDistributor.TRACKING_ENTITY.with((Entity)ent));
-      		PacketHandler.CHANNEL.send(new ClientboundBooleanNBTPacket("streets", ent.getPersistentData().getBoolean("streets"), ((Entity)ent).getId()), PacketDistributor.TRACKING_ENTITY.with((Entity)ent));
-      	}
-	}
 	
 	@Override
 	public void serverExplosion(IExplosiveEntity ent) {

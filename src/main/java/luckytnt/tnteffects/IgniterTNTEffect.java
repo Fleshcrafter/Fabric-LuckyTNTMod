@@ -7,6 +7,7 @@ import luckytntlib.util.explosions.IForEachBlockExplosionEffect;
 import luckytntlib.util.tnteffects.PrimedTNTEffect;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.TntBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.particle.ParticleTypes;
@@ -31,6 +32,7 @@ public class IgniterTNTEffect extends PrimedTNTEffect{
 			public void doBlockExplosion(World level, BlockPos pos, BlockState state, double distance) {
 				if(state.getBlock() instanceof TntBlock block) {
 					block.onDestroyedByExplosion(level, pos, new Explosion(level, (Entity)entity, null, null, pos.getX(), pos.getY(), pos.getZ(), 0, false, Explosion.DestructionType.DESTROY, ParticleTypes.EXPLOSION, ParticleTypes.EXPLOSION_EMITTER, SoundEvents.ENTITY_GENERIC_EXPLODE));
+					level.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 				}
 			}
 		});

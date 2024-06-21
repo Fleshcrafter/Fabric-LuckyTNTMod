@@ -92,6 +92,7 @@ public class CustomTNTEffect extends PrimedTNTEffect {
 					public void doBlockExplosion(World level, BlockPos pos, BlockState state, double distance) {
 						if(!state.isAir() && state.getBlock().getBlastResistance() <= 200) {
 							state.getBlock().onDestroyedByExplosion(level, pos, ImprovedExplosion.dummyExplosion(ent.getLevel()));
+							level.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 						}
 					}
 				});
@@ -116,6 +117,7 @@ public class CustomTNTEffect extends PrimedTNTEffect {
 					public void doBlockExplosion(World level, BlockPos pos, BlockState state, double distance) {
 						if(!state.isAir() && state.getBlock().getBlastResistance() <= 200) {
 							state.getBlock().onDestroyedByExplosion(level, pos, ImprovedExplosion.dummyExplosion(ent.getLevel()));
+							level.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 						}
 					}
 				});
@@ -141,6 +143,7 @@ public class CustomTNTEffect extends PrimedTNTEffect {
 					public void doBlockExplosion(World level, BlockPos pos, BlockState state, double distance) {
 						if(Math.random() < 0.66f && !state.isAir()) {
 							state.getBlock().onDestroyedByExplosion(level, pos, explosion);
+							level.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 							if(Math.random() < 0.5f) {
 								ent.getLevel().setBlockState(pos, Blocks.MELON.getDefaultState());
 							}
@@ -204,6 +207,7 @@ public class CustomTNTEffect extends PrimedTNTEffect {
 					public void doBlockExplosion(World level, BlockPos pos, BlockState state, double distance) {
 						if(!state.isAir() && state.getBlock().getBlastResistance() <= 200) {
 							state.getBlock().onDestroyedByExplosion(level, pos, ImprovedExplosion.dummyExplosion(ent.getLevel()));
+							level.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 						}
 					}
 				});
@@ -228,6 +232,7 @@ public class CustomTNTEffect extends PrimedTNTEffect {
 					public void doBlockExplosion(World level, BlockPos pos, BlockState state, double distance) {
 						if(!state.isAir() && state.getBlock().getBlastResistance() <= 200) {
 							state.getBlock().onDestroyedByExplosion(level, pos, ImprovedExplosion.dummyExplosion(ent.getLevel()));
+							level.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 						}
 					}
 				});
@@ -253,6 +258,7 @@ public class CustomTNTEffect extends PrimedTNTEffect {
 					public void doBlockExplosion(World level, BlockPos pos, BlockState state, double distance) {
 						if(Math.random() < 0.66f && !state.isAir()) {
 							state.getBlock().onDestroyedByExplosion(level, pos, explosion);
+							level.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 							if(Math.random() < 0.5f) {
 								ent.getLevel().setBlockState(pos, Blocks.MELON.getDefaultState());
 							}
@@ -303,6 +309,7 @@ public class CustomTNTEffect extends PrimedTNTEffect {
 					public void doBlockExplosion(World level, BlockPos pos, BlockState state, double distance) {
 						if(!state.isAir() && state.getBlock().getBlastResistance() <= 200) {
 							state.getBlock().onDestroyedByExplosion(level, pos, ImprovedExplosion.dummyExplosion(ent.getLevel()));
+							level.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 						}
 					}
 				});
@@ -314,6 +321,7 @@ public class CustomTNTEffect extends PrimedTNTEffect {
 					public void doBlockExplosion(World level, BlockPos pos, BlockState state, double distance) {
 						if(!state.isAir() && state.getBlock().getBlastResistance() <= 200) {
 							state.getBlock().onDestroyedByExplosion(level, pos, ImprovedExplosion.dummyExplosion(ent.getLevel()));
+							level.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 						}
 					}
 				});
@@ -326,6 +334,7 @@ public class CustomTNTEffect extends PrimedTNTEffect {
 					public void doBlockExplosion(World level, BlockPos pos, BlockState state, double distance) {
 						if(Math.random() < 0.66f && !state.isAir()) {
 							state.getBlock().onDestroyedByExplosion(level, pos, explosion);
+							level.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 							if(Math.random() < 0.5f) {
 								ent.getLevel().setBlockState(pos, Blocks.MELON.getDefaultState());
 							}

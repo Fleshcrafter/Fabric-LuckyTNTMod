@@ -18,11 +18,11 @@ public class GhostTNTEffect extends PrimedTNTEffect {
 		if(ent.getTNTFuse() == 60) {
 			PlayerEntity player = ent.getLevel().getClosestPlayer((Entity)ent, 100);
 			if(player != null && player != ent.owner()) {
-				((Entity)ent).setPos(player.getX(), player.getY(), player.getZ());
+				((Entity)ent).setPosition(player.getX(), player.getY(), player.getZ());
 			} else {
 				LivingEntity entity = ent.getLevel().getClosestEntity(ent.getLevel().getNonSpectatingEntities(LivingEntity.class, new Box(ent.x() - 100, ent.y() - 100, ent.z() - 100, ent.x() + 100, ent.y() + 100, ent.z() + 100)), TargetPredicate.createNonAttackable().setBaseMaxDistance(5).ignoreVisibility().ignoreDistanceScalingFactor(), null, ent.x(), ent.y(), ent.z());
 				if(entity != null && entity != ent.owner()) {
-					((Entity)ent).setPos(entity.getX(), entity.getY(), entity.getZ());
+					((Entity)ent).setPosition(entity.getX(), entity.getY(), entity.getZ());
 				}
 			}
 		}

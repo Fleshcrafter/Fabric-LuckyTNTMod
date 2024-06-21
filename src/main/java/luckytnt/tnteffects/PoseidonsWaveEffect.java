@@ -2,8 +2,8 @@ package luckytnt.tnteffects;
 
 import luckytnt.registry.BlockRegistry;
 import luckytntlib.util.IExplosiveEntity;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
 
 public class PoseidonsWaveEffect extends OceanTNTEffect {
 
@@ -15,8 +15,8 @@ public class PoseidonsWaveEffect extends OceanTNTEffect {
 	public void baseTick(IExplosiveEntity entity) {
 		super.baseTick(entity);
 		if(entity.getTNTFuse() == 179) {
-			if(entity.getLevel() instanceof ServerLevel sl) {
-				sl.setWeatherParameters(0, 10000, true, true);
+			if(entity.getLevel() instanceof ServerWorld sl) {
+				sl.setWeather(0, 10000, true, true);
 			}
 		}
 	}

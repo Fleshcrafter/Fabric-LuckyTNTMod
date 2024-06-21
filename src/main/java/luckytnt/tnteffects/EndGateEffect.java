@@ -76,7 +76,7 @@ public class EndGateEffect extends PrimedTNTEffect{
 				BlockState stateDown = entity.getLevel().getBlockState(posDown);
 				
 				if(Block.isFaceFullSquare(stateDown.getCollisionShape(entity.getLevel(), posDown), Direction.UP) && !Block.isFaceFullSquare(state.getCollisionShape(entity.getLevel(), pos), Direction.UP)) {
-					man.setPos(entity.x() + offX, offY, entity.z() + offZ);
+					man.setPosition(entity.x() + offX, offY, entity.z() + offZ);
 					break;
 				}
 			}

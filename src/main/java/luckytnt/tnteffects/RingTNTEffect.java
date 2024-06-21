@@ -23,7 +23,7 @@ public class RingTNTEffect extends PrimedTNTEffect {
 			double x = ent.x() + 10 * Math.cos(angle * Math.PI / 180);
 			double z = ent.z() + 10 * Math.sin(angle * Math.PI / 180);
 			double y = getFirstMotionBlockingBlock(ent.getLevel(), x, z);
-			tnt.setPos(x, y + 1D, z);
+			tnt.setPosition(x, y + 1D, z);
 			ent.getLevel().spawnEntity(tnt);
 		}
 	}

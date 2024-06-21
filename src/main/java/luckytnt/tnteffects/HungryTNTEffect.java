@@ -2,8 +2,6 @@ package luckytnt.tnteffects;
 
 import java.util.List;
 
-import luckytnt.network.ClientboundIntNBTPacket;
-import luckytnt.network.PacketHandler;
 import luckytnt.registry.BlockRegistry;
 import luckytntlib.util.IExplosiveEntity;
 import luckytntlib.util.explosions.ImprovedExplosion;
@@ -55,9 +53,6 @@ public class HungryTNTEffect extends PrimedTNTEffect {
 					NbtCompound tag = ent.getPersistentData();
 					tag.putInt("amount", ent.getPersistentData().getInt("amount") + 1);
 					ent.setPersistentData(tag);
-					if(!ent.getLevel().isClient()) {
-        				PacketHandler.CHANNEL.send(new ClientboundIntNBTPacket("amount", ent.getPersistentData().getInt("amount"), ((Entity)ent).getId()), PacketDistributor.TRACKING_ENTITY.with((Entity)ent));
-        			}
         			target.discard();
 				} else if(target instanceof PlayerEntity) {
 					DamageSources sources = ent.getLevel().getDamageSources();

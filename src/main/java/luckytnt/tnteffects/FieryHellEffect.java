@@ -65,7 +65,7 @@ public class FieryHellEffect extends PrimedTNTEffect {
 		
 		for(int count = 0; count < 15; count++) {
 			Entity ghast = new GhastEntity(EntityType.GHAST, ent.getLevel());
-			ghast.setPos(ent.x() + 20 * Math.random() - 20 * Math.random(), ent.y() + 50 / 2 * Math.random() + 50 / 2, ent.z() + 20 * Math.random() - 20 * Math.random());
+			ghast.setPosition(ent.x() + 20 * Math.random() - 20 * Math.random(), ent.y() + 50 / 2 * Math.random() + 50 / 2, ent.z() + 20 * Math.random() - 20 * Math.random());
 			ent.getLevel().spawnEntity(ghast);
 		}
 	}

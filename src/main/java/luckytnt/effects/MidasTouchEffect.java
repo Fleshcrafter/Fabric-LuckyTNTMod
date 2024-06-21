@@ -49,7 +49,7 @@ public class MidasTouchEffect extends StatusEffect {
 	}
 	
 	@Override
-	public void onApplied(LivingEntity entity, int amplifier) {
+	public void applyUpdateEffect(LivingEntity entity, int amplifier) {
 		World level = entity.getWorld();
 		if(!level.isClient) {
 

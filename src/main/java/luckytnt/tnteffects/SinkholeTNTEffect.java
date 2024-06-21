@@ -4,37 +4,44 @@ import luckytnt.registry.BlockRegistry;
 import luckytntlib.util.IExplosiveEntity;
 import luckytntlib.util.explosions.ImprovedExplosion;
 import luckytntlib.util.tnteffects.PrimedTNTEffect;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 public class SinkholeTNTEffect extends PrimedTNTEffect {
 
 	@Override
 	public void explosionTick(IExplosiveEntity ent) {
 		if(ent.getTNTFuse() == 250) {
-			ent.getPersistentData().putInt("depth", 20);
+			NbtCompound tag = ent.getPersistentData();
+			tag.putInt("depth", 20);
+			ent.setPersistentData(tag);
 		}
 		if(ent.getTNTFuse() <= 150) {
-			((Entity)ent).setDeltaMovement(Vec3.ZERO);
+			((Entity)ent).setVelocity(Vec3d.ZERO);
 			((Entity)ent).setNoGravity(true);
 		}
-		if(ent.getTNTFuse() <= 150 && !ent.getLevel().isClientSide() && ent.getTNTFuse() % 2 == 0) {
+		if(ent.getTNTFuse() <= 150 && !ent.getLevel().isClient() && ent.getTNTFuse() % 2 == 0) {
 			for(int offX = -33; offX <= 33; offX++) {
 				for(int offY = -33; offY <= 33; offY++) {
 					for(int offZ = -33; offZ <= 33; offZ++) {
 						double distance = Math.sqrt(offX * offX + offY * offY + offZ * offZ) + Math.random() * 4D - 2D;
-						BlockPos pos = new BlockPos(Mth.floor(ent.x() + offX), Mth.floor(ent.y() + offY + ent.getPersistentData().getInt("depth")), Mth.floor(ent.z() + offZ));
-						if(distance <= 30 && ent.getLevel().getBlockState(pos).getExplosionResistance(ent.getLevel(), toBlockPos(ent.getPos()), ImprovedExplosion.dummyExplosion(ent.getLevel())) < 200) {
-							ent.getLevel().getBlockState(pos).getBlock().onBlockExploded(ent.getLevel().getBlockState(pos), ent.getLevel(), pos, ImprovedExplosion.dummyExplosion(ent.getLevel()));
+						BlockPos pos = new BlockPos(MathHelper.floor(ent.x() + offX), MathHelper.floor(ent.y() + offY + ent.getPersistentData().getInt("depth")), MathHelper.floor(ent.z() + offZ));
+						if(distance <= 30 && ent.getLevel().getBlockState(pos).getBlock().getBlastResistance() < 200) {
+							ent.getLevel().getBlockState(pos).getBlock().onDestroyedByExplosion(ent.getLevel(), pos, ImprovedExplosion.dummyExplosion(ent.getLevel()));
+							ent.getLevel().setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 						}
 					}
 				}
 			}
 			
-			ent.getPersistentData().putInt("depth", ent.getPersistentData().getInt("depth") - 1);
+			NbtCompound tag = ent.getPersistentData();
+			tag.putInt("depth", ent.getPersistentData().getInt("depth") - 1);
+			ent.setPersistentData(tag);
 		}
 	}
 	

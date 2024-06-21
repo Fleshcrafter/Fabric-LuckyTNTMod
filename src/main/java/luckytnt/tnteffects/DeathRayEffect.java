@@ -4,8 +4,6 @@ import org.joml.Vector3f;
 
 import luckytnt.registry.SoundRegistry;
 import luckytntlib.util.IExplosiveEntity;
-import luckytntlib.util.explosions.ExplosionHelper;
-import luckytntlib.util.explosions.IForEachBlockExplosionEffect;
 import luckytntlib.util.explosions.ImprovedExplosion;
 import luckytntlib.util.tnteffects.PrimedTNTEffect;
 import net.minecraft.block.Block;
@@ -16,7 +14,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class DeathRayEffect extends PrimedTNTEffect {
 
@@ -33,26 +30,33 @@ public class DeathRayEffect extends PrimedTNTEffect {
 		
 		if(ent.getTNTFuse() < 80) {
 			((Entity)ent).setVelocity(0, 0, 0);
-			((Entity)ent).setPos(((Entity)ent).prevX, ((Entity)ent).prevY, ((Entity)ent).prevZ);
+			((Entity)ent).setPosition(((Entity)ent).prevX, ((Entity)ent).prevY, ((Entity)ent).prevZ);
 			
-			ExplosionHelper.doSphericalExplosion(ent.getLevel(), ent.getPos(), ent.getPersistentData().getInt("explosionSize"), new IForEachBlockExplosionEffect() {
-				
-				@Override
-				public void doBlockExplosion(World level, BlockPos pos, BlockState state, double distance) {
-					if(distance >= 75) {
-						if(state.getBlock().getBlastResistance() < 2000 && !state.isAir()) {
-							if(Math.random() < 0.1f) {
-								level.setBlockState(pos, Blocks.LAVA.getDefaultState(), 3);
-							} else if(Math.random() < 0.8f) {
-								level.setBlockState(pos, Blocks.OBSIDIAN.getDefaultState(), 3);
+			int size = ent.getPersistentData().getInt("explosionSize");
+			
+			for(int offX = -size; offX <= size; offX++) {
+				for(int offY = size; offY >= -size; offY--) {
+					for(int offZ = -size; offZ <= size; offZ++) {
+						double distance = Math.sqrt(offX * offX + offY * offY + offZ * offZ);
+						if(distance <= size && distance > size - 3) {
+							BlockPos pos = new BlockPos((int)ent.getPos().x, (int)ent.getPos().y, (int)ent.getPos().z).add(offX, offY, offZ);
+							BlockState state = ent.getLevel().getBlockState(pos);
+							if(distance >= 75) {
+								if(state.getBlock().getBlastResistance() < 2000 && !state.isAir()) {
+									if(Math.random() < 0.1f) {
+										ent.getLevel().setBlockState(pos, Blocks.LAVA.getDefaultState(), 3);
+									} else if(Math.random() < 0.8f) {
+										ent.getLevel().setBlockState(pos, Blocks.OBSIDIAN.getDefaultState(), 3);
+									}
+								}
+							} else if(state.getBlock().getBlastResistance() < 2000 && !state.isAir()) {
+								state.getBlock().onDestroyedByExplosion(ent.getLevel(), pos, ImprovedExplosion.dummyExplosion(ent.getLevel()));
+								ent.getLevel().setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 							}
 						}
-					} else if(state.getBlock().getBlastResistance() < 2000 && !state.isAir()) {
-						state.getBlock().onDestroyedByExplosion(level, pos, ImprovedExplosion.dummyExplosion(ent.getLevel()));
-						level.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 					}
 				}
-			});
+			}
 			
 			NbtCompound tag = ent.getPersistentData();
 			tag.putInt("explosionSize", ent.getPersistentData().getInt("explosionSize") + 1);

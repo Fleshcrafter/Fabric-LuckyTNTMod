@@ -23,7 +23,7 @@ public class DeathRayRayItem extends LDynamiteItem{
 	@Override
 	public LExplosiveProjectile shoot(World level, double x, double y, double z, Vec3d direction, float power, @Nullable LivingEntity thrower){
 		LExplosiveProjectile dyn = dynamite.get().create(level);
-		dyn.setPos(x, y, z);
+		dyn.setPosition(x, y, z);
 		dyn.setVelocity(direction.x, direction.y, direction.z, 4, 0);
 		dyn.setOwner(thrower);
 		level.spawnEntity(dyn);

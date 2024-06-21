@@ -14,43 +14,42 @@ import luckytnt.registry.BlockRegistry;
 import luckytntlib.util.IExplosiveEntity;
 import luckytntlib.util.explosions.ExplosionHelper;
 import luckytntlib.util.explosions.IForEachBlockExplosionEffect;
-import luckytntlib.util.explosions.ImprovedExplosion;
 import luckytntlib.util.tnteffects.PrimedTNTEffect;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.animal.Sheep;
-import net.minecraft.world.item.DyeColor;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseCoralPlantTypeBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.CoralParentBlock;
+import net.minecraft.block.MapColor;
+import net.minecraft.block.ShapeContext;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.entity.passive.SheepEntity;
+import net.minecraft.particle.DustParticleEffect;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.state.property.Properties;
+import net.minecraft.util.DyeColor;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 
 public class WorldOfWoolsEffect extends PrimedTNTEffect {
-	public static List<MapColor> WHITE = List.of(MapColor.SNOW, MapColor.QUARTZ, MapColor.TERRACOTTA_WHITE, MapColor.WOOL);
-	public static List<MapColor> LIGHT_GRAY = List.of(MapColor.METAL, MapColor.CLAY, MapColor.COLOR_LIGHT_GRAY);
-	public static List<MapColor> GRAY = List.of(MapColor.STONE, MapColor.COLOR_GRAY, MapColor.TERRACOTTA_CYAN, MapColor.DEEPSLATE);
-	public static List<MapColor> BLACK = List.of(MapColor.COLOR_BLACK);
-	public static List<MapColor> BROWN = List.of(MapColor.DIRT, MapColor.WOOD, MapColor.COLOR_BROWN, MapColor.PODZOL, MapColor.TERRACOTTA_BLACK, MapColor.TERRACOTTA_BROWN, MapColor.TERRACOTTA_GRAY, MapColor.TERRACOTTA_LIGHT_GRAY, MapColor.RAW_IRON);
-	public static List<MapColor> RED = List.of(MapColor.FIRE, MapColor.COLOR_RED, MapColor.NETHER, MapColor.TERRACOTTA_RED, MapColor.CRIMSON_HYPHAE, MapColor.CRIMSON_NYLIUM, MapColor.TERRACOTTA_PINK);
-	public static List<MapColor> ORANGE = List.of(MapColor.COLOR_ORANGE, MapColor.TERRACOTTA_ORANGE);
-	public static List<MapColor> YELLOW = List.of(MapColor.SAND, MapColor.COLOR_YELLOW, MapColor.GOLD, MapColor.TERRACOTTA_YELLOW);
-	public static List<MapColor> LIME = List.of(MapColor.GRASS, MapColor.COLOR_LIGHT_GREEN, MapColor.EMERALD, MapColor.GLOW_LICHEN);
-	public static List<MapColor> GREEN = List.of(MapColor.PLANT, MapColor.COLOR_GREEN, MapColor.TERRACOTTA_LIGHT_GREEN, MapColor.TERRACOTTA_GREEN);
-	public static List<MapColor> CYAN = List.of(MapColor.COLOR_CYAN, MapColor.WARPED_NYLIUM, MapColor.WARPED_STEM, MapColor.WARPED_WART_BLOCK);
-	public static List<MapColor> LIGHT_BLUE = List.of(MapColor.ICE, MapColor.COLOR_LIGHT_BLUE, MapColor.DIAMOND);
-	public static List<MapColor> BLUE = List.of(MapColor.WATER, MapColor.COLOR_BLUE, MapColor.LAPIS, MapColor.TERRACOTTA_LIGHT_BLUE);
-	public static List<MapColor> PURPLE = List.of(MapColor.COLOR_PURPLE, MapColor.TERRACOTTA_BLUE, MapColor.WARPED_HYPHAE);
-	public static List<MapColor> MAGENTA = List.of(MapColor.COLOR_MAGENTA, MapColor.TERRACOTTA_MAGENTA, MapColor.TERRACOTTA_PURPLE, MapColor.CRIMSON_STEM);
-	public static List<MapColor> PINK = List.of(MapColor.COLOR_PINK);
+	public static List<MapColor> WHITE = List.of(MapColor.WHITE, MapColor.OFF_WHITE, MapColor.TERRACOTTA_WHITE, MapColor.WHITE_GRAY);
+	public static List<MapColor> LIGHT_GRAY = List.of(MapColor.IRON_GRAY, MapColor.LIGHT_BLUE_GRAY, MapColor.LIGHT_GRAY);
+	public static List<MapColor> GRAY = List.of(MapColor.STONE_GRAY, MapColor.GRAY, MapColor.TERRACOTTA_CYAN, MapColor.DEEPSLATE_GRAY);
+	public static List<MapColor> BLACK = List.of(MapColor.BLACK);
+	public static List<MapColor> BROWN = List.of(MapColor.DIRT_BROWN, MapColor.OAK_TAN, MapColor.BROWN, MapColor.SPRUCE_BROWN, MapColor.TERRACOTTA_BLACK, MapColor.TERRACOTTA_BROWN, MapColor.TERRACOTTA_GRAY, MapColor.TERRACOTTA_LIGHT_GRAY, MapColor.RAW_IRON_PINK);
+	public static List<MapColor> RED = List.of(MapColor.BRIGHT_RED, MapColor.RED, MapColor.DARK_RED, MapColor.TERRACOTTA_RED, MapColor.DULL_RED, MapColor.DARK_CRIMSON, MapColor.TERRACOTTA_PINK);
+	public static List<MapColor> ORANGE = List.of(MapColor.ORANGE, MapColor.TERRACOTTA_ORANGE);
+	public static List<MapColor> YELLOW = List.of(MapColor.PALE_YELLOW, MapColor.YELLOW, MapColor.GOLD, MapColor.TERRACOTTA_YELLOW);
+	public static List<MapColor> LIME = List.of(MapColor.PALE_GREEN, MapColor.LIME, MapColor.EMERALD_GREEN, MapColor.LICHEN_GREEN);
+	public static List<MapColor> GREEN = List.of(MapColor.DARK_GREEN, MapColor.GREEN, MapColor.TERRACOTTA_LIME, MapColor.TERRACOTTA_GREEN);
+	public static List<MapColor> CYAN = List.of(MapColor.CYAN, MapColor.TEAL, MapColor.DARK_AQUA, MapColor.BRIGHT_TEAL);
+	public static List<MapColor> LIGHT_BLUE = List.of(MapColor.PALE_PURPLE, MapColor.LIGHT_BLUE, MapColor.DIAMOND_BLUE);
+	public static List<MapColor> BLUE = List.of(MapColor.WATER_BLUE, MapColor.BLUE, MapColor.LAPIS_BLUE, MapColor.TERRACOTTA_LIGHT_BLUE);
+	public static List<MapColor> PURPLE = List.of(MapColor.PURPLE, MapColor.TERRACOTTA_BLUE, MapColor.DARK_DULL_PINK);
+	public static List<MapColor> MAGENTA = List.of(MapColor.MAGENTA, MapColor.TERRACOTTA_MAGENTA, MapColor.TERRACOTTA_PURPLE, MapColor.DULL_PINK);
+	public static List<MapColor> PINK = List.of(MapColor.PINK);
 	
 	@Override
 	public void serverExplosion(IExplosiveEntity ent) {
@@ -59,9 +58,9 @@ public class WorldOfWoolsEffect extends PrimedTNTEffect {
 		ExplosionHelper.doSphericalExplosion(ent.getLevel(), ent.getPos(), 100, new IForEachBlockExplosionEffect() {
 			
 			@Override
-			public void doBlockExplosion(Level level, BlockPos pos, BlockState state, double distance) {
+			public void doBlockExplosion(World level, BlockPos pos, BlockState state, double distance) {
 				MapColor color = state.getMapColor(level, pos);
-				if(color != MapColor.NONE & !state.getCollisionShape(level, pos, CollisionContext.empty()).isEmpty() && state.getExplosionResistance(level, pos, ImprovedExplosion.dummyExplosion(level)) <= 200) {
+				if(color != MapColor.CLEAR & !state.getCollisionShape(level, pos, ShapeContext.absent()).isEmpty() && state.getBlock().getBlastResistance() <= 200) {
 					if(WHITE.contains(color)) {
 						blocks.add(Pair.of(pos, Blocks.WHITE_WOOL));
 					} else if(LIGHT_GRAY.contains(color)) {
@@ -97,7 +96,7 @@ public class WorldOfWoolsEffect extends PrimedTNTEffect {
 					}
 				}
 				
-				if((state.is(Blocks.WATER) || state.is(Blocks.BUBBLE_COLUMN) || state.getBlock() instanceof BaseCoralPlantTypeBlock) && state.getExplosionResistance(level, pos, ImprovedExplosion.dummyExplosion(level)) <= 200) {
+				if((state.isOf(Blocks.WATER) || state.isOf(Blocks.BUBBLE_COLUMN) || state.getBlock() instanceof CoralParentBlock) && state.getBlock().getBlastResistance() <= 200) {
 					blocks.add(Pair.of(pos, Blocks.BLUE_STAINED_GLASS));
 				}
 				
@@ -105,25 +104,25 @@ public class WorldOfWoolsEffect extends PrimedTNTEffect {
 					blocks.add(Pair.of(pos, Blocks.GREEN_WOOL));
 				}
 				
-				if(state.hasProperty(BlockStateProperties.WATERLOGGED) && state.getValue(BlockStateProperties.WATERLOGGED) && state.getExplosionResistance(level, pos, ImprovedExplosion.dummyExplosion(level)) <= 200) {
+				if(state.contains(Properties.WATERLOGGED) && state.get(Properties.WATERLOGGED) && state.getBlock().getBlastResistance() <= 200) {
 					blocks.add(Pair.of(pos, Blocks.BLUE_STAINED_GLASS));
 				}
 				
-				if(state.is(Blocks.LAVA) && state.getExplosionResistance(level, pos, ImprovedExplosion.dummyExplosion(level)) <= 200) {
+				if(state.isOf(Blocks.LAVA) && state.getBlock().getBlastResistance() <= 200) {
 					blocks.add(Pair.of(pos, Blocks.ORANGE_STAINED_GLASS));
 				}
 			}
 		});
 		
 		for(Pair<BlockPos, Block> pair : blocks) {
-			ent.getLevel().setBlock(pair.getFirst(), pair.getSecond().defaultBlockState(), 3);
+			ent.getLevel().setBlockState(pair.getFirst(), pair.getSecond().getDefaultState(), 3);
 		}
 		
 		for(int i = 0; i < 3 + new Random().nextInt(6); i++) {
 			int x = new Random().nextInt(151) - 75;
 			int z = new Random().nextInt(151) - 75;
 			
-			BlockPos origin = new BlockPos(Mth.floor(ent.x() + x), Mth.floor(LevelEvents.getTopBlock(ent.getLevel(), ent.x() + x, ent.z() + z, true) + 1), Mth.floor(ent.z() + z));
+			BlockPos origin = new BlockPos(MathHelper.floor(ent.x() + x), MathHelper.floor(LevelEvents.getTopBlock(ent.getLevel(), ent.x() + x, ent.z() + z, true) + 1), MathHelper.floor(ent.z() + z));
 			boolean xOrZ = new Random().nextBoolean();
 			int rr = 16 + new Random().nextInt(11);
 			Block block = Blocks.RED_CONCRETE;
@@ -147,20 +146,20 @@ public class WorldOfWoolsEffect extends PrimedTNTEffect {
 		}
 		
 		for(int i = 0; i <= 60 + new Random().nextInt(21); i++) {
-			Sheep sheep = new Sheep(EntityType.SHEEP, ent.getLevel());
+			SheepEntity sheep = new SheepEntity(EntityType.SHEEP, ent.getLevel());
 			
 			int x = new Random().nextInt(151) - 75;
 			int z = new Random().nextInt(151) - 75;
 			
-			sheep.setPos(ent.x() + x, LevelEvents.getTopBlock(ent.getLevel(), ent.x() + x, ent.z() + z, true) + 1, ent.z() + z);
-			sheep.finalizeSpawn((ServerLevel)ent.getLevel(), ent.getLevel().getCurrentDifficultyAt(toBlockPos(ent.getPos())), MobSpawnType.MOB_SUMMONED, null, null);
-			ent.getLevel().addFreshEntity(sheep);
+			sheep.setPosition(ent.x() + x, LevelEvents.getTopBlock(ent.getLevel(), ent.x() + x, ent.z() + z, true) + 1, ent.z() + z);
+			sheep.initialize((ServerWorld)ent.getLevel(), ent.getLevel().getLocalDifficulty(toBlockPos(ent.getPos())), SpawnReason.MOB_SUMMONED, null, null);
+			ent.getLevel().spawnEntity(sheep);
 		}
 		
-		BlockPos min = toBlockPos(ent.getPos()).offset(100, 100, 100);
-		BlockPos max = toBlockPos(ent.getPos()).offset(-100, -100, -100);
-		List<Sheep> list = ent.getLevel().getEntitiesOfClass(Sheep.class, new AABB(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ()));
-		for(Sheep sheep : list) {
+		BlockPos min = toBlockPos(ent.getPos()).add(100, 100, 100);
+		BlockPos max = toBlockPos(ent.getPos()).add(-100, -100, -100);
+		List<SheepEntity> list = ent.getLevel().getNonSpectatingEntities(SheepEntity.class, new Box(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ()));
+		for(SheepEntity sheep : list) {
 			sheep.setColor(randomColor());
 		}
 	}
@@ -168,7 +167,7 @@ public class WorldOfWoolsEffect extends PrimedTNTEffect {
 	@Override
 	public void spawnParticles(IExplosiveEntity ent) {
 		for(int i = 0; i < 50; i++) {
-			ent.getLevel().addParticle(new DustParticleOptions(new Vector3f(20f, 20f, 20f), 1f), ent.x() + Math.random() * 2 - Math.random() * 2, ent.y() + 1D + Math.random() * 2 - Math.random() * 2, ent.z() + Math.random() * 2 - Math.random() * 2, 0, 0, 0);
+			ent.getLevel().addParticle(new DustParticleEffect(new Vector3f(20f, 20f, 20f), 1f), ent.x() + Math.random() * 2 - Math.random() * 2, ent.y() + 1D + Math.random() * 2 - Math.random() * 2, ent.z() + Math.random() * 2 - Math.random() * 2, 0, 0, 0);
 		}
 	}
 	
@@ -191,20 +190,20 @@ public class WorldOfWoolsEffect extends PrimedTNTEffect {
 		if(xOrZ) {
 			for(int offX = -radius - 1; offX <= radius + 1; offX++) {
 				for(int offY = 0; offY <= radius + 1; offY++) {
-					BlockPos pos = origin.offset(offX, offY, 0);
+					BlockPos pos = origin.add(offX, offY, 0);
 					double distance = Math.sqrt(offX * offX + offY * offY);
-					if(distance > radius && distance <= (radius + 1) && ent.getLevel().getBlockState(pos).getExplosionResistance(ent.getLevel(), pos, ImprovedExplosion.dummyExplosion(ent.getLevel())) <= 100) {
-						ent.getLevel().setBlock(pos, block.defaultBlockState(), 3);
+					if(distance > radius && distance <= (radius + 1) && ent.getLevel().getBlockState(pos).getBlock().getBlastResistance() <= 100) {
+						ent.getLevel().setBlockState(pos, block.getDefaultState(), 3);
 					}
 				}
 			}
 		} else {
 			for(int offZ = -radius - 1; offZ <= radius + 1; offZ++) {
 				for(int offY = 0; offY <= radius + 1; offY++) {
-					BlockPos pos = origin.offset(0, offY, offZ);
+					BlockPos pos = origin.add(0, offY, offZ);
 					double distance = Math.sqrt(offZ * offZ + offY * offY);
-					if(distance > radius && distance <= (radius + 1) && ent.getLevel().getBlockState(pos).getExplosionResistance(ent.getLevel(), pos, ImprovedExplosion.dummyExplosion(ent.getLevel())) <= 100) {
-						ent.getLevel().setBlock(pos, block.defaultBlockState(), 3);
+					if(distance > radius && distance <= (radius + 1) && ent.getLevel().getBlockState(pos).getBlock().getBlastResistance() <= 100) {
+						ent.getLevel().setBlockState(pos, block.getDefaultState(), 3);
 					}
 				}
 			}
@@ -214,36 +213,36 @@ public class WorldOfWoolsEffect extends PrimedTNTEffect {
 	public void placeLegs(IExplosiveEntity ent, BlockPos origin, Block block, int radius, boolean xOrZ) {
 		if(xOrZ) {
 			for(int offY = -1; offY > -200; offY--) {
-				BlockPos pos = origin.offset(radius + 1, offY, 0);
-				if(ent.getLevel().getBlockState(pos).getCollisionShape(ent.getLevel(), pos, CollisionContext.empty()).isEmpty() && ent.getLevel().getBlockState(pos).getExplosionResistance(ent.getLevel(), pos, ImprovedExplosion.dummyExplosion(ent.getLevel())) <= 100) {
-					ent.getLevel().setBlock(pos, block.defaultBlockState(), 3);
+				BlockPos pos = origin.add(radius + 1, offY, 0);
+				if(ent.getLevel().getBlockState(pos).getCollisionShape(ent.getLevel(), pos, ShapeContext.absent()).isEmpty() && ent.getLevel().getBlockState(pos).getBlock().getBlastResistance() <= 100) {
+					ent.getLevel().setBlockState(pos, block.getDefaultState(), 3);
 				} else {
 					break;
 				}
 			}
 			
 			for(int offY = -1; offY > -200; offY--) {
-				BlockPos pos = origin.offset(-radius - 1, offY, 0);
-				if(ent.getLevel().getBlockState(pos).getCollisionShape(ent.getLevel(), pos, CollisionContext.empty()).isEmpty() && ent.getLevel().getBlockState(pos).getExplosionResistance(ent.getLevel(), pos, ImprovedExplosion.dummyExplosion(ent.getLevel())) <= 100) {
-					ent.getLevel().setBlock(pos, block.defaultBlockState(), 3);
+				BlockPos pos = origin.add(-radius - 1, offY, 0);
+				if(ent.getLevel().getBlockState(pos).getCollisionShape(ent.getLevel(), pos, ShapeContext.absent()).isEmpty() && ent.getLevel().getBlockState(pos).getBlock().getBlastResistance() <= 100) {
+					ent.getLevel().setBlockState(pos, block.getDefaultState(), 3);
 				} else {
 					break;
 				}
 			}
 		} else {
 			for(int offY = -1; offY > -200; offY--) {
-				BlockPos pos = origin.offset(0, offY, radius + 1);
-				if(ent.getLevel().getBlockState(pos).getCollisionShape(ent.getLevel(), pos, CollisionContext.empty()).isEmpty() && ent.getLevel().getBlockState(pos).getExplosionResistance(ent.getLevel(), pos, ImprovedExplosion.dummyExplosion(ent.getLevel())) <= 100) {
-					ent.getLevel().setBlock(pos, block.defaultBlockState(), 3);
+				BlockPos pos = origin.add(0, offY, radius + 1);
+				if(ent.getLevel().getBlockState(pos).getCollisionShape(ent.getLevel(), pos, ShapeContext.absent()).isEmpty() && ent.getLevel().getBlockState(pos).getBlock().getBlastResistance() <= 100) {
+					ent.getLevel().setBlockState(pos, block.getDefaultState(), 3);
 				} else {
 					break;
 				}
 			}
 			
 			for(int offY = -1; offY > -200; offY--) {
-				BlockPos pos = origin.offset(0, offY, -radius - 1);
-				if(ent.getLevel().getBlockState(pos).getCollisionShape(ent.getLevel(), pos, CollisionContext.empty()).isEmpty() && ent.getLevel().getBlockState(pos).getExplosionResistance(ent.getLevel(), pos, ImprovedExplosion.dummyExplosion(ent.getLevel())) <= 100) {
-					ent.getLevel().setBlock(pos, block.defaultBlockState(), 3);
+				BlockPos pos = origin.add(0, offY, -radius - 1);
+				if(ent.getLevel().getBlockState(pos).getCollisionShape(ent.getLevel(), pos, ShapeContext.absent()).isEmpty() && ent.getLevel().getBlockState(pos).getBlock().getBlastResistance() <= 100) {
+					ent.getLevel().setBlockState(pos, block.getDefaultState(), 3);
 				} else {
 					break;
 				}
