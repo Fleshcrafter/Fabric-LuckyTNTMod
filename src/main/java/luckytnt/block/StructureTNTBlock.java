@@ -21,8 +21,8 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -43,22 +43,21 @@ public class StructureTNTBlock extends LTNTBlock {
     }
     
     @Override
-    public ActionResult onUse(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult result) {
-    	ItemStack stack = player.getStackInHand(hand);
+    public ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult result) {
     	if(stack.getItem() == Items.FLINT_AND_STEEL) {
     		explode(level, false, pos.getX(), pos.getY(), pos.getZ(), player);
     		level.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
     		if(!player.isCreative()) {
-    			stack.damage(1, player, event -> event.sendToolBreakStatus(hand));
+    			stack.damage(1, player, LivingEntity.getSlotForHand(hand));
     		}
         	player.incrementStat(Stats.USED.getOrCreateStat(stack.getItem()));
-        	return ActionResult.success(level.isClient);
+        	return ItemActionResult.success(level.isClient);
     	}
     	else if(stack.getItem() == ItemRegistry.CONFIGURATION_WAND.get()) {
     		cycleThroughStructures(level, state, pos);
-    		return ActionResult.success(level.isClient);
+    		return ItemActionResult.success(level.isClient);
     	}
-    	return ActionResult.FAIL;
+    	return ItemActionResult.FAIL;
     }
     
     public void cycleThroughStructures(World level, BlockState state, BlockPos pos) {

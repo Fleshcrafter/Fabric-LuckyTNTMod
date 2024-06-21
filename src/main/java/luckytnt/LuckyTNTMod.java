@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import luckytnt.client.ClientAccess;
+import luckytnt.client.overlay.OverlayTick;
 import luckytnt.config.LuckyTNTConfigValues;
 import luckytnt.registry.AttributeRegistry;
 import luckytnt.registry.BiomeModificationRegistry;
@@ -53,6 +54,7 @@ public class LuckyTNTMod implements ModInitializer {
 			ModelRegistry.init();
 			RendererRegistry.init();
 			RenderLayerRegistry.init();
+			OverlayTick.onGameStart();
 			
 			RH.registerConfigScreenFactory(Text.literal("Lucky TNT Mod"), ClientAccess.getFactory());
 		}

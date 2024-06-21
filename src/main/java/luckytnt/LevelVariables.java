@@ -3,6 +3,7 @@ package luckytnt;
 import luckytnt.network.LevelVariablesS2CPacket;
 import net.minecraft.datafixer.DataFixTypes;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.PersistentState;
@@ -20,7 +21,7 @@ public class LevelVariables extends PersistentState {
 	public static LevelVariables clientSide = new LevelVariables();
 	
 	@Override
-	public NbtCompound writeNbt(NbtCompound tag) {
+	public NbtCompound writeNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
 		tag.putInt("doomsdayTime", doomsdayTime);
 		tag.putInt("toxicCloudsTime", toxicCloudsTime);
 		tag.putInt("iceAgeTime", iceAgeTime);
@@ -45,7 +46,7 @@ public class LevelVariables extends PersistentState {
 	
 	public static LevelVariables get(WorldAccess level) {
 		if(level instanceof ServerWorldAccess sLevel)
-			return sLevel.toServerWorld().getServer().getOverworld().getPersistentStateManager().getOrCreate(new PersistentState.Type<LevelVariables>(LevelVariables::new, f -> LevelVariables.load(f), DataFixTypes.LEVEL), "ltm_level_variables");
+			return sLevel.toServerWorld().getServer().getOverworld().getPersistentStateManager().getOrCreate(new PersistentState.Type<LevelVariables>(() -> {return new LevelVariables();}, (f, w) -> LevelVariables.load(f), DataFixTypes.LEVEL), "ltm_level_variables");
 		else
 			return clientSide;
 	}

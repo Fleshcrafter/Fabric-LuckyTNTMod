@@ -5,6 +5,7 @@ import java.util.Random;
 import luckytnt.block.PresentBlock;
 import luckytnt.config.LuckyTNTConfigValues;
 import luckytnt.registry.BlockRegistry;
+import luckytnt.util.BlockSurviveChecks;
 import luckytntlib.util.IExplosiveEntity;
 import luckytntlib.util.explosions.ExplosionHelper;
 import luckytntlib.util.explosions.IForEachBlockExplosionEffect;
@@ -61,7 +62,7 @@ public class PresentMeteorEffect extends PrimedTNTEffect {
 					}
 					level.setBlockState(pos, BlockRegistry.PRESENT.get().getDefaultState().with(PresentBlock.FACING, dir).with(PresentBlock.TYPE, random.nextInt(4)));
 				}
-				else if(((SnowBlock)Blocks.SNOW).canPlaceAt(state, level, pos) && (distance < 60 || Math.random() < 0.7f)) {
+				else if(BlockSurviveChecks.canSnowPlaceAt(state, level, pos) && (distance < 60 || Math.random() < 0.7f)) {
 					level.setBlockState(pos, Blocks.SNOW.getDefaultState().with(SnowBlock.LAYERS, random.nextInt(1, 3)));
 				}
 			}

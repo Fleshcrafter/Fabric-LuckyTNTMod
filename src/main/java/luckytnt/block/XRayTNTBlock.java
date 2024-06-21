@@ -32,8 +32,7 @@ public class XRayTNTBlock extends LTNTBlock{
     	return true;
     }
     
-    @SuppressWarnings("deprecation")
-	@Override
+    @Override
     public boolean isSideInvisible(BlockState state, BlockState stateFrom, Direction direction) {
     	return stateFrom.isOf(this) ? true : super.isSideInvisible(state, stateFrom, direction);
     }

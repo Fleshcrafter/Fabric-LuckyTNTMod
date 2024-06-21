@@ -21,8 +21,8 @@ import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -86,7 +86,7 @@ public class TrollTNTMk2Block extends LTNTBlock{
 	}
 	
 	@Override
-	public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+	public ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult result) {
 		ItemStack itemStack = player.getStackInHand(hand);
 		if (itemStack.isOf(Items.FLINT_AND_STEEL) || itemStack.isOf(Items.FIRE_CHARGE)) {
 			placeSurroundingBlocks(world, pos.getX(), pos.getY(), pos.getZ());
@@ -94,15 +94,15 @@ public class TrollTNTMk2Block extends LTNTBlock{
 			Item item = itemStack.getItem();
 			if (!player.isCreative()) {
 				if (itemStack.isOf(Items.FLINT_AND_STEEL)) {
-					itemStack.damage(1, player, playerx -> playerx.sendToolBreakStatus(hand));
+					itemStack.damage(1, player, LivingEntity.getSlotForHand(hand));
 				} else {
 					itemStack.decrement(1);
 				}
 			}
 			player.incrementStat(Stats.USED.getOrCreateStat(item));
-			return ActionResult.success(world.isClient);
+			return ItemActionResult.success(world.isClient);
 		}
-		return ActionResult.PASS;
+		return ItemActionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 	}
 
 	@Override

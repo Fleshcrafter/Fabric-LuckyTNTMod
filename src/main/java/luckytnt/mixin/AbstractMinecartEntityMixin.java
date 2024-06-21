@@ -38,7 +38,7 @@ public abstract class AbstractMinecartEntityMixin {
         }
 	}
 	
-	@Inject(method = "moveOnRail", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/vehicle/AbstractMinecartEntity;snapPositionToRail(DDD)Lnet/minecraft/util/math/Vec3d;", shift = At.Shift.AFTER), cancellable = true)
+	@Inject(method = "moveOnRail", at = @At(value = "INVOKE", target = "Lnet/minecraft/block/AbstractRailBlock;getShapeProperty()Lnet/minecraft/state/property/Property;", shift = At.Shift.BEFORE), cancellable = true)
 	private void injectMoveOnRail(BlockPos pos, BlockState state, CallbackInfo info, @Local(ordinal = 0) LocalBooleanRef bl, @Local(ordinal = 1) LocalBooleanRef bl2) {
 		if (state.isOf(BlockRegistry.OBSIDIAN_POWERED_RAIL.get())) {
 			bl.set(state.get(PoweredRailBlock.POWERED));

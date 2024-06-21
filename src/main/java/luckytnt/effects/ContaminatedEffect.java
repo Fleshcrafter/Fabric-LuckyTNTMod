@@ -7,6 +7,7 @@ import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.text.Text;
 
 public class ContaminatedEffect extends StatusEffect {
@@ -26,8 +27,8 @@ public class ContaminatedEffect extends StatusEffect {
 	}
 
 	@Override
-	public void applyUpdateEffect(LivingEntity entity, int amplifier) {
-		StatusEffectInstance instance = entity.getActiveStatusEffects().get(this);
+	public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
+		StatusEffectInstance instance = entity.getActiveStatusEffects().get(RegistryEntry.of(this));
 		int duration = instance == null ? 0 : instance.getDuration();
 		DamageSources sources = entity.getWorld().getDamageSources();
 		
@@ -43,5 +44,6 @@ public class ContaminatedEffect extends StatusEffect {
 				}
 			}
 		}
+		return true;
 	}
 }

@@ -13,10 +13,11 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
-@Mixin(InGameHud.class)
+//@Mixin(InGameHud.class)
 public abstract class InGameHudMixin {
 	
 	private static float contaminatedAmount = 0;
@@ -25,13 +26,13 @@ public abstract class InGameHudMixin {
 	protected abstract void renderOverlay(DrawContext context, Identifier texture, float opacity);
 	
 	@SuppressWarnings("resource")
-	@Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getLastFrameDuration()F"), cancellable = true)
-	private void render(DrawContext context, float tickDelta, CallbackInfo info) {
+	@Inject(method = "renderMiscOverlays", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MinecraftClient;getLastFrameDuration()F"), cancellable = true)
+	private void injectRenderMiscOverlays(DrawContext context, float tickDelta, CallbackInfo info) {
 		PlayerEntity player = MinecraftClient.getInstance().player;
 		if(player instanceof LuckyTNTEntityExtension lplayer) {
-			if(lplayer.getAdditionalPersistentData().getInt("freezeTime") > 0 && !player.hasStatusEffect(EffectRegistry.CONTAMINATED_EFFECT.get())) {
+			if(lplayer.getAdditionalPersistentData().getInt("freezeTime") > 0 && !player.hasStatusEffect(RegistryEntry.of(EffectRegistry.CONTAMINATED_EFFECT.get()))) {
 				renderOverlay(context, new Identifier("luckytntmod:textures/powder_snow_outline.png"), (float)(lplayer.getAdditionalPersistentData().getInt("freezeTime")) / 1200f);
-			} else if(player.hasStatusEffect(EffectRegistry.CONTAMINATED_EFFECT.get()) && LuckyTNTConfigValues.RENDER_CONTAMINATED_OVERLAY.get()) {
+			} else if(player.hasStatusEffect(RegistryEntry.of(EffectRegistry.CONTAMINATED_EFFECT.get())) && LuckyTNTConfigValues.RENDER_CONTAMINATED_OVERLAY.get()) {
 				renderOverlay(context, new Identifier("luckytntmod:textures/contaminated_outline.png"), contaminatedAmount);
 				contaminatedAmount = MathHelper.clamp(contaminatedAmount + 0.025f, 0f, 1f);
 			} else if(contaminatedAmount > 0){

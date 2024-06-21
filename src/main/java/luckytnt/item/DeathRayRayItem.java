@@ -27,7 +27,7 @@ public class DeathRayRayItem extends LDynamiteItem{
 		dyn.setVelocity(direction.x, direction.y, direction.z, 4, 0);
 		dyn.setOwner(thrower);
 		level.spawnEntity(dyn);
-		level.playSound(null, new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z)), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.MASTER, 1, 0.5f);
+		level.playSound(null, new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z)), SoundEvents.ENTITY_GENERIC_EXPLODE.value(), SoundCategory.MASTER, 1, 0.5f);
 		return dyn;
 	}
 }

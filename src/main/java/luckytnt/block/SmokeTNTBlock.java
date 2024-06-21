@@ -15,14 +15,15 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.DyeItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -60,7 +61,7 @@ public class SmokeTNTBlock extends LTNTBlock implements BlockEntityProvider {
 	}
 	
 	@Override
-	public ActionResult onUse(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult result) {
+	public ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult result) {
         BlockEntity block = level.getBlockEntity(pos);	
 		if(player.getStackInHand(hand).getItem() instanceof DyeItem dye && block != null && block instanceof SmokeTNTBlockEntity blockEntity) {
 			if(dye == Items.BLACK_DYE) {
@@ -75,7 +76,7 @@ public class SmokeTNTBlock extends LTNTBlock implements BlockEntityProvider {
 				if(level instanceof ServerWorld sLevel) {
 					sLevel.spawnParticles(new DustParticleEffect(new Vector3f(blockEntity.getPersistentData().getFloat("r"), blockEntity.getPersistentData().getFloat("g"), blockEntity.getPersistentData().getFloat("b")), 1f), pos.getX() + 0.5f, pos.getY() + 1f, pos.getZ() + 0.5f, 1, 0, 0, 0, 0);
 				}
-				return ActionResult.SUCCESS;
+				return ItemActionResult.SUCCESS;
 			}
 			if(dye == Items.WHITE_DYE) {
 				if(blockEntity.getPersistentData().getFloat("r") < 1 || blockEntity.getPersistentData().getFloat("g") < 1 || blockEntity.getPersistentData().getFloat("b") < 1) {
@@ -89,7 +90,7 @@ public class SmokeTNTBlock extends LTNTBlock implements BlockEntityProvider {
 				if(level instanceof ServerWorld sLevel) {
 					sLevel.spawnParticles(new DustParticleEffect(new Vector3f(blockEntity.getPersistentData().getFloat("r"), blockEntity.getPersistentData().getFloat("g"), blockEntity.getPersistentData().getFloat("b")), 1f), pos.getX() + 0.5f, pos.getY() + 1f, pos.getZ() + 0.5f, 1, 0, 0, 0, 0);
 				}
-				return ActionResult.SUCCESS;
+				return ItemActionResult.SUCCESS;
 			}
 			if(dye == Items.RED_DYE) {
 				if(blockEntity.getPersistentData().getFloat("r") < 1) {
@@ -101,7 +102,7 @@ public class SmokeTNTBlock extends LTNTBlock implements BlockEntityProvider {
 				if(level instanceof ServerWorld sLevel) {
 					sLevel.spawnParticles(new DustParticleEffect(new Vector3f(blockEntity.getPersistentData().getFloat("r"), blockEntity.getPersistentData().getFloat("g"), blockEntity.getPersistentData().getFloat("b")), 1f), pos.getX() + 0.5f, pos.getY() + 1f, pos.getZ() + 0.5f, 1, 0, 0, 0, 0);
 				}
-				return ActionResult.SUCCESS;
+				return ItemActionResult.SUCCESS;
 			}
 			if(dye == Items.GREEN_DYE) {
 				if(blockEntity.getPersistentData().getFloat("g") < 1) {
@@ -113,7 +114,7 @@ public class SmokeTNTBlock extends LTNTBlock implements BlockEntityProvider {
 				if(level instanceof ServerWorld sLevel) {
 					sLevel.spawnParticles(new DustParticleEffect(new Vector3f(blockEntity.getPersistentData().getFloat("r"), blockEntity.getPersistentData().getFloat("g"), blockEntity.getPersistentData().getFloat("b")), 1f), pos.getX() + 0.5f, pos.getY() + 1f, pos.getZ() + 0.5f, 1, 0, 0, 0, 0);
 				}
-				return ActionResult.SUCCESS;
+				return ItemActionResult.SUCCESS;
 			}
 			if(dye == Items.BLUE_DYE) {
 				if(blockEntity.getPersistentData().getFloat("b") < 1) {
@@ -125,10 +126,10 @@ public class SmokeTNTBlock extends LTNTBlock implements BlockEntityProvider {
 				if(level instanceof ServerWorld sLevel) {
 					sLevel.spawnParticles(new DustParticleEffect(new Vector3f(blockEntity.getPersistentData().getFloat("r"), blockEntity.getPersistentData().getFloat("g"), blockEntity.getPersistentData().getFloat("b")), 1f), pos.getX() + 0.5f, pos.getY() + 1f, pos.getZ() + 0.5f, 1, 0, 0, 0, 0);
 				}
-				return ActionResult.SUCCESS;
+				return ItemActionResult.SUCCESS;
 			}
 		}
-		return super.onUse(state, level, pos, player, hand, result);
+		return super.onUseWithItem(stack, state, level, pos, player, hand, result);
 	}
 	
 	@Override

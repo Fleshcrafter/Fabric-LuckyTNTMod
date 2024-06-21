@@ -2,7 +2,7 @@ package luckytnt.util;
 
 import java.util.List;
 
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBlockTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -24,7 +24,7 @@ public class Materials {
 	static List<Block> WATER_PLANTS = List.of(Blocks.SEA_PICKLE, Blocks.KELP, Blocks.KELP_PLANT, Blocks.SEAGRASS, Blocks.TALL_SEAGRASS);
 	
 	//STONE
-	static List<TagKey<Block>> STONE_TAGS = List.of(BlockTags.BASE_STONE_OVERWORLD, BlockTags.BASE_STONE_NETHER, ConventionalBlockTags.ORES, ConventionalBlockTags.QUARTZ_ORES, BlockTags.STONE_BRICKS, BlockTags.STONE_BUTTONS, BlockTags.STONE_PRESSURE_PLATES, ConventionalBlockTags.SANDSTONE_BLOCKS, ConventionalBlockTags.SANDSTONE_SLABS, ConventionalBlockTags.SANDSTONE_STAIRS, BlockTags.WALLS, BlockTags.TERRACOTTA);
+	static List<TagKey<Block>> STONE_TAGS = List.of(BlockTags.BASE_STONE_OVERWORLD, BlockTags.BASE_STONE_NETHER, ConventionalBlockTags.ORES, ConventionalBlockTags.STONES, ConventionalBlockTags.COBBLESTONES, ConventionalBlockTags.QUARTZ_ORES, BlockTags.STONE_BRICKS, BlockTags.STONE_BUTTONS, BlockTags.STONE_PRESSURE_PLATES, ConventionalBlockTags.SANDSTONE_BLOCKS, ConventionalBlockTags.SANDSTONE_SLABS, ConventionalBlockTags.SANDSTONE_STAIRS, BlockTags.WALLS, BlockTags.TERRACOTTA);
 	static List<Block> STONE = List.of(Blocks.PRISMARINE, Blocks.PRISMARINE_BRICK_SLAB, Blocks.PRISMARINE_BRICK_STAIRS, Blocks.PRISMARINE_BRICKS, Blocks.PRISMARINE_SLAB, Blocks.PRISMARINE_STAIRS, Blocks.DARK_PRISMARINE, Blocks.DARK_PRISMARINE_SLAB, Blocks.DARK_PRISMARINE_STAIRS,
 									   Blocks.ICE, Blocks.PACKED_ICE, Blocks.BLUE_ICE, Blocks.MAGMA_BLOCK, Blocks.OBSIDIAN, Blocks.CRYING_OBSIDIAN, Blocks.CALCITE, Blocks.DRIPSTONE_BLOCK, Blocks.SMOOTH_STONE, Blocks.SMOOTH_STONE_SLAB, Blocks.STONE_SLAB, Blocks.STONE_STAIRS, Blocks.DIORITE_SLAB, Blocks.DIORITE_STAIRS, Blocks.POLISHED_DIORITE_SLAB, Blocks.POLISHED_DIORITE_STAIRS, Blocks.ANDESITE_SLAB, Blocks.ANDESITE_STAIRS, Blocks.POLISHED_ANDESITE_SLAB, Blocks.POLISHED_ANDESITE_STAIRS, Blocks.GRANITE_SLAB, Blocks.GRANITE_STAIRS, Blocks.POLISHED_GRANITE_SLAB, Blocks.POLISHED_GRANITE_STAIRS,
 									   Blocks.MUD_BRICK_SLAB, Blocks.MUD_BRICK_STAIRS, Blocks.MUD_BRICKS, Blocks.BRICKS, Blocks.BRICK_SLAB, Blocks.BRICK_STAIRS, Blocks.CRACKED_DEEPSLATE_BRICKS, Blocks.DEEPSLATE_BRICKS, Blocks.DEEPSLATE_BRICK_SLAB, Blocks.DEEPSLATE_BRICK_STAIRS, Blocks.DEEPSLATE_TILE_SLAB, Blocks.DEEPSLATE_TILES, Blocks.DEEPSLATE_TILE_STAIRS, Blocks.POLISHED_DEEPSLATE_SLAB, Blocks.CRACKED_DEEPSLATE_TILES, Blocks.CRACKED_DEEPSLATE_BRICKS, Blocks.SCULK, Blocks.SCULK_CATALYST, Blocks.SCULK_SENSOR, Blocks.SCULK_SHRIEKER, Blocks.SCULK_VEIN, Blocks.CALIBRATED_SCULK_SENSOR, 

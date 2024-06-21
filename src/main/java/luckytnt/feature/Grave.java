@@ -6,7 +6,7 @@ import java.time.temporal.ChronoField;
 import com.mojang.serialization.Codec;
 
 import luckytnt.config.LuckyTNTConfigValues;
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
@@ -17,6 +17,9 @@ import net.minecraft.block.enums.BlockHalf;
 import net.minecraft.block.enums.ChestType;
 import net.minecraft.block.enums.SlabType;
 import net.minecraft.block.enums.StairShape;
+import net.minecraft.loot.LootTable;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -48,9 +51,13 @@ public class Grave extends Feature<DefaultFeatureConfig>{
 	public BlockState chestSouthLeft = Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.SOUTH).with(ChestBlock.CHEST_TYPE, ChestType.LEFT);
 	public BlockState chestSouthRight = Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.SOUTH).with(ChestBlock.CHEST_TYPE, ChestType.RIGHT);
 	
-	public Identifier GRAVE_LOOT_1 = new Identifier("luckytntmod:chests/grave_loot_1");
-	public Identifier GRAVE_LOOT_2 = new Identifier("luckytntmod:chests/grave_loot_2");
-	public Identifier GRAVE_LOOT_RARE = new Identifier("luckytntmod:chests/grave_loot_rare");
+	public static final Identifier GRAVE_LOOT_1_LOCATION = new Identifier("luckytntmod:chests/grave_loot_1");
+	public static final Identifier GRAVE_LOOT_2_LOCATION = new Identifier("luckytntmod:chests/grave_loot_2");
+	public static final Identifier GRAVE_LOOT_RARE_LOCATION = new Identifier("luckytntmod:chests/grave_loot_rare");
+	
+	public static final RegistryKey<LootTable> GRAVE_LOOT_1 = RegistryKey.of(RegistryKeys.LOOT_TABLE, GRAVE_LOOT_1_LOCATION);
+	public static final RegistryKey<LootTable> GRAVE_LOOT_2 = RegistryKey.of(RegistryKeys.LOOT_TABLE, GRAVE_LOOT_2_LOCATION);
+	public static final RegistryKey<LootTable> GRAVE_LOOT_RARE = RegistryKey.of(RegistryKeys.LOOT_TABLE, GRAVE_LOOT_RARE_LOCATION);
 	
 	public Grave(Codec<DefaultFeatureConfig> codec) {
 		super(codec);
@@ -70,7 +77,7 @@ public class Grave extends Feature<DefaultFeatureConfig>{
 		Random random = ctx.getWorld().getRandom();
 		int rand = random.nextInt(3);
 		
-		if(level.getBiome(pos).isIn(ConventionalBiomeTags.MUSHROOM)) {
+		if(level.getBiome(pos).isIn(ConventionalBiomeTags.IS_MUSHROOM)) {
 			ground = Blocks.MYCELIUM.getDefaultState();
 		}
 		

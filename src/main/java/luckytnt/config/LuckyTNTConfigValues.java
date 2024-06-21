@@ -9,8 +9,8 @@ import luckytntlib.config.common.ClientConfig;
 import luckytntlib.config.common.Config;
 import luckytntlib.config.common.Config.ConfigValue;
 import luckytntlib.config.common.Config.UpdatePacketCreator;
-import luckytntlib.network.LuckyTNTPacket;
 import luckytntlib.config.common.ServerConfig;
+import net.minecraft.network.packet.CustomPayload;
 
 public class LuckyTNTConfigValues {
 	
@@ -40,7 +40,7 @@ public class LuckyTNTConfigValues {
 	private static UpdatePacketCreator CREATOR = new UpdatePacketCreator() {
 		
 		@Override
-		public LuckyTNTPacket getPacket(List<ConfigValue<?>> configValues) {
+		public CustomPayload getPacket(List<ConfigValue<?>> configValues) {
 			return new LuckyTNTUpdateConfigValuesPacket(configValues);
 		}
 	};

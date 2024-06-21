@@ -16,7 +16,7 @@ public class MimicTNTEffect extends PrimedTNTEffect {
 		((Entity)ent).setVelocity(0, 0, 0);
 		((Entity)ent).setPosition(((Entity) ent).prevX, ((Entity) ent).prevY, ((Entity) ent).prevZ);
 		if (ent.getLevel().getClosestPlayer((Entity) ent, 5) != null && ent.getLevel().getClosestPlayer((Entity) ent, 5) != ent.owner()) {
-			ent.getLevel().playSound((Entity)ent, toBlockPos(ent.getPos()), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4f, (1f + (ent.getLevel().getRandom().nextFloat() - ent.getLevel().getRandom().nextFloat()) * 0.2f) * 0.7f);
+			ent.getLevel().playSound((Entity)ent, toBlockPos(ent.getPos()), SoundEvents.ENTITY_GENERIC_EXPLODE.value(), SoundCategory.BLOCKS, 4f, (1f + (ent.getLevel().getRandom().nextFloat() - ent.getLevel().getRandom().nextFloat()) * 0.2f) * 0.7f);
 			if(!ent.getLevel().isClient()) {
 				serverExplosion(ent);
 				ent.destroy();

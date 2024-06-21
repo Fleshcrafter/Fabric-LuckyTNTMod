@@ -24,7 +24,7 @@ public abstract class GameRendererMixin {
 	private Camera camera;
 
 	@Inject(method = "renderWorld", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/GameRenderer;loadProjectionMatrix(Lorg/joml/Matrix4f;)V", shift = At.Shift.AFTER), cancellable = true)
-	private void renderWorldInject(float tickDelta, long limitTime, MatrixStack matrices, CallbackInfo info) {
+	private void renderWorldInject(float tickDelta, long limitTime, CallbackInfo info) {
 		MinecraftClient minecraft = MinecraftClient.getInstance();
 		ClientPlayerEntity player = minecraft.player;
 		
@@ -42,6 +42,8 @@ public abstract class GameRendererMixin {
 				ecamera.setPitchRaw(pitch);
 				ecamera.setYawRaw(yaw);
 			}
+			
+			MatrixStack matrices = new MatrixStack();
 			
 			matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(roll));
 		}

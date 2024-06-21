@@ -1,20 +1,21 @@
 package luckytnt.entity;
 
+import luckytnt.LuckyTNTMod;
 import luckytntlib.entity.LExplosiveProjectile;
 import luckytntlib.util.tnteffects.PrimedTNTEffect;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageEffects;
-import net.minecraft.entity.damage.DamageScaling;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
-import net.minecraft.entity.damage.DeathMessageType;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntry.Reference;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -40,8 +41,8 @@ public class HailstoneProjectile extends LExplosiveProjectile {
 	public void onEntityHit(EntityHitResult result) {
 		super.onEntityHit(result);
 		if(result.getEntity() instanceof LivingEntity lent) {
-			DamageType type = new DamageType("hailstone", DamageScaling.NEVER, 0f, DamageEffects.HURT, DeathMessageType.DEFAULT);
-			DamageSource source = new DamageSource(RegistryEntry.of(type), this, owner());
+			Reference<DamageType> type = getLevel().getRegistryManager().get(RegistryKeys.DAMAGE_TYPE).entryOf(RegistryKey.of(RegistryKeys.DAMAGE_TYPE, new Identifier(LuckyTNTMod.MODID, "hailstone")));
+			DamageSource source = new DamageSource(type, this, owner());
 			
 			lent.damage(source, 4f);
 		}

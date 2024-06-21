@@ -21,8 +21,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ItemActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -65,8 +65,7 @@ public class ItemFireworkBlock extends LTNTBlock implements BlockEntityProvider 
 	}
 
 	@Override
-	public ActionResult onUse(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult result) {
-		ItemStack stack = player.getStackInHand(hand);
+	public ItemActionResult onUseWithItem(ItemStack stack, BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult result) {
 		Item item = stack.getItem();
 		if(stack != ItemStack.EMPTY && item != Items.FLINT_AND_STEEL && level.getBlockEntity(pos) != null && level.getBlockEntity(pos) instanceof ItemFireworkBlockEntity block) {
 			block.item = item;
@@ -76,8 +75,8 @@ public class ItemFireworkBlock extends LTNTBlock implements BlockEntityProvider 
 				stack.decrement(1);
 			}
 			player.incrementStat(Stats.USED.getOrCreateStat(item));
-			return ActionResult.SUCCESS;
+			return ItemActionResult.SUCCESS;
 		}
-		return super.onUse(state, level, pos, player, hand, result);
+		return super.onUseWithItem(stack, state, level, pos, player, hand, result);
 	}
 }

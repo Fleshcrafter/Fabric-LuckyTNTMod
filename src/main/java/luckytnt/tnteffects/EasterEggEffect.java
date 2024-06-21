@@ -29,7 +29,7 @@ public class EasterEggEffect extends PrimedTNTEffect{
 		if(((Entity)entity).isOnGround() && entity.getPersistentData().getInt("level") > 0) {
 			serverExplosion(entity);
 			World level = entity.getLevel();
-			entity.getLevel().playSound((Entity)entity, toBlockPos(entity.getPos()), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4f, (1f + (level.random.nextFloat() - level.random.nextFloat()) * 0.2f) * 0.7f);
+			entity.getLevel().playSound((Entity)entity, toBlockPos(entity.getPos()), SoundEvents.ENTITY_GENERIC_EXPLODE.value(), SoundCategory.BLOCKS, 4f, (1f + (level.random.nextFloat() - level.random.nextFloat()) * 0.2f) * 0.7f);
 			entity.destroy();
 		}
 	}

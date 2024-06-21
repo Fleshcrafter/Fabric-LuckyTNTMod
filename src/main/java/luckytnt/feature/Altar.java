@@ -7,7 +7,7 @@ import com.mojang.serialization.Codec;
 
 import luckytnt.config.LuckyTNTConfigValues;
 import luckytnt.registry.BlockRegistry;
-import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBiomeTags;
+import net.fabricmc.fabric.api.tag.convention.v2.ConventionalBiomeTags;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SlabBlock;
@@ -73,7 +73,7 @@ public class Altar extends Feature<DefaultFeatureConfig>{
 		StructureWorldAccess level = ctx.getWorld();
 		BlockPos pos = ctx.getOrigin();
 		
-		if(level.getBiome(pos).isIn(ConventionalBiomeTags.MUSHROOM)) {
+		if(level.getBiome(pos).isIn(ConventionalBiomeTags.IS_MUSHROOM)) {
 			ground = Blocks.MYCELIUM.getDefaultState();
 		}
 		

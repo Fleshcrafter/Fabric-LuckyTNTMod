@@ -27,7 +27,7 @@ public class PompeiiEffect extends PrimedTNTEffect{
 						pompeii.setVelocity((Math.random() * 3D - 1.5D) * 0.1f, 0.6f + Math.random() * 0.4f, (Math.random() * 3D - 1.5D) * 0.1f, 3f + entity.getLevel().random.nextFloat() * 2f, 0f);	
 						pompeii.setOnFireFor(1000);
 						entity.getLevel().spawnEntity(pompeii);
-						entity.getLevel().playSound(null, toBlockPos(entity.getPos()), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.MASTER, 3, 1);
+						entity.getLevel().playSound(null, toBlockPos(entity.getPos()), SoundEvents.ENTITY_GENERIC_EXPLODE.value(), SoundCategory.MASTER, 3, 1);
 					}
 				}
 			}

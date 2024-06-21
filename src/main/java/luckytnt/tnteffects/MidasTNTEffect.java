@@ -17,6 +17,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.DustParticleEffect;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
@@ -45,7 +46,7 @@ public class MidasTNTEffect extends PrimedTNTEffect {
 			BlockPos max = toBlockPos(ent.getPos()).add(i, i, i);
 			List<LivingEntity> list = ent.getLevel().getNonSpectatingEntities(LivingEntity.class, new Box(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ()));
 			for(LivingEntity lent : list) {
-				lent.addStatusEffect(new StatusEffectInstance(EffectRegistry.MIDAS_TOUCH_EFFECT.get(), 2000, 0));
+				lent.addStatusEffect(new StatusEffectInstance(RegistryEntry.of(EffectRegistry.MIDAS_TOUCH_EFFECT.get()), 2000, 0));
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 package luckytnt.entity;
 
+import luckytnt.util.BlockSurviveChecks;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -23,12 +24,11 @@ public class SnowySnowball extends SnowballEntity {
 		super(level, x, y, z);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onBlockHit(BlockHitResult result) {
 		super.onBlockHit(result);
 		BlockPos pos = result.getBlockPos();
-		if(Blocks.SNOW.canPlaceAt(getWorld().getBlockState(pos.up()), getWorld(), pos.up()) && getWorld().getBlockState(pos.up()).getBlock().getBlastResistance() < 100 && getWorld().getFluidState(pos.up()).isOf(Fluids.EMPTY)) {
+		if(BlockSurviveChecks.canSnowPlaceAt(getWorld().getBlockState(pos.up()), getWorld(), pos.up()) && getWorld().getBlockState(pos.up()).getBlock().getBlastResistance() < 100 && getWorld().getFluidState(pos.up()).isOf(Fluids.EMPTY)) {
 			getWorld().setBlockState(pos.up(), Blocks.SNOW.getDefaultState(), 3);
 		}
 	}

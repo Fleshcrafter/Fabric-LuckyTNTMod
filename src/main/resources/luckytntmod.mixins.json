@@ -1,14 +1,14 @@
 {
 	"required": true,
 	"package": "luckytnt.mixin",
-	"compatibilityLevel": "JAVA_17",
+	"compatibilityLevel": "JAVA_21",
 	"mixins": [
 		"LivingEntityMixin",
 		"AbstractMinecartEntityMixin",
-		"HungerManagerMixin"
+		"HungerManagerMixin",
+		"FireBlockMixin"
 	],
 	"client": [
-		"InGameHudMixin",
 		"GameRendererMixin",
 		"CameraMixin"
 	],

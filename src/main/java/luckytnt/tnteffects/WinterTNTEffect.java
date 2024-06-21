@@ -4,6 +4,7 @@ import org.joml.Vector3f;
 
 import luckytnt.entity.SnowySnowball;
 import luckytnt.registry.BlockRegistry;
+import luckytnt.util.BlockSurviveChecks;
 import luckytnt.util.Materials;
 import luckytntlib.util.IExplosiveEntity;
 import luckytntlib.util.explosions.ExplosionHelper;
@@ -34,10 +35,9 @@ public class WinterTNTEffect extends PrimedTNTEffect {
 		
 		ExplosionHelper.doTopBlockExplosionForAll(ent.getLevel(), ent.getPos(), 150, new IForEachBlockExplosionEffect() {
 			
-			@SuppressWarnings("deprecation")
 			@Override
 			public void doBlockExplosion(World level, BlockPos pos, BlockState state, double distance) {
-				if(state.getBlock().getBlastResistance() < 200 && Blocks.SNOW.canPlaceAt(state, level, pos)) {
+				if(state.getBlock().getBlastResistance() < 200 && BlockSurviveChecks.canSnowPlaceAt(state, level, pos)) {
 					level.setBlockState(pos, Blocks.SNOW.getDefaultState(), 3);
 				}
 			}

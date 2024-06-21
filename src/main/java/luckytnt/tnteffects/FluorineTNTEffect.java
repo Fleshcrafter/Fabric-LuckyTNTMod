@@ -39,7 +39,7 @@ public class FluorineTNTEffect extends PrimedTNTEffect {
 					explosion.doEntityExplosion(7f, true);
 					explosion.doBlockExplosion(1f, 1f, 0.75f, 0.5f, false, false);
 				}
-				ent.getLevel().playSound(null, new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z)), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4, (1.0F + (ent.getLevel().getRandom().nextFloat() - ent.getLevel().getRandom().nextFloat()) * 0.2F) * 0.7F);
+				ent.getLevel().playSound(null, new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z)), SoundEvents.ENTITY_GENERIC_EXPLODE.value(), SoundCategory.BLOCKS, 4, (1.0F + (ent.getLevel().getRandom().nextFloat() - ent.getLevel().getRandom().nextFloat()) * 0.2F) * 0.7F);
 				NbtCompound tag = ent.getPersistentData();
 				tag.putInt("nextExplosion", 5 + (int)Math.round(Math.random() * 2));
 				ent.setPersistentData(tag);

@@ -8,46 +8,41 @@ import luckytnt.network.LevelVariablesS2CPacket;
 import luckytnt.network.LuckyTNTUpdateConfigValuesPacket;
 import luckytntlib.config.common.Config;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.PlayChannelHandler;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.Context;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking.PlayPayloadHandler;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
 
 public class ClientNetworkRegistry {
 	
-	private static final PlayChannelHandler UPDATE_S2C = new PlayChannelHandler() {
+	private static final PlayPayloadHandler<LuckyTNTUpdateConfigValuesPacket> UPDATE_S2C = new PlayPayloadHandler<LuckyTNTUpdateConfigValuesPacket>() {
 		
 		@Override
-		public void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-			NbtCompound tag = buf.readNbt();
+		public void receive(LuckyTNTUpdateConfigValuesPacket payload, Context context) {
+			NbtCompound tag = payload.data;
 			
-			client.execute(() -> {
+			context.client().execute(() -> {
 				Config.writeToValues(tag, LuckyTNTConfigValues.CONFIG.getConfigValues());
 			});
 		}
 	};
-	private static final PlayChannelHandler HYDROGEN_BOMB_S2C = new PlayChannelHandler() {
+	private static final PlayPayloadHandler<HydrogenBombS2CPacket> HYDROGEN_BOMB_S2C = new PlayPayloadHandler<HydrogenBombS2CPacket>() {
 		
 		@Override
-		public void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-			int entId = buf.readInt();
+		public void receive(HydrogenBombS2CPacket payload, Context context) {
+			int entId = payload.entityId;
 			
-			client.execute(() -> {
+			context.client().execute(() -> {
 				ClientAccess.displayHydrogenBombParticles(entId);
 			});
 		}
 	};
-	private static final PlayChannelHandler LEVEL_VARIABLES_S2C = new PlayChannelHandler() {
+	private static final PlayPayloadHandler<LevelVariablesS2CPacket> LEVEL_VARIABLES_S2C = new PlayPayloadHandler<LevelVariablesS2CPacket>() {
 		
 		@Override
-		public void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender) {
-			NbtCompound tag = buf.readNbt();
-			LevelVariables variables = new LevelVariables();
-			variables.read(tag);
+		public void receive(LevelVariablesS2CPacket payload, Context context) {
+			LevelVariables variables = payload.variables;
 			
-			client.execute(() -> {
+			context.client().execute(() -> {
 				ClientAccess.syncLevelVariables(variables);
 			});
 		}
@@ -55,8 +50,8 @@ public class ClientNetworkRegistry {
 	
 	
 	public static void init() {
-		ClientPlayNetworking.registerGlobalReceiver(LuckyTNTUpdateConfigValuesPacket.NAME, UPDATE_S2C);
-		ClientPlayNetworking.registerGlobalReceiver(HydrogenBombS2CPacket.NAME, HYDROGEN_BOMB_S2C);
-		ClientPlayNetworking.registerGlobalReceiver(LevelVariablesS2CPacket.NAME, LEVEL_VARIABLES_S2C);
+		ClientPlayNetworking.registerGlobalReceiver(LuckyTNTUpdateConfigValuesPacket.ID, UPDATE_S2C);
+		ClientPlayNetworking.registerGlobalReceiver(HydrogenBombS2CPacket.ID, HYDROGEN_BOMB_S2C);
+		ClientPlayNetworking.registerGlobalReceiver(LevelVariablesS2CPacket.ID, LEVEL_VARIABLES_S2C);
 	}
 }

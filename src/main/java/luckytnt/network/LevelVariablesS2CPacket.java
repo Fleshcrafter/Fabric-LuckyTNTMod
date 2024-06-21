@@ -2,31 +2,38 @@ package luckytnt.network;
 
 import luckytnt.LevelVariables;
 import luckytnt.LuckyTNTMod;
-import luckytntlib.network.LuckyTNTPacket;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
 
-public class LevelVariablesS2CPacket implements LuckyTNTPacket {
+public class LevelVariablesS2CPacket implements CustomPayload {
 
-	public static Identifier NAME = new Identifier(LuckyTNTMod.MODID, "level_variables_s2c");
+	public static final Identifier NAME = new Identifier(LuckyTNTMod.MODID, "level_variables_s2c");
+	public static final CustomPayload.Id<LevelVariablesS2CPacket> ID = new CustomPayload.Id<>(NAME);
+    public static final PacketCodec<RegistryByteBuf, LevelVariablesS2CPacket> CODEC = PacketCodec.of(LevelVariablesS2CPacket::write, LevelVariablesS2CPacket::new);
 	
 	public final LevelVariables variables;
 	
 	public LevelVariablesS2CPacket(LevelVariables variables) {
 		this.variables = variables;
 	}
-
-	@Override
-	public PacketByteBuf toByteBuf() {
-		PacketByteBuf buf = PacketByteBufs.create();
-		buf.writeNbt(variables.writeNbt(new NbtCompound()));
-		return buf;
+	
+	public LevelVariablesS2CPacket(PacketByteBuf buf) {
+		variables = LevelVariables.load(buf.readNbt());
+	}
+	
+	public void write(PacketByteBuf buf) {
+		buf.writeNbt(variables.writeNbt(new NbtCompound(), null));
 	}
 
 	@Override
-	public Identifier getName() {
-		return NAME;
+	public Id<? extends CustomPayload> getId() {
+		return ID;
 	}
+	
+	
+	
 }

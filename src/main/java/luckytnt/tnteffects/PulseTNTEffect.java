@@ -27,7 +27,7 @@ public class PulseTNTEffect extends PrimedTNTEffect{
 					explosion.doBlockExplosion();
 		      		
 					if(entity.getTNTFuse() > 0) {
-						level.playSound(null, toBlockPos(entity.getPos()), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4,(1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.2F) * 0.7F);
+						level.playSound(null, toBlockPos(entity.getPos()), SoundEvents.ENTITY_GENERIC_EXPLODE.value(), SoundCategory.BLOCKS, 4,(1.0F + (level.random.nextFloat() - level.random.nextFloat()) * 0.2F) * 0.7F);
 					}
 					
 					NbtCompound tag = entity.getPersistentData();

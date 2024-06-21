@@ -53,7 +53,7 @@ public class EntityFireworkEffect extends PrimedTNTEffect {
 			lent.setPosition(ent.x(), ent.y(), ent.z());
 			lent.setVelocity(Math.random() * 3f - 1.5f, Math.random() * 3f - 1.5f, Math.random() * 3f - 1.5f);
 			if(lent instanceof MobEntity mob && ent.getLevel() instanceof ServerWorld sLevel) {
-				mob.initialize(sLevel, sLevel.getLocalDifficulty(toBlockPos(ent.getPos())), SpawnReason.MOB_SUMMONED, null, null);
+				mob.initialize(sLevel, sLevel.getLocalDifficulty(toBlockPos(ent.getPos())), SpawnReason.MOB_SUMMONED, null);
 			}
 			ent.getLevel().spawnEntity(lent);
 		}

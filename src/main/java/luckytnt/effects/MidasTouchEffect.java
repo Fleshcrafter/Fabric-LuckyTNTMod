@@ -49,7 +49,7 @@ public class MidasTouchEffect extends StatusEffect {
 	}
 	
 	@Override
-	public void applyUpdateEffect(LivingEntity entity, int amplifier) {
+	public boolean applyUpdateEffect(LivingEntity entity, int amplifier) {
 		World level = entity.getWorld();
 		if(!level.isClient) {
 
@@ -147,5 +147,6 @@ public class MidasTouchEffect extends StatusEffect {
 				entity.equipStack(EquipmentSlot.FEET, new ItemStack(Items.GOLDEN_BOOTS));
 			}
 		}
+		return true;
 	}
 }

@@ -32,7 +32,7 @@ public class CatalystTNTEffect extends PrimedTNTEffect {
 					explosion.doEntityExplosion(2f, true);
 					explosion.doBlockExplosion(1f, 1f, 0.75f, 1f, false, false);
 				}
-				ent.getLevel().playSound(null, new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z)), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 4, (1.0F + (ent.getLevel().getRandom().nextFloat() - ent.getLevel().getRandom().nextFloat()) * 0.2F) * 0.7F);
+				ent.getLevel().playSound(null, new BlockPos(MathHelper.floor(x), MathHelper.floor(y), MathHelper.floor(z)), SoundEvents.ENTITY_GENERIC_EXPLODE.value(), SoundCategory.BLOCKS, 4, (1.0F + (ent.getLevel().getRandom().nextFloat() - ent.getLevel().getRandom().nextFloat()) * 0.2F) * 0.7F);
 				NbtCompound tag = ent.getPersistentData();
 				tag.putInt("nextExplosion", 4 + (int)Math.round(Math.random()));
 				ent.setPersistentData(tag);
