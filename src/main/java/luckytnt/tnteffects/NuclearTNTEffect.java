@@ -19,7 +19,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.particle.DustParticleEffect;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -39,7 +39,7 @@ public class NuclearTNTEffect extends PrimedTNTEffect{
 			@Override
 			public void doEntityExplosion(Entity entity, double distance) {
 				if(entity instanceof LivingEntity living) {
-					living.addStatusEffect(new StatusEffectInstance(RegistryEntry.of(EffectRegistry.CONTAMINATED_EFFECT.get()), 48 * strength));
+					living.addStatusEffect(new StatusEffectInstance(Registries.STATUS_EFFECT.getEntry(EffectRegistry.CONTAMINATED_EFFECT.get()), 48 * strength));
 				}
 			}
 		});

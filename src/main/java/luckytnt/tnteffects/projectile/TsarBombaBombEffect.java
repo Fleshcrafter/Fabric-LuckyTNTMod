@@ -19,7 +19,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -48,7 +48,7 @@ public class TsarBombaBombEffect extends PrimedTNTEffect implements NuclearBombL
 		
 		List<LivingEntity> list = entity.getLevel().getNonSpectatingEntities(LivingEntity.class, new Box(entity.x() - 90, entity.y() - 65, entity.z() - 90, entity.x() + 90, entity.y() + 65, entity.z() + 90));
 		for(LivingEntity living : list) {
-			living.addStatusEffect(new StatusEffectInstance(RegistryEntry.of(EffectRegistry.CONTAMINATED_EFFECT.get()), 3600, 0, true, true, true));
+			living.addStatusEffect(new StatusEffectInstance(Registries.STATUS_EFFECT.getEntry(EffectRegistry.CONTAMINATED_EFFECT.get()), 3600, 0, true, true, true));
 		}
 		
 		for(int offX = -300; offX <= 300; offX++) {

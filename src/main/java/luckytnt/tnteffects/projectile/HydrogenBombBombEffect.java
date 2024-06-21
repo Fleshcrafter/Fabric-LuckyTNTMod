@@ -21,7 +21,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -66,7 +66,7 @@ public class HydrogenBombBombEffect extends PrimedTNTEffect implements NuclearBo
 		
 		List<LivingEntity> list = ent.getLevel().getNonSpectatingEntities(LivingEntity.class, new Box(ent.x() - 90, ent.y() - 65, ent.z() - 90, ent.x() + 90, ent.y() + 65, ent.z() + 90));
 		for(LivingEntity living : list) {
-			living.addStatusEffect(new StatusEffectInstance(RegistryEntry.of(EffectRegistry.CONTAMINATED_EFFECT.get()), 4800, 0, true, true, true));
+			living.addStatusEffect(new StatusEffectInstance(Registries.STATUS_EFFECT.getEntry(EffectRegistry.CONTAMINATED_EFFECT.get()), 4800, 0, true, true, true));
 		}
 	}
 	

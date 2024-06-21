@@ -22,7 +22,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.particle.DustParticleEffect;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -83,7 +83,7 @@ public class NuclearWasteBlock extends FallingBlock {
 		super.onEntityCollision(state, level, pos, entity);
 		if(entity instanceof LivingEntity l_Entity) {
 			l_Entity.addStatusEffect(new StatusEffectInstance(StatusEffects.POISON, 120, 4, false, true));
-			l_Entity.addStatusEffect(new StatusEffectInstance(RegistryEntry.of(EffectRegistry.CONTAMINATED_EFFECT.get()), 120, 0, false, true));
+			l_Entity.addStatusEffect(new StatusEffectInstance(Registries.STATUS_EFFECT.getEntry(EffectRegistry.CONTAMINATED_EFFECT.get()), 120, 0, false, true));
 			l_Entity.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 120, 0, false, true));
 		}
 		else if(entity instanceof ItemEntity i_Entity) {

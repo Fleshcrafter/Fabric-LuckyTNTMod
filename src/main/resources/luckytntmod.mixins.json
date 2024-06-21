@@ -10,7 +10,8 @@
 	],
 	"client": [
 		"GameRendererMixin",
-		"CameraMixin"
+		"CameraMixin",
+		"InGameHudMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
