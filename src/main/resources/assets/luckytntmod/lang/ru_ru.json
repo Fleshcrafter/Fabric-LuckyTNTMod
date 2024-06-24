@@ -812,10 +812,10 @@
   	"command.randomtnt.success2": " предметов",
   	
   	"tag.item.luckytntmod.crops": "Зерновые культуры",
-	"tag.item.luckytntmod.concrete_powder": "Бетонный Порошок",
+	"tag.item.luckytntmod.concrete_powder": "Бетонные Порошки",
 	"tag.item.luckytntmod.wart_blocks": "Бородавочные Блоки",
-	"tag.item.c.ingots.uranium": "Урановый Слиток",
-	"tag.item.c.ingots.antimatter": "Слиток Антиматерии",
+	"tag.item.c.ingots.uranium": "Урановые Слитки",
+	"tag.item.c.ingots.antimatter": "Слитки Антиматерии",
 	"tag.item.c.ores.uranium": "Урановые Руды",
 	"tag.item.c.ores.gunpowder": "Пороховые Руды"
 }
