@@ -83,7 +83,7 @@ public class NuclearWasteBlock extends FallingBlock {
 		super.onEntityCollision(state, level, pos, entity);
 		if(entity instanceof LivingEntity l_Entity) {
 			l_Entity.addStatusEffect(new StatusEffectInstance(StatusEffects.POISON, 120, 4, false, true));
-			l_Entity.addStatusEffect(new StatusEffectInstance(Registries.STATUS_EFFECT.getEntry(EffectRegistry.CONTAMINATED_EFFECT.get()), 120, 0, false, true));
+			l_Entity.addStatusEffect(new StatusEffectInstance(Registries.STATUS_EFFECT.entryOf(EffectRegistry.CONTAMINATED), 120, 0, false, true));
 			l_Entity.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 120, 0, false, true));
 		}
 		else if(entity instanceof ItemEntity i_Entity) {

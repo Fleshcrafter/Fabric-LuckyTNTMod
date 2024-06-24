@@ -48,7 +48,7 @@ public class TsarBombaBombEffect extends PrimedTNTEffect implements NuclearBombL
 		
 		List<LivingEntity> list = entity.getLevel().getNonSpectatingEntities(LivingEntity.class, new Box(entity.x() - 90, entity.y() - 65, entity.z() - 90, entity.x() + 90, entity.y() + 65, entity.z() + 90));
 		for(LivingEntity living : list) {
-			living.addStatusEffect(new StatusEffectInstance(Registries.STATUS_EFFECT.getEntry(EffectRegistry.CONTAMINATED_EFFECT.get()), 3600, 0, true, true, true));
+			living.addStatusEffect(new StatusEffectInstance(Registries.STATUS_EFFECT.entryOf(EffectRegistry.CONTAMINATED), 3600, 0, true, true, true));
 		}
 		
 		for(int offX = -300; offX <= 300; offX++) {

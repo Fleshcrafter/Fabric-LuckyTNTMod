@@ -66,7 +66,7 @@ public class HydrogenBombBombEffect extends PrimedTNTEffect implements NuclearBo
 		
 		List<LivingEntity> list = ent.getLevel().getNonSpectatingEntities(LivingEntity.class, new Box(ent.x() - 90, ent.y() - 65, ent.z() - 90, ent.x() + 90, ent.y() + 65, ent.z() + 90));
 		for(LivingEntity living : list) {
-			living.addStatusEffect(new StatusEffectInstance(Registries.STATUS_EFFECT.getEntry(EffectRegistry.CONTAMINATED_EFFECT.get()), 4800, 0, true, true, true));
+			living.addStatusEffect(new StatusEffectInstance(Registries.STATUS_EFFECT.entryOf(EffectRegistry.CONTAMINATED), 4800, 0, true, true, true));
 		}
 	}
 	

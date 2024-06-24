@@ -39,7 +39,7 @@ public class NuclearTNTEffect extends PrimedTNTEffect{
 			@Override
 			public void doEntityExplosion(Entity entity, double distance) {
 				if(entity instanceof LivingEntity living) {
-					living.addStatusEffect(new StatusEffectInstance(Registries.STATUS_EFFECT.getEntry(EffectRegistry.CONTAMINATED_EFFECT.get()), 48 * strength));
+					living.addStatusEffect(new StatusEffectInstance(Registries.STATUS_EFFECT.entryOf(EffectRegistry.CONTAMINATED), 48 * strength));
 				}
 			}
 		});

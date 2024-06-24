@@ -46,7 +46,7 @@ public class MidasTNTEffect extends PrimedTNTEffect {
 			BlockPos max = toBlockPos(ent.getPos()).add(i, i, i);
 			List<LivingEntity> list = ent.getLevel().getNonSpectatingEntities(LivingEntity.class, new Box(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ()));
 			for(LivingEntity lent : list) {
-				lent.addStatusEffect(new StatusEffectInstance(Registries.STATUS_EFFECT.getEntry(EffectRegistry.MIDAS_TOUCH_EFFECT.get()), 2000, 0));
+				lent.addStatusEffect(new StatusEffectInstance(Registries.STATUS_EFFECT.entryOf(EffectRegistry.MIDAS_TOUCH), 2000, 0));
 			}
 		}
 	}

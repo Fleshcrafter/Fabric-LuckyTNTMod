@@ -28,11 +28,11 @@ public class OverlayTick {
 			RenderSystem.enableBlend();
 			RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
 			if(player instanceof LuckyTNTEntityExtension lplayer) {
-				if(lplayer.getAdditionalPersistentData().getInt("freezeTime") > 0 && !player.hasStatusEffect(Registries.STATUS_EFFECT.getEntry(EffectRegistry.CONTAMINATED_EFFECT.get()))) {
+				if(lplayer.getAdditionalPersistentData().getInt("freezeTime") > 0 && !player.hasStatusEffect(Registries.STATUS_EFFECT.entryOf(EffectRegistry.CONTAMINATED))) {
 					RenderSystem.setShaderColor(1f, 1f, 1f, (float)(lplayer.getAdditionalPersistentData().getInt("freezeTime")) / 1200f);
 					RenderSystem.setShaderTexture(0, new Identifier("luckytntmod:textures/powder_snow_outline.png"));
 					graphics.drawTexture(new Identifier("luckytntmod:textures/powder_snow_outline.png"), 0, 0, 0, 0, w, h, w, h);
-				} else if(player.hasStatusEffect(Registries.STATUS_EFFECT.getEntry(EffectRegistry.CONTAMINATED_EFFECT.get())) && LuckyTNTConfigValues.RENDER_CONTAMINATED_OVERLAY.get()) {
+				} else if(player.hasStatusEffect(Registries.STATUS_EFFECT.entryOf(EffectRegistry.CONTAMINATED)) && LuckyTNTConfigValues.RENDER_CONTAMINATED_OVERLAY.get()) {
 					RenderSystem.setShaderColor(1f, 1f, 1f, contaminatedAmount);
 					RenderSystem.setShaderTexture(0, new Identifier("luckytntmod:textures/contaminated_outline.png"));
 					graphics.drawTexture(new Identifier("luckytntmod:textures/contaminated_outline.png"), 0, 0, 0, 0, w, h, w, h);
