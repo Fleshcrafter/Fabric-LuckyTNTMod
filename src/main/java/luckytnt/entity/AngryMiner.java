@@ -44,7 +44,7 @@ public class AngryMiner extends HostileEntity implements RangedAttackMob {
 	}
 	
 	@Override
-	public void shootAt(LivingEntity entity, float strength) {
+	public void attack(LivingEntity entity, float strength) {
 		double xVel = entity.getX() - getX();
 		double yVel = entity.getY() + getStandingEyeHeight() - 1.1f;
 		double zVel = entity.getZ() - getZ();

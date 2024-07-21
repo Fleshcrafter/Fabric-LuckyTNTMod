@@ -55,7 +55,7 @@ public class TrollTNTMk2Block extends LTNTBlock{
 	}
 
 	@Override
-	public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+	public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
 		if (!world.isClient()) {
 			explode(world, false, pos.getX(), pos.getY(), pos.getZ(), null);
 		}
@@ -65,7 +65,6 @@ public class TrollTNTMk2Block extends LTNTBlock{
             PiglinBrain.onGuardedBlockInteracted(player, false);
         }
         world.emitGameEvent(GameEvent.BLOCK_DESTROY, pos, GameEvent.Emitter.of(player, state));
-        return state;
 	}
 	
 	@Nullable
@@ -90,7 +89,7 @@ public class TrollTNTMk2Block extends LTNTBlock{
 		ItemStack itemStack = player.getStackInHand(hand);
 		if (itemStack.isOf(Items.FLINT_AND_STEEL) || itemStack.isOf(Items.FIRE_CHARGE)) {
 			placeSurroundingBlocks(world, pos.getX(), pos.getY(), pos.getZ());
-			world.setBlockState(pos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL_AND_REDRAW);
+			world.setBlockState(pos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL | Block.REDRAW_ON_MAIN_THREAD);
 			Item item = itemStack.getItem();
 			if (!player.isCreative()) {
 				if (itemStack.isOf(Items.FLINT_AND_STEEL)) {

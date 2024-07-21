@@ -12,8 +12,8 @@ import luckytntlib.util.tnteffects.PrimedTNTEffect;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.enums.BlockFace;
 import net.minecraft.block.enums.ComparatorMode;
+import net.minecraft.block.enums.WallMountLocation;
 import net.minecraft.item.AutomaticItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.DustParticleEffect;
@@ -55,7 +55,7 @@ public class RedstoneTNTEffect extends PrimedTNTEffect{
 					case 11: replace = Blocks.DROPPER.getDefaultState().with(Properties.FACING, getRandomDirection()); break;
 					case 12: replace = Blocks.DISPENSER.getDefaultState().with(Properties.FACING, getRandomDirection()); break;
 					case 13: replace = Blocks.DAYLIGHT_DETECTOR.getDefaultState().with(Properties.INVERTED, Math.random() < 0.5f); break;
-					case 14: replace = Blocks.LEVER.getDefaultState().with(Properties.POWERED, Math.random() < 0.5f).with(Properties.HORIZONTAL_FACING, getRandomDirectionHorizontal()).with(Properties.BLOCK_FACE, BlockFace.FLOOR); break;
+					case 14: replace = Blocks.LEVER.getDefaultState().with(Properties.POWERED, Math.random() < 0.5f).with(Properties.HORIZONTAL_FACING, getRandomDirectionHorizontal()).with(Properties.WALL_MOUNT_LOCATION, WallMountLocation.FLOOR); break;
 					case 15: replace = Blocks.REPEATER.getDefaultState().with(Properties.HORIZONTAL_FACING, getRandomDirectionHorizontal()).with(Properties.DELAY, 1 + new Random().nextInt(4)).with(Properties.LOCKED, Math.random() < 0.5f); break;
 					case 16: replace = Blocks.COMPARATOR.getDefaultState().with(Properties.HORIZONTAL_FACING, getRandomDirectionHorizontal()).with(Properties.COMPARATOR_MODE, Math.random() < 0.5f ? ComparatorMode.COMPARE : ComparatorMode.SUBTRACT); break;
 				}

@@ -177,7 +177,7 @@ public class NewYearsFireworkEffect extends PrimedTNTEffect {
 		CREEPER("creeper");
 		
 		@SuppressWarnings("deprecation")
-		private static final StringIdentifiable.EnumCodec<Shape> CODEC = StringIdentifiable.createCodec(Shape::values);
+		private static final Codec<Shape> CODEC = StringIdentifiable.createCodec(Shape::values);
 		private final String name;
 		
 		private Shape(String name) {

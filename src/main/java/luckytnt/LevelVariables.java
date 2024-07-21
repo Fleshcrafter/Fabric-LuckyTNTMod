@@ -1,7 +1,6 @@
 package luckytnt;
 
 import luckytnt.network.LevelVariablesS2CPacket;
-import net.minecraft.datafixer.DataFixTypes;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -45,7 +44,7 @@ public class LevelVariables extends PersistentState {
 	
 	public static LevelVariables get(WorldAccess level) {
 		if(level instanceof ServerWorldAccess sLevel)
-			return sLevel.toServerWorld().getServer().getOverworld().getPersistentStateManager().getOrCreate(new PersistentState.Type<LevelVariables>(LevelVariables::new, f -> LevelVariables.load(f), DataFixTypes.LEVEL), "ltm_level_variables");
+			return sLevel.toServerWorld().getServer().getOverworld().getPersistentStateManager().getOrCreate(f -> LevelVariables.load(f), LevelVariables::new, "ltm_level_variables");
 		else
 			return clientSide;
 	}

@@ -51,7 +51,7 @@ public class PresentBlock extends Block {
 	}
 	
 	@Override
-	public BlockState onBreak(World level, BlockPos pos, BlockState state, PlayerEntity player) {
+	public void onBreak(World level, BlockPos pos, BlockState state, PlayerEntity player) {
 		if(!player.isCreative()) {
 			Random random = new Random();
 			Item item = Items.COAL;
@@ -99,6 +99,6 @@ public class PresentBlock extends Block {
 				level.addParticle(ParticleTypes.CLOUD, pos.getX() + 0.5f + Math.random() * 2 - 1f, pos.getY() + 0.5f + Math.random() * 2 - 1f, pos.getZ() + 0.5f + Math.random() * 2 - 1f, 0, 0, 0);
 			}
 		}
-		return super.onBreak(level, pos, state, player);
+		super.onBreak(level, pos, state, player);
 	}
 }

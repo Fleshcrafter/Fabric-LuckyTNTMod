@@ -10,8 +10,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.TntBlock;
 import net.minecraft.entity.Entity;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
@@ -31,7 +29,7 @@ public class IgniterTNTEffect extends PrimedTNTEffect{
 			@Override
 			public void doBlockExplosion(World level, BlockPos pos, BlockState state, double distance) {
 				if(state.getBlock() instanceof TntBlock block) {
-					block.onDestroyedByExplosion(level, pos, new Explosion(level, (Entity)entity, null, null, pos.getX(), pos.getY(), pos.getZ(), 0, false, Explosion.DestructionType.DESTROY, ParticleTypes.EXPLOSION, ParticleTypes.EXPLOSION_EMITTER, SoundEvents.ENTITY_GENERIC_EXPLODE));
+					block.onDestroyedByExplosion(level, pos, new Explosion(level, (Entity)entity, null, null, pos.getX(), pos.getY(), pos.getZ(), 0, false, Explosion.DestructionType.DESTROY));
 					level.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 				}
 			}

@@ -255,16 +255,15 @@ public class BlockRegistry {
 	
 	//Other
 	public static final Supplier<Block> NUCLEAR_WASTE = registerBlock("nuclear_waste", () -> new NuclearWasteBlock(AbstractBlock.Settings.create().mapColor(MapColor.GREEN).sounds(BlockSoundGroup.SLIME).breakInstantly().noCollision().dropsNothing().ticksRandomly().luminance(s -> 8)));
-	public static final Supplier<Block> GUNPOWDER_ORE = registerBlock("gunpowder_ore", () -> new ExperienceDroppingBlock(UniformIntProvider.create(2, 5), AbstractBlock.Settings.create().mapColor(MapColor.LIGHT_GRAY).sounds(BlockSoundGroup.STONE).requiresTool().strength(3f, 3f)));
-	public static final Supplier<Block> DEEPSLATE_GUNPOWDER_ORE = registerBlock("deepslate_gunpowder_ore", () -> new ExperienceDroppingBlock(UniformIntProvider.create(2, 5), AbstractBlock.Settings.create().mapColor(MapColor.LIGHT_GRAY).sounds(BlockSoundGroup.DEEPSLATE).requiresTool().strength(4.5f, 3f)));
+	public static final Supplier<Block> GUNPOWDER_ORE = registerBlock("gunpowder_ore", () -> new ExperienceDroppingBlock(AbstractBlock.Settings.create().mapColor(MapColor.LIGHT_GRAY).sounds(BlockSoundGroup.STONE).requiresTool().strength(3f, 3f), UniformIntProvider.create(2, 5)));
+	public static final Supplier<Block> DEEPSLATE_GUNPOWDER_ORE = registerBlock("deepslate_gunpowder_ore", () -> new ExperienceDroppingBlock(AbstractBlock.Settings.create().mapColor(MapColor.LIGHT_GRAY).sounds(BlockSoundGroup.DEEPSLATE).requiresTool().strength(4.5f, 3f), UniformIntProvider.create(2, 5)));
 	public static final Supplier<Block> URANIUM_ORE = registerBlock("uranium_ore", () -> new UraniumOreBlock(AbstractBlock.Settings.create().mapColor(MapColor.LIME).sounds(BlockSoundGroup.STONE).requiresTool().strength(3f, 3f)));
 	public static final Supplier<Block> DEEPSLATE_URANIUM_ORE = registerBlock("deepslate_uranium_ore", () -> new UraniumOreBlock(AbstractBlock.Settings.create().mapColor(MapColor.LIME).sounds(BlockSoundGroup.DEEPSLATE).requiresTool().strength(4.5f, 3f)));
 	public static final Supplier<Block> OBSIDIAN_RAIL = registerBlock("obsidian_rail", () -> new RailBlock(AbstractBlock.Settings.create().mapColor(MapColor.CLEAR).sounds(BlockSoundGroup.METAL).requiresTool().strength(0.7f, 1200f).noCollision()));
 	public static final Supplier<Block> OBSIDIAN_POWERED_RAIL = registerBlock("obsidian_powered_rail", () -> new PoweredRailBlock(AbstractBlock.Settings.create().mapColor(MapColor.CLEAR).sounds(BlockSoundGroup.METAL).requiresTool().strength(0.7f, 1200f).noCollision()));
 	public static final Supplier<Block> OBSIDIAN_ACTIVATOR_RAIL = registerBlock("obsidian_activator_rail", () -> new PoweredRailBlock(AbstractBlock.Settings.create().mapColor(MapColor.CLEAR).sounds(BlockSoundGroup.METAL).requiresTool().strength(0.7f, 1200f).noCollision()));
 	public static final Supplier<Block> OBSIDIAN_DETECTOR_RAIL = registerBlock("obsidian_detector_rail", () -> new DetectorRailBlock(AbstractBlock.Settings.create().mapColor(MapColor.CLEAR).sounds(BlockSoundGroup.METAL).requiresTool().strength(0.7f, 1200f).noCollision()));
-	@SuppressWarnings("deprecation")
-	public static final Supplier<Block> TOXIC_STONE = registerBlock("toxic_stone", () -> new ToxicStoneBlock(AbstractBlock.Settings.copyShallow(Blocks.STONE).mapColor(MapColor.GREEN).dropsLike(Blocks.STONE)));
+	public static final Supplier<Block> TOXIC_STONE = registerBlock("toxic_stone", () -> new ToxicStoneBlock(AbstractBlock.Settings.copy(Blocks.STONE).mapColor(MapColor.GREEN).dropsLike(Blocks.STONE)));
 	public static final Supplier<Block> PRESENT = registerBlock("present", () -> new PresentBlock(AbstractBlock.Settings.create().mapColor(MapColor.RED).sounds(BlockSoundGroup.WOOL).strength(0.3f, 0f)));
 	
 	public static Supplier<Block> registerBlock(String name, Supplier<Block> blockSupplier) {

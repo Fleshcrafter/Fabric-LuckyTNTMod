@@ -115,11 +115,11 @@ public class ItemFireworkEffect extends PrimedTNTEffect {
 				} else if(item instanceof ArrowItem) {
 					for(int count = 0; count < 300; count++) {
 						if(item instanceof SpectralArrowItem) {
-							PersistentProjectileEntity arrow = new SpectralArrowEntity(ent.getLevel(), ent.x(), ent.y(), ent.z(), new ItemStack(Items.SPECTRAL_ARROW));
+							PersistentProjectileEntity arrow = new SpectralArrowEntity(ent.getLevel(), ent.x(), ent.y(), ent.z());
 							arrow.setVelocity(Math.random() * 6f - 3f, Math.random() * 6f - 3f, Math.random() * 6f - 3f);
 							ent.getLevel().spawnEntity(arrow);
 						} else {
-							ArrowEntity arrow = new ArrowEntity(ent.getLevel(), ent.x(), ent.y(), ent.z(), new ItemStack(Items.ARROW));
+							ArrowEntity arrow = new ArrowEntity(ent.getLevel(), ent.x(), ent.y(), ent.z());
 							arrow.initFromStack(stack == null ? new ItemStack(item) : stack);
 							arrow.setVelocity(Math.random() * 6f - 3f, Math.random() * 6f - 3f, Math.random() * 6f - 3f);
 							ent.getLevel().spawnEntity(arrow);

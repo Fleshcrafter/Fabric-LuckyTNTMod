@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.6-SNAPSHOT'
+	id 'fabric-loom' version '1.7-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -21,10 +21,9 @@ dependencies {
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	modImplementation "com.github.SlimingHD:Fabric-LuckyTNTLib:1.20.3-0.97.1.7"
-
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modImplementation "com.github.SlimingHD:Fabric-LuckyTNTLib:1.20-0.92.2.0"
 	
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 }
 
 processResources {
@@ -59,7 +58,7 @@ publishing {
 			from components.java
 		}
 	}
-
+	
 	repositories {
 	}
 }

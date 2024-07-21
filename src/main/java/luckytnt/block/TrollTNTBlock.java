@@ -16,7 +16,7 @@ public class TrollTNTBlock extends LTNTBlock{
     }
 
 	@Override
-	public BlockState onBreak(World level, BlockPos pos, BlockState state, PlayerEntity player) {
+	public void onBreak(World level, BlockPos pos, BlockState state, PlayerEntity player) {
     	if(level.getBlockState(pos.up()).getBlock().getBlastResistance() < 200) {
     		level.setBlockState(pos.up(), BlockRegistry.TROLL_TNT.get().getDefaultState(), 3);
     	}
@@ -35,6 +35,6 @@ public class TrollTNTBlock extends LTNTBlock{
     	if(level.getBlockState(pos.west()).getBlock().getBlastResistance() < 200) {
     		level.setBlockState(pos.west(), BlockRegistry.TROLL_TNT.get().getDefaultState(), 3);
     	}
-    	return super.onBreak(level, pos, state, player);
+    	super.onBreak(level, pos, state, player);
     }
 }

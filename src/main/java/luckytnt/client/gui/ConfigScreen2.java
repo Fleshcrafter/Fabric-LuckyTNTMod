@@ -15,8 +15,9 @@ import luckytntlib.config.common.Config;
 import luckytntlib.config.common.Config.ConfigValue;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.AxisGridWidget;
+import net.minecraft.client.gui.widget.AxisGridWidget.DisplayAxis;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.DirectionalLayoutWidget;
 import net.minecraft.client.gui.widget.GridWidget;
 import net.minecraft.client.gui.widget.GridWidget.Adder;
 import net.minecraft.client.gui.widget.Positioner;
@@ -49,8 +50,8 @@ public class ConfigScreen2 extends Screen {
 	
 	@Override
 	public void init() {
-		DirectionalLayoutWidget linear = layout.addHeader(DirectionalLayoutWidget.vertical());
-		linear.add(new TextWidget(title, textRenderer), Positioner::alignHorizontalCenter);
+		AxisGridWidget linear = layout.addHeader(new AxisGridWidget(0, 0, DisplayAxis.VERTICAL));
+		linear.add(new TextWidget(title, textRenderer), new Positioner.Impl().alignHorizontalCenter());
 		
 		ButtonWidget empty = new ButtonWidget.Builder(Text.empty(), button -> deactivatedButtonAction()).size(100, 15).build();
 		
